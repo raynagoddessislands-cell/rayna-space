@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rayna.space | 神島玲奈 宇宙哲学本陣</title>
+    <style>
+        /* 俗世のノイズを消し去る漆黒の世界観 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            color: #fff;
+            font-family: 'Times New Roman', 'Noto Serif JP', serif;
+            overflow: hidden;
+            -webkit-user-select: none; /* 絶対防衛コピープロテクション */
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* 宇宙背景（映画級ズームアップの器） */
+        .space-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #111526 0%, #000000 100%);
+            transition: transform 6s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 1;
+        }
+
+        .space-bg.zoom {
+            transform: scale(1.4); /* 映画級の奥行きズームアップ */
+        }
+
+        /* シネマスコープ（映画館の上下黒帯） */
+        .cinema-bolt {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: #000;
+            z-index: 10;
+            transition: height 1.5s ease;
+        }
+        .bolt-top { top: 0; }
+        .bolt-bottom { bottom: 0; }
+
+        .cinema-active .bolt-top,
+        .cinema-active .bolt-bottom {
+            height: 12vh; /* 映画の画角へ変貌 */
+        }
+
+        /* 操縦席（メインUI） */
+        .interface {
+            position: relative;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: opacity 1s ease;
+        }
+
+        .works-trigger {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            letter-spacing: 0.3em;
+            cursor: pointer;
+            transition: all 0.5s ease;
+        }
+
+        .works-trigger:hover {
+            background: #fff;
+            color: #000;
+            box-shadow: 0 0 20px rgba(255,255,255,0.6);
+        }
+
+        /* 映画風タイポグラフィ（2分割フレーズ） */
+        .cinema-text-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 15;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .phrase {
+            font-size: 2.2rem;
+            letter-spacing: 0.4em;
+            margin: 20px 0;
+            opacity: 0;
+            filter: blur(15px);
+            transition: opacity 2s ease, filter 2s ease;
+        }
+
+        .phrase.reveal {
+            opacity: 1;
+            filter: blur(0px);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 上下シネマスコープ -->
+    <div class="cinema-bolt bolt-top"></div>
+    <div class="cinema-bolt bolt-bottom"></div>
+
+    <!-- 宇宙背景 -->
+    <div class="space-bg" id="bg"></div>
+
+    <!-- 初期インターフェース -->
+    <div class="interface" id="ui">
+        <h1 style="letter-spacing: 0.5em; font-weight: 300; margin-bottom: 50px;">RAYNA KAMISIMA</h1>
+        <button class="works-trigger" onclick="launchCinema()">Works</button>
+    </div>
+
+    <!-- 視聴覚タイポグラフィの舞台 -->
+    <div class="cinema-text-container">
+        <p class="phrase" id="p1">今、神島玲奈が渾身の力で描く！</p>
+        <p class="phrase" id="p2">宇宙と人間の真実が明かされる！</p>
+    </div>
+
+    <script>
+        // 映画風ズームアップ演出コード
+        function launchCinema() {
+            // UIを静かに消去
+            document.getElementById('ui').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('ui').style.display = 'none';
+            }, 1000);
+
+            // シネマスコープ＆背景ズーム発動
+            document.body.classList.add('cinema-active');
+            document.getElementById('bg').classList.add('zoom');
+
+            // 第1幕：1.5秒後にフェードイン（ブラー解除）
+            setTimeout(() => {
+                document.getElementById('p1').classList.add('reveal');
+            }, 1500);
+
+            // 第2幕：4.5秒後に重厚に浮かび上がる
+            setTimeout(() => {
+                document.getElementById('p2').classList.add('reveal');
+            }, 4500);
+        }
+
+        /* ==========================================
+           『宇宙神話・新創世記』絶対防衛トラップ（コピープロテクション）
+           ========================================== */
+        // 1. 右クリックメニューの完全遮断
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        }, false);
+
+        // 2. キーボードによる泥棒挙動（コピー、開発者ツール）の強制無効化
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+C (コピー), Ctrl+U (ソース表示), Ctrl+S (保存) を阻止
+            if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 85 || e.keyCode === 83)) {
+                e.preventDefault();
+                return false;
+            }
+            // F12 (開発者ツール) を阻止
+            if (e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+        }, false);
+    </script>
+</body>
+</html>
