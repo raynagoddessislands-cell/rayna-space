@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>rayna.space | 神島玲奈 宇宙哲学本陣</title>
     <style>
-        /* 俗世のノイズを消し去る漆黒の世界観 */
+        /* 隠世のノイズを消し去る漆黒の世界観 */
         body, html {
             margin: 0;
             padding: 0;
@@ -21,36 +21,36 @@
             user-select: none;
         }
 
-        /* 宇宙空間の器 */
-        .space-container {
+        /* 【新兵装】ド迫力・宇宙シネマ背景動画の器 */
+        .video-background {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100vw;
+            height: 56.25vw; /* 16:9の黄金シネマ比率 */
+            min-height: 100vh;
+            min-width: 177.77vh;
+            transform: translate(-50%, -50%) scale(1.0);
+            z-index: 1;
+            transition: transform 6s cubic-bezier(0.1, 0.8, 0.2, 1);
+            pointer-events: none;
+        }
+
+        /* 「Works」プッシュ時の一大ズームアップ挙動 */
+        .video-background.zoom {
+            transform: translate(-50%, -50%) scale(1.5);
+        }
+
+        /* 動画の上の漆黒フィルター（エレガントな深みを演出） */
+        .video-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, #0a0d1a 0%, #000 100%);
-            transition: transform 7s cubic-bezier(0.1, 0.8, 0.2, 1);
-            z-index: 1;
-        }
-
-        /* 映画級大ズームアップ発動時の挙動 */
-        .space-container.zoom {
-            transform: scale(1.6);
-        }
-
-        /* AIstudio風：星々の瞬きエフェクト */
-        .star {
-            position: absolute;
-            background-color: #fff;
-            border-radius: 50%;
-            opacity: 0;
-            animation: twinkle linear infinite;
-        }
-
-        @keyframes twinkle {
-            0% { opacity: 0; transform: scale(0.5); }
-            50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 8px #fff; }
-            100% { opacity: 0; transform: scale(0.5); }
+            background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
+            z-index: 2;
+            pointer-events: none;
         }
 
         /* シネマスコープ（映画館の上下黒帯） */
@@ -61,14 +61,14 @@
             height: 0;
             background: #000;
             z-index: 10;
-            transition: height 1.8s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: height 2s cubic-bezier(0.25, 1, 0.3, 1);
         }
         .bolt-top { top: 0; }
         .bolt-bottom { bottom: 0; }
 
         .cinema-active .bolt-top,
         .cinema-active .bolt-bottom {
-            height: 14vh; /* 映画の荘厳な画角へ */
+            height: 14vh; /* 荘厳なシネマ画角へ */
         }
 
         /* 操縦席（メインUI） */
@@ -82,29 +82,29 @@
             width: 100%;
             height: 100%;
             text-align: center;
-            transition: opacity 1.2s ease, filter 1.2s ease;
+            transition: opacity 1.5s ease, filter 1.5s ease;
         }
 
         .works-trigger {
             background: transparent;
-            border: 1px solid rgba(255,255,255,0.7);
+            border: 1px solid rgba(255,255,255,0.6);
             color: #fff;
-            padding: 18px 50px;
-            font-size: 1.3rem;
-            letter-spacing: 0.4em;
+            padding: 20px 60px;
+            font-size: 1.4rem;
+            letter-spacing: 0.5em;
             cursor: pointer;
-            transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: all 0.8s cubic-bezier(0.1, 0.8, 0.2, 1);
             backdrop-filter: blur(4px);
         }
 
         .works-trigger:hover {
             background: #fff;
             color: #000;
-            box-shadow: 0 0 30px rgba(255,255,255,0.8), inset 0 0 10px rgba(255,255,255,0.5);
-            letter-spacing: 0.5em;
+            box-shadow: 0 0 40px rgba(255,255,255,0.8);
+            letter-spacing: 0.7em;
         }
 
-        /* 映画風シネマタイポグラフィ（2分割フレーズ） */
+        /* 映画風シネマタイポグラフィ（神聖ゴールド） */
         .cinema-text-container {
             position: absolute;
             top: 0;
@@ -120,14 +120,15 @@
         }
 
         .phrase {
-            font-size: 2.4rem;
-            letter-spacing: 0.5em;
-            margin: 25px 0;
+            font-size: 2.6rem;
+            color: #f1c40f; /* 聖なる金色の輝き */
+            letter-spacing: 0.6em;
+            margin: 30px 0;
             opacity: 0;
-            filter: blur(20px);
-            transform: scale(0.9);
-            transition: opacity 2.5s cubic-bezier(0.25, 1, 0.5, 1), filter 2.5s cubic-bezier(0.25, 1, 0.5, 1), transform 2.5s cubic-bezier(0.25, 1, 0.5, 1);
-            text-shadow: 0 0 15px rgba(255,255,255,0.4);
+            filter: blur(25px);
+            transform: scale(0.85);
+            transition: opacity 3s cubic-bezier(0.1, 0.8, 0.2, 1), filter 3s cubic-bezier(0.1, 0.8, 0.2, 1), transform 3s cubic-bezier(0.1, 0.8, 0.2, 1);
+            text-shadow: 0 0 25px rgba(241,196,15,0.6);
             font-weight: 300;
         }
 
@@ -144,12 +145,18 @@
     <div class="cinema-bolt bolt-top"></div>
     <div class="cinema-bolt bolt-bottom"></div>
 
-    <!-- キラキラ輝く宇宙空間の器 -->
-    <div class="space-container" id="space"></div>
+    <!-- 漆黒の深みベール -->
+    <div class="video-overlay"></div>
+
+    <!-- 【ステルス配置】Vimeoの超高精細宇宙映像を背景に強制同期（ノイズ完全カット仕様） -->
+    <iframe class="video-background" id="space-video" 
+        src="https://vimeo.com" 
+        frameborder="0" allow="autoplay; fullscreen" allowfullscreen>
+    </iframe>
 
     <!-- 初期インターフェース -->
     <div class="interface" id="ui">
-        <h1 style="letter-spacing: 0.6em; font-weight: 300; margin-bottom: 60px; font-size: 2.8rem; text-shadow: 0 0 20px rgba(255,255,255,0.2);">RAYNA KAMISIMA</h1>
+        <h1 style="letter-spacing: 0.7em; font-weight: 300; margin-bottom: 70px; font-size: 3.2rem; text-shadow: 0 0 30px rgba(255,255,255,0.4);">RAYNA KAMISIMA</h1>
         <button class="works-trigger" onclick="launchCinema()">Works</button>
     </div>
 
@@ -160,54 +167,28 @@
     </div>
 
     <script>
-        // 宇宙に何百ものキラキラ光る星々を自動生成する妙法
-        const space = document.getElementById('space');
-        const starCount = 150; // 星の総数
-
-        for (let i = 0; i < starCount; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            
-            // ランダム配置
-            star.style.left = `${Math.random() * 100}%`;
-            star.style.top = `${Math.random() * 100}%`;
-            
-            // 星の大きさにバリエーションを持たせる（AIstudio風）
-            const size = Math.random() * 3;
-            star.style.width = `${size}px`;
-            star.style.height = `${size}px`;
-            
-            // 瞬きの速度と時間差（時間的な美しさ）をバラバラにする
-            const duration = 2 + Math.random() * 4;
-            const delay = Math.random() * 5;
-            star.style.animationDuration = `${duration}s`;
-            star.style.animationDelay = `${delay}s`;
-            
-            space.appendChild(star);
-        }
-
-        // 映画風ズームアップ＆テキスト展開演出
+        // 映画風大音響＆大ズーム演出発動
         function launchCinema() {
-            // UIを静かに消去（ブラーをかけながら）
+            // UIを静かに消去
             document.getElementById('ui').style.opacity = '0';
-            document.getElementById('ui').style.filter = 'blur(10px)';
+            document.getElementById('ui').style.filter = 'blur(15px)';
             setTimeout(() => {
                 document.getElementById('ui').style.display = 'none';
-            }, 1200);
+            }, 1500);
 
-            // シネマスコープ＆背景大宇宙ズーム発動
+            // シネマスコープ作動＆背景宇宙動画のウルトラズームアップ！
             document.body.classList.add('cinema-active');
-            document.getElementById('space').classList.add('zoom');
+            document.getElementById('space-video').classList.add('zoom');
 
-            // 第1幕：1.8秒後に深みから浮かび上がる
+            // 第1幕：2秒後に深みから神聖ゴールドが浮かび上がる
             setTimeout(() => {
                 document.getElementById('p1').classList.add('reveal');
-            }, 1800);
+            }, 2000);
 
-            // 第2幕：5.5秒後に圧倒的な調和をもって現る
+            // 第2幕：6秒後に圧倒的な調和をもって現る
             setTimeout(() => {
                 document.getElementById('p2').classList.add('reveal');
-            }, 5500);
+            }, 6000);
         }
 
         /* ==========================================
