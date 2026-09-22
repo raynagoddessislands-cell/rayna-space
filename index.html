@@ -5,15 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>rayna.space | 神島玲奈 宇宙哲学本陣</title>
     <style>
-        /* 白飛びを完全に抑え込み、落ち着いた淡い空の階調を表現 */
+        /* 背景色自体のコントラストをさらに鮮明にし、白飛びの土台を完全に排除 */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
             min-height: 100vh;
-            /* 色彩の深みを増し、白に負けない背景土台を構築 */
-            background: linear-gradient(180deg, #8ba8c7 0%, #bebee3 50%, #e2e8f0 100%);
+            background: linear-gradient(180deg, #7da0c4 0%, #b2b2df 50%, #e2e8f0 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -27,16 +26,16 @@
             user-select: none;
         }
 
-        /* 眩しすぎた光の帯の透明度を下げ、繊細なたなびく「筋雲」として定着 */
+        /* 光の帯（白筋）の不透明度をさらに下げ、極めて淡く静謐なたなびきへ */
         body::before {
             content: "";
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             background: 
-                linear-gradient(65deg, transparent 35%, rgba(255,255,255,0.15) 43%, rgba(255,255,255,0.25) 48%, transparent 53%),
-                linear-gradient(-40deg, transparent 25%, rgba(255,255,255,0.12) 32%, rgba(255,255,255,0.22) 37%, transparent 45%),
-                radial-gradient(circle at 50% 20%, rgba(255,255,255,0.3) 0%, transparent 60%);
-            opacity: 0.9;
+                linear-gradient(65deg, transparent 38%, rgba(255,255,255,0.08) 44%, rgba(255,255,255,0.15) 48%, transparent 54%),
+                linear-gradient(-40deg, transparent 28%, rgba(255,255,255,0.06) 34%, rgba(255,255,255,0.12) 39%, transparent 46%),
+                radial-gradient(circle at 50% 20%, rgba(255,255,255,0.15) 0%, transparent 60%);
+            opacity: 1.0;
             pointer-events: none;
         }
 
@@ -46,9 +45,8 @@
             padding: 20px;
         }
 
-        /* 文字の視認性をさらに高め、輪郭をくっきりと洗練 */
         .title {
-            color: #2d3748;
+            color: #1a202c;
             font-size: 3.5rem;
             letter-spacing: 0.4em;
             margin-bottom: 30px;
@@ -59,16 +57,16 @@
 
         .works-box {
             display: inline-block;
-            border: 1px solid #2d3748;
+            border: 1px solid #1a202c;
             padding: 12px 60px;
-            color: #2d3748;
+            color: #1a202c;
             font-size: 1.5rem;
             letter-spacing: 0.3em;
             text-decoration: none;
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.45);
             backdrop-filter: blur(8px);
             text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.9);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
         }
     </style>
 </head>
