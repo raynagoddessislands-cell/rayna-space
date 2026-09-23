@@ -7,7 +7,7 @@
     <style>
         /* 宇宙とゲーミングを融合したダークサイバー精神 */
         body {
-            background-color: #0a0a16;
+            background-color: #06060c; /* より深い漆黒の宇宙へ */
             color: #00ffcc;
             font-family: 'Courier New', Courier, monospace, sans-serif;
             margin: 0;
@@ -19,30 +19,54 @@
             min-height: 100vh;
             overflow: hidden;
             text-shadow: 0 0 10px #00ffcc;
+            position: relative;
         }
 
-        /* 空間の歪み（背景演出） */
-        .stars {
+        /* ==========================================
+           【新兵装】満天の星々：煌めきエフェクト
+           ========================================== */
+        .star-field {
             position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, transparent 20%, #0a0a16 20%, #0a0a16 80%, transparent 80%, transparent),
-                        radial-gradient(circle, transparent 20%, #0a0a16 20%, #0a0a16 80%, transparent 80%, transparent);
-            background-size: 4px 4px;
             z-index: -1;
-            opacity: 0.3;
+            pointer-events: none;
         }
 
-        /* 要塞の統制コンソール */
+        /* 星の共通仕様（純粋なCSSによる光の粒子） */
+        .star {
+            position: absolute;
+            background-color: #ffffff;
+            border-radius: 50%;
+            opacity: 0;
+        }
+
+        /* 3種類の異なるサイズと速度で煌めき（またたき）を分散 */
+        .star.size-s { width: 1px; height: 1px; animation: blinkStar 2s infinite ease-in-out; }
+        .star.size-m { width: 2px; height: 2px; animation: blinkStar 3s infinite ease-in-out; }
+        .star.size-l { width: 3px; height: 3px; animation: blinkStar 4s infinite ease-in-out; box-shadow: 0 0 4px #fff; }
+
+        /* 星のまたたきアニメーション */
+        @keyframes blinkStar {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* ==========================================
+           要塞の統制コンソール（メインUI）
+           ========================================== */
         .container {
             text-align: center;
             border: 2px solid #ff0055;
             padding: 40px;
-            background: rgba(10, 10, 22, 0.8);
-            box-shadow: 0 0 30px rgba(255, 0, 85, 0.5);
+            background: rgba(6, 6, 12, 0.85); /* 星が透けるよう調整 */
+            box-shadow: 0 0 30px rgba(255, 0, 85, 0.4);
             border-radius: 10px;
             max-width: 600px;
             width: 90%;
+            backdrop-filter: blur(4px); /* 背後の星をわずかににじませる近未来シールド */
         }
 
         h1 {
@@ -59,7 +83,7 @@
             margin-bottom: 30px;
         }
 
-        /* 運命のWorksボタン（works.htmlへのハイパーリンクへ換装） */
+        /* 運命のWorksボタン */
         .btn-works {
             display: inline-block;
             background: transparent;
@@ -89,11 +113,14 @@
             margin-top: 40px;
             font-size: 0.8rem;
             color: #8888aa;
+            z-index: 1;
         }
     </style>
 </head>
 <body>
-    <div class="stars"></div>
+
+    <!-- 【新兵装】満天の星々を展開するセクター -->
+    <div class="star-field" id="cosmos"></div>
 
     <div class="container">
         <h1>神島玲奈 宇宙哲学新要塞</h1>
@@ -102,12 +129,37 @@
         <p>「読者をサスペンスとロマンへ没頭させる高尚なゲーミング遊び場」</p>
         <p style="color: #8888aa; font-size: 0.9rem; margin-bottom: 40px;">※現在、副官の手により要塞拡張工事中</p>
 
-        <!-- 【換装完了】クリックで即座に作品アーカイブ領域（works.html）へワープ -->
+        <!-- WORKSへの接続ワープゲート -->
         <a href="works.html" class="btn-works">WORKS</a>
     </div>
 
     <div class="footer">
         &copy; 宇宙総合指令官提督 神島玲奈 / Powered by Cloudflare Pages
     </div>
+
+    <script>
+        // 【自動星々生成スクリプト】
+        // 要塞の背後に100個の異なる星をランダム配置し、煌めきを非同期に分散させる
+        const cosmos = document.getElementById('cosmos');
+        const starCount = 100;
+        const sizes = ['size-s', 'size-m', 'size-l'];
+
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            
+            // サイズをランダムに決定
+            const randomSize = sizes[Math.floor(Math.random() * sizes.length)];
+            star.classList.add('star', randomSize);
+            
+            // 配置位置（宇宙空間の座標）をランダムに決定
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            
+            // 煌めきのタイミングをランダムにずらし、自然なまたたきにする
+            star.style.animationDelay = Math.random() * 4 + 's';
+            
+            cosmos.appendChild(star);
+        }
+    </script>
 </body>
 </html>
