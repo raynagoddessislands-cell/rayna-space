@@ -59,7 +59,7 @@
             margin-bottom: 30px;
         }
 
-        /* 運命のWorksボタン */
+        /* 運命のWorksボタン（works.htmlへのハイパーリンクへ換装） */
         .btn-works {
             display: inline-block;
             background: transparent;
@@ -102,20 +102,12 @@
         <p>「読者をサスペンスとロマンへ没頭させる高尚なゲーミング遊び場」</p>
         <p style="color: #8888aa; font-size: 0.9rem; margin-bottom: 40px;">※現在、副官の手により要塞拡張工事中</p>
 
-        <!-- 遊び場の起点となるボタン -->
-        <a href="#works" class="btn-works" id="works-trigger">WORKS</a>
+        <!-- 【換装完了】クリックで即座に作品アーカイブ領域（works.html）へワープ -->
+        <a href="works.html" class="btn-works">WORKS</a>
     </div>
 
     <div class="footer">
         &copy; 宇宙総合指令官提督 神島玲奈 / Powered by Cloudflare Pages
     </div>
-
-    <script>
-        // ボタンを押した際、サスペンスを予感させる演出（実験用）
-        document.getElementById('works-trigger').addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('【警告】これより閣下の脳内宇宙、および分冊ePub／UFOスケルトンPDFの防衛領域（Works）へと接続を試みます。準備を整えよ。');
-        });
-    </script>
 </body>
 </html>
