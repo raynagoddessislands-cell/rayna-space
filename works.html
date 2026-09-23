@@ -42,6 +42,7 @@
             font-size: 2rem;
             text-shadow: 0 0 15px #00ffcc;
             margin-bottom: 30px;
+            letter-spacing: 2px;
         }
 
         .grid {
@@ -54,7 +55,6 @@
 
         /* 作品を格納するセクタースロット */
         .card {
-            border: 2px solid #333;
             background: rgba(20, 20, 40, 0.6);
             padding: 25px;
             border-radius: 8px;
@@ -62,27 +62,53 @@
             position: relative;
             overflow: hidden;
         }
+
+        /* 【新兵装】スロット01専用：ピンクのネオンパルスアニメーション */
+        .card-vol1 {
+            border: 2px solid #ff0055;
+            animation: neonPulsePink 3s infinite alternate;
+        }
+
+        /* 【新兵装】スロット02専用：グリーンのネオンパルスアニメーション */
+        .card-ufo {
+            border: 2px solid #00ffcc;
+            animation: neonPulseGreen 3s infinite alternate;
+        }
+
         .card:hover {
-            border-color: #00ffcc;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
             transform: translateY(-5px);
         }
 
         .card-type {
             font-size: 0.8rem;
-            color: #ff0055;
             font-weight: bold;
             letter-spacing: 1px;
         }
+        .text-pink { color: #ff0055; text-shadow: 0 0 5px #ff0055; }
+        .text-green { color: #00ffcc; text-shadow: 0 0 5px #00ffcc; }
 
         .card-title {
             color: #fff;
             font-size: 1.3rem;
             margin: 10px 0;
+            text-shadow: 0 0 8px rgba(255,255,255,0.5);
+        }
+
+        /* 【新兵装】タイピングテキストを格納するコンテナ */
+        .story-text {
+            color: #aaa;
+            font-size: 0.9rem;
+            min-height: 4.5em; /* テキスト出現中のガタつき防止 */
+            line-height: 1.5;
+        }
+
+        /* カーソルが点滅する演出 */
+        .story-text::after {
+            content: '_';
+            animation: blink 0.8s infinite;
         }
 
         .card-price {
-            color: #ff0055;
             font-size: 1.1rem;
             font-weight: bold;
             margin: 15px 0;
@@ -93,18 +119,49 @@
             display: block;
             text-align: center;
             background: transparent;
-            color: #00ffcc;
-            border: 1px solid #00ffcc;
             padding: 10px;
             text-decoration: none;
             font-weight: bold;
             transition: all 0.3s;
             cursor: pointer;
         }
-        .btn-gate:hover {
+        
+        .btn-gate-pink {
+            color: #ff0055;
+            border: 1px solid #ff0055;
+        }
+        .btn-gate-pink:hover {
+            background: #ff0055;
+            color: #0a0a16;
+            box-shadow: 0 0 15px #ff0055;
+        }
+
+        .btn-gate-green {
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
+        }
+        .btn-gate-green:hover {
             background: #00ffcc;
             color: #0a0a16;
             box-shadow: 0 0 15px #00ffcc;
+        }
+
+        /* アニメーション定義：ピンクパルス */
+        @keyframes neonPulsePink {
+            0% { box-shadow: 0 0 5px rgba(255, 0, 85, 0.2); border-color: rgba(255, 0, 85, 0.5); }
+            100% { box-shadow: 0 0 20px rgba(255, 0, 85, 0.6); border-color: rgba(255, 0, 85, 1); }
+        }
+
+        /* アニメーション定義：グリーンパルス */
+        @keyframes neonPulseGreen {
+            0% { box-shadow: 0 0 5px rgba(0, 255, 204, 0.2); border-color: rgba(0, 255, 204, 0.5); }
+            100% { box-shadow: 0 0 20px rgba(0, 255, 204, 0.6); border-color: rgba(0, 255, 204, 1); }
+        }
+
+        /* カーソル点滅 */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
     </style>
 </head>
@@ -118,25 +175,52 @@
 
     <div class="grid">
         <!-- スロット1：有料宇宙哲学書 -->
-        <div class="card">
-            <div class="card-type">[VOLUME 01 / 電子図書館閲覧権]</div>
+        <div class="card card-vol1">
+            <div class="card-type text-pink">[VOLUME 01 / 電子図書館閲覧権]</div>
             <div class="card-title">宇宙哲学分冊 第1巻（仮）</div>
-            <p style="color: #aaa; font-size: 0.9rem;">ここにサスペンスとロマンを孕んだ、人類の意識を進化させるあらすじが展開されます。</p>
-            <div class="card-price">価格: ￥2,000</div>
-            <div class="btn-gate" onclick="triggerPurchase()">決済ゲートを起動</div>
+            <!-- タイピング演出が流れる領域 -->
+            <div class="story-text" id="type-vol1"></div>
+            <div class="card-price text-pink">価格: ￥2,000</div>
+            <div class="btn-gate btn-gate-pink" onclick="triggerPurchase()">決済ゲートを起動</div>
         </div>
 
         <!-- スロット2：UFOスケルトンPDF -->
-        <div class="card">
-            <div class="card-type">[DATA FILE / 極秘付録]</div>
+        <div class="card card-ufo">
+            <div class="card-type text-green">[DATA FILE / 極秘付録]</div>
             <div class="card-title">オリジナルUFOスケルトン設計図</div>
-            <p style="color: #aaa; font-size: 0.9rem;">機密解除されたUFOの構造を可視化した、特製スケルトンPDFデータ。</p>
-            <div class="card-price" style="color: #00ffcc;">価格: ￥0 (限定特典)</div>
-            <div class="btn-gate" onclick="alert('UFO設計図のダウンロードリンク、または簡易ビューアへ接続します。')">データを開く</div>
+            <!-- タイピング演出が流れる領域 -->
+            <div class="story-text" id="type-ufo"></div>
+            <div class="card-price text-green">価格: ￥0 (限定特典)</div>
+            <div class="btn-gate btn-gate-green" onclick="alert('UFO設計図のダウンロードリンク、または簡易ビューアへ接続します。')">データを開く</div>
         </div>
     </div>
 
     <script>
+        // 【新兵装】タイピングエフェクト制御スクリプト
+        const textVol1 = "ここにサスペンスとロマンを孕んだ、人類の意識を進化させるあらすじが展開されます。現在、副官の手により文章の同期（アップデート）を待機中…。";
+        const textUFO = "機密解除されたUFOの内部構造を完全可視化した、特製スケルトンPDFデータ。閲覧には高尚な精神の覚醒が必要となる。";
+
+        function typeWriter(elementId, text, speed) {
+            let i = 0;
+            const element = document.getElementById(elementId);
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // ページ読み込み完了時にタイピングを開始（文字送り速度: 50ミリ秒）
+        window.onload = function() {
+            typeWriter("type-vol1", textVol1, 50);
+            setTimeout(() => {
+                typeWriter("type-ufo", textUFO, 50);
+            }, 1000); // 2つ目のカードは1秒遅らせて起動
+        };
+
         function triggerPurchase() {
             alert('【通信中】これより暗号化決済ゲート（Stripe連携予定地）との同期を試みます。フェーズ3の拡張をお待ちください。');
         }
