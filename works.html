@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宇宙哲学新要塞 - WORKSアーカイブ</title>
+    <style>
+        body {
+            background-color: #0a0a16;
+            color: #00ffcc;
+            font-family: 'Courier New', Courier, monospace, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .header-nav {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 40px;
+        }
+
+        /* トップへ戻るための帰還ボタン */
+        .btn-back {
+            color: #ff0055;
+            text-decoration: none;
+            border: 1px solid #ff0055;
+            padding: 5px 15px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        .btn-back:hover {
+            background: #ff0055;
+            color: #fff;
+            box-shadow: 0 0 10px #ff0055;
+        }
+
+        h2 {
+            font-size: 2rem;
+            text-shadow: 0 0 15px #00ffcc;
+            margin-bottom: 30px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        /* 作品を格納するセクタースロット */
+        .card {
+            border: 2px solid #333;
+            background: rgba(20, 20, 40, 0.6);
+            padding: 25px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .card:hover {
+            border-color: #00ffcc;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .card-type {
+            font-size: 0.8rem;
+            color: #ff0055;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .card-title {
+            color: #fff;
+            font-size: 1.3rem;
+            margin: 10px 0;
+        }
+
+        .card-price {
+            color: #ff0055;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        /* 購買・閲覧ゲートを起動するボタン */
+        .btn-gate {
+            display: block;
+            text-align: center;
+            background: transparent;
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
+            padding: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .btn-gate:hover {
+            background: #00ffcc;
+            color: #0a0a16;
+            box-shadow: 0 0 15px #00ffcc;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-nav">
+        <a href="index.html" class="btn-back">◀ 要塞中心核へ帰還</a>
+    </div>
+
+    <h2>【作品アーカイブ領域】</h2>
+
+    <div class="grid">
+        <!-- スロット1：有料宇宙哲学書 -->
+        <div class="card">
+            <div class="card-type">[VOLUME 01 / 電子図書館閲覧権]</div>
+            <div class="card-title">宇宙哲学分冊 第1巻（仮）</div>
+            <p style="color: #aaa; font-size: 0.9rem;">ここにサスペンスとロマンを孕んだ、人類の意識を進化させるあらすじが展開されます。</p>
+            <div class="card-price">価格: ￥2,000</div>
+            <div class="btn-gate" onclick="triggerPurchase()">決済ゲートを起動</div>
+        </div>
+
+        <!-- スロット2：UFOスケルトンPDF -->
+        <div class="card">
+            <div class="card-type">[DATA FILE / 極秘付録]</div>
+            <div class="card-title">オリジナルUFOスケルトン設計図</div>
+            <p style="color: #aaa; font-size: 0.9rem;">機密解除されたUFOの構造を可視化した、特製スケルトンPDFデータ。</p>
+            <div class="card-price" style="color: #00ffcc;">価格: ￥0 (限定特典)</div>
+            <div class="btn-gate" onclick="alert('UFO設計図のダウンロードリンク、または簡易ビューアへ接続します。')">データを開く</div>
+        </div>
+    </div>
+
+    <script>
+        function triggerPurchase() {
+            alert('【通信中】これより暗号化決済ゲート（Stripe連携予定地）との同期を試みます。フェーズ3の拡張をお待ちください。');
+        }
+    </script>
+</body>
+</html>
