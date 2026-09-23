@@ -1,117 +1,110 @@
-    /* 【新兵装】ド迫力・宇宙シネマ背景動画の器 */
-    .video-background {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 100vw;
-        height: 56.25vw; /* 16:9の黄金シネマ比率 */
-        min-height: 100vh;
-        min-width: 177.77vh;
-        transform: translate(-50%, -50%) scale(1.0);
-        z-index: 1;
-        transition: transform 6s cubic-bezier(0.1, 0.8, 0.2, 1);
-        pointer-events: none;
-    }
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rayna.space</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(180deg, #b0c8d6 0%, #dcdcf7 50%, #e8edf3 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Times New Roman', 'Noto Serif JP', serif;
+            -webkit-user-select: none;
+            user-select: none;
+        }
 
-    /* 「Works」プッシュ時の一大ズームアップ挙動 */
-    .video-background.zoom {
-        transform: translate(-50%, -50%) scale(1.5);
-    }
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(255,255,255,0.4) 0%, transparent 60%),
+                radial-gradient(circle at 80% 70%, rgba(214,214,245,0.5) 0%, transparent 70%);
+            filter: url(#watercolor-blur);
+            opacity: 0.9;
+            pointer-events: none;
+            z-index: 1;
+        }
 
-    /* 動画の上の漆黒フィルター（エレガントな深みを演出） */
-    .video-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
-        z-index: 2;
-        pointer-events: none;
-    }
+        .reeds-shadow {
+            position: absolute;
+            bottom: 0;
+            left: 8%;
+            width: 180px;
+            height: 240px;
+            background: linear-gradient(15deg, rgba(26,42,58,0.15) 0%, transparent 80%);
+            clip-path: polygon(10% 100%, 15% 20%, 25% 100%, 40% 40%, 50% 100%, 65% 5%, 75% 100%, 85% 30%, 90% 100%);
+            filter: blur(4px);
+            z-index: 2;
+            pointer-events: none;
+            transform-origin: bottom center;
+            animation: sway 6s ease-in-out infinite alternate;
+        }
 
-    /* シネマスコープ（映画館の上下黒帯） */
-    .cinema-bolt {
-        position: absolute;
-        left: 0;
-        width: 100%;
-        height: 0;
-        background: #000;
-        z-index: 10;
-        transition: height 2s cubic-bezier(0.25, 1, 0.3, 1);
-    }
-    .bolt-top { top: 0; }
-    .bolt-bottom { bottom: 0; }
+        @keyframes sway {
+            0% { transform: rotate(-2deg) skewX(-2deg); }
+            100% { transform: rotate(2deg) skewX(2deg); }
+        }
 
-    .cinema-active .bolt-top,
-    .cinema-active .bolt-bottom {
-        height: 14vh; /* 荘厳なシネマ画角へ */
-    }
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
 
-    /* 操縦席（メインUI） */
-    .interface {
-        position: relative;
-        z-index: 5;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-        text-align: center;
-        transition: opacity 1.5s ease, filter 1.5s ease;
-    }
+        .title {
+            font-size: 36px;
+            font-weight: 400;
+            letter-spacing: 0.35em;
+            color: #1a2a3a;
+            margin-bottom: 35px;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
 
-    .works-trigger {
-        background: transparent;
-        border: 1px solid rgba(255,255,255,0.6);
-        color: #fff;
-        padding: 20px 60px;
-        font-size: 1.4rem;
-        letter-spacing: 0.5em;
-        cursor: pointer;
-        transition: all 0.8s cubic-bezier(0.1, 0.8, 0.2, 1);
-        backdrop-filter: blur(4px);
-    }
+        .btn-works {
+            background: rgba(26,42,58,0.03);
+            border: 1px solid #1a2a3a;
+            color: #1a2a3a;
+            padding: 12px 50px;
+            font-size: 14px;
+            letter-spacing: 0.25em;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
 
-    .works-trigger:hover {
-        background: #fff;
-        color: #000;
-        box-shadow: 0 0 40px rgba(255,255,255,0.8);
-        letter-spacing: 0.7em;
-    }
+        .btn-works:hover {
+            background: #1a2a3a;
+            color: #ffffff;
+            box-shadow: 0 5px 15px rgba(26,42,58,0.1);
+        }
+    </style>
+</head>
+<body>
 
-    /* 映画風シネマタイポグラフィ（神聖ゴールド） */
-    .cinema-text-container {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 15;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        pointer-events: none;
-    }
+    <svg xmlns="http://w3.org" style="position: absolute; width: 0; height: 0;">
+        <filter id="watercolor-blur">
+            <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+    </svg>
 
-    .phrase {
-        font-size: 2.6rem;
-        color: #f1c40f; /* 聖なる金色の輝き */
-        letter-spacing: 0.6em;
-        margin: 30px 0;
-        opacity: 0;
-        filter: blur(25px);
-        transform: scale(0.85);
-        transition: opacity 3s cubic-bezier(0.1, 0.8, 0.2, 1), filter 3s cubic-bezier(0.1, 0.8, 0.2, 1), transform 3s cubic-bezier(0.1, 0.8, 0.2, 1);
-        text-shadow: 0 0 25px rgba(241,196,15,0.6);
-        font-weight: 300;
-    }
+    <div class="reeds-shadow"></div>
 
-    .phrase.reveal {
-        opacity: 1;
-        filter: blur(0px);
-        transform: scale(1);
-    }
-</style>
+    <div class="container">
+        <div class="title">Rayna Kamisima</div>
+        <button class="btn-works" onclick="location.href='/works'">Works</button>
+    </div>
+
+</body>
+</html>
