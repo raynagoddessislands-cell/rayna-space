@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>レイナスペース | 神島玲奈 宇宙哲学本陣</title>
+    <title>rayna.space</title>
     <style>
-        /* 【第1層：背景】佐鳴湖畔の静謐な空気感を宿す水彩グラデーション */
         body, html {
             margin: 0;
             padding: 0;
@@ -21,36 +20,67 @@
             align-items: center;
             font-family: 'Times New Roman', 'Noto Serif JP', serif;
             -webkit-user-select: none;
-            user-select: none; /* 絶対防衛コピープロテクション */
+            user-select: none;
         }
 
-        /* 【第2層：水彩の質感】特殊フィルターで淡い空の「にじみ」と「筋雲」を合成 */
         body::before {
             content: "";
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             background: 
-                linear-gradient(70deg, rgba(255,255,255,0.25) 45%, rgba(255,255,255,0.4) 48%, rgba(255,255,255,0) 55%),
-                linear-gradient(-35deg, rgba(255,255,255,0.2) 35%, rgba(255,255,255,0.3) 40%, rgba(255,255,255,0) 50%);
-            filter: url(#watercolor-blur); /* 後敷きのSVGフィルターと連動 */
+                linear-gradient(70deg, transparent 30%, rgba(255,255,255,0.25) 45%, rgba(255,255,255,0.4) 48%, transparent 55%),
+                linear-gradient(-35deg, transparent 20%, rgba(255,255,255,0.2) 35%, rgba(255,255,255,0.3) 40%, transparent 50%);
+            filter: url(#watercolor-blur);
             opacity: 0.85;
             pointer-events: none;
             z-index: 1;
         }
 
-        /* 【第3層：前景】手前にそよぐ瑞々しい葦の葉やUIの配置コンテナ */
-        .foreground-content {
+        .reeds {
+            position: absolute;
+            bottom: -10px;
+            left: 5%;
+            width: 250px;
+            height: auto;
+            opacity: 0.25;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .container {
             position: relative;
             z-index: 10;
-            color: #1a2a3a;
             text-align: center;
-            text-shadow: 0 0 15px rgba(255,255,255,0.6);
+        }
+
+        .title {
+            font-size: 32px;
+            font-weight: 400;
+            letter-spacing: 0.3em;
+            color: #1a2a3a;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .btn-works {
+            background: none;
+            border: 1px solid #1a2a3a;
+            color: #1a2a3a;
+            padding: 10px 40px;
+            font-size: 14px;
+            letter-spacing: 0.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-works:hover {
+            background: #1a2a3a;
+            color: #ffffff;
         }
     </style>
 </head>
 <body>
 
-    <!-- 質感のための隠しSVGフィルター -->
     <svg xmlns="http://w3.org" style="display: none;">
         <filter id="watercolor-blur">
             <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
@@ -58,10 +88,9 @@
         </filter>
     </svg>
 
-    <!-- 前景UI（遊び場・文学没頭スペース） -->
-    <div class="foreground-content">
-        <h1 style="font-size: 2.5rem; letter-spacing: 0.2em; font-weight: 500;">レイナスペース</h1>
-        <p style="font-size: 1.1rem; letter-spacing: 0.1em; opacity: 0.9;">神島玲奈 宇宙哲学本陣</p>
+    <div class="container">
+        <div class="title">Rayna Kamisima</div>
+        <button class="btn-works" onclick="location.href='/works'">Works</button>
     </div>
 
 </body>
