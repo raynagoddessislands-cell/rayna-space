@@ -3,70 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>rayna.space | 神島玲奈 宇宙哲学本陣</title>
+    <title>レイナスペース | 神島玲奈 宇宙哲学本陣</title>
     <style>
         /* 【第1層：背景】佐鳴湖畔の静謐な空気感を宿す水彩グラデーション */
         body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            min-height: 100vh; overflow: hidden; position: relative;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
             background: linear-gradient(180deg, #a2bccc 0%, #d6d6f5 40%, #f0f4f8 100%);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             font-family: 'Times New Roman', 'Noto Serif JP', serif;
-            -webkit-user-select: none; user-select: none; /* 絶対防衛コピープロテクション */
+            -webkit-user-select: none;
+            user-select: none; /* 絶対防衛コピープロテクション */
         }
 
         /* 【第2層：水彩の質感】特殊フィルターで淡い空の「にじみ」と「筋雲」を合成 */
         body::before {
-            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: 
-                linear-gradient(70deg, transparent 30%, rgba(255,255,255,0.25) 45%, rgba(255,255,255,0.4) 48%, transparent 55%),
-                linear-gradient(-35deg, transparent 20%, rgba(255,255,255,0.2) 35%, rgba(255,255,255,0.3) 40%, transparent 50%);
-            filter: url(#watercolor-blur);
-            opacity: 0.85; pointer-events: none; z-index: 1;
+                linear-gradient(70deg, rgba(255,255,255,0.25) 45%, rgba(255,255,255,0.4) 48%, rgba(255,255,255,0) 55%),
+                linear-gradient(-35deg, rgba(255,255,255,0.2) 35%, rgba(255,255,255,0.3) 40%, rgba(255,255,255,0) 50%);
+            filter: url(#watercolor-blur); /* 後敷きのSVGフィルターと連動 */
+            opacity: 0.85;
+            pointer-events: none;
+            z-index: 1;
         }
 
-        /* 【第3層：前景】手前にそよぐ瑞々しい葦の葉の配置設定 */
-        .reeds {
-            position: absolute; bottom: -10px; left: 5%; width: 250px; height: auto;
-            opacity: 0.25; z-index: 2; pointer-events: none;
-            filter: blur(0.5px);
-        }
-
-        /* 【第4層：文字陣】高潔なるアイデンティティ表示 */
-        .container { text-align: center; z-index: 10; padding: 20px; }
-        .title {
-            color: #2c3e50; font-size: 3.5rem; letter-spacing: 0.4em; margin-bottom: 30px;
-            text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.9); font-weight: 300; text-transform: uppercase;
-        }
-        .works-box {
-            display: inline-block; border: 1px solid #2c3e50; padding: 12px 60px;
-            color: #2c3e50; font-size: 1.5rem; letter-spacing: 0.3em; text-decoration: none;
-            background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(8px);
-            text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.9); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+        /* 【第3層：前景】手前にそよぐ瑞々しい葦の葉やUIの配置コンテナ */
+        .foreground-content {
+            position: relative;
+            z-index: 10;
+            color: #1a2a3a;
+            text-align: center;
+            text-shadow: 0 0 15px rgba(255,255,255,0.6);
         }
     </style>
 </head>
 <body>
 
-    <!-- 【SVG多層化の真髄】デジタルキャンバスに水彩のにじみを発生させる特殊コード -->
+    <!-- 質感のための隠しSVGフィルター -->
     <svg xmlns="http://w3.org" style="display: none;">
         <filter id="watercolor-blur">
             <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="30" xChannelSelector="R" yChannelSelector="G" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="20" xChannelSelector="R" yChannelSelector="G" />
         </filter>
     </svg>
 
-    <!-- 【ベクター描画層】佐鳴湖畔の葦の葉を模した精密コードグラフィック -->
-    <svg class="reeds" viewBox="0 0 100 100" xmlns="http://w3.org">
-        <path d="M10,100 Q15,40 40,10 Q25,50 15,100 Z" fill="#4a5d4e"/>
-        <path d="M25,100 Q20,30 55,5 Q35,45 30,100 Z" fill="#5c7562"/>
-        <path d="M5,100 Q25,60 20,20 Q15,70 8,100 Z" fill="#3d4d40"/>
-    </svg>
-
-    <!-- 【本体コンテナ】 -->
-    <div class="container">
-        <div class="title">RAYNA KAMISIMA</div>
-        <div class="works-box">Works</div>
+    <!-- 前景UI（遊び場・文学没頭スペース） -->
+    <div class="foreground-content">
+        <h1 style="font-size: 2.5rem; letter-spacing: 0.2em; font-weight: 500;">レイナスペース</h1>
+        <p style="font-size: 1.1rem; letter-spacing: 0.1em; opacity: 0.9;">神島玲奈 宇宙哲学本陣</p>
     </div>
 
 </body>
