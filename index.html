@@ -7,7 +7,7 @@
     <style>
         /* 宇宙とゲーミングを融合したダークサイバー精神 */
         body {
-            background-color: #06060c; /* より深い漆黒の宇宙へ */
+            background-color: #05050a; /* 深淵なる漆黒宇宙 */
             color: #00ffcc;
             font-family: 'Courier New', Courier, monospace, sans-serif;
             margin: 0;
@@ -22,34 +22,15 @@
             position: relative;
         }
 
-        /* 満天の星々：煌めきエフェクト */
-        .star-field {
+        /* マウスストーカーを描画する透明なキャンバス */
+        #comet-canvas {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
-            pointer-events: none;
-        }
-
-        /* 星の共通仕様 */
-        .star {
-            position: absolute;
-            background-color: #ffffff;
-            border-radius: 50%;
-            opacity: 0;
-        }
-
-        /* 3種類の異なるサイズと速度で煌めき（またたき）を分散 */
-        .star.size-s { width: 1px; height: 1px; animation: blinkStar 2s infinite ease-in-out; }
-        .star.size-m { width: 2px; height: 2px; animation: blinkStar 3s infinite ease-in-out; }
-        .star.size-l { width: 3px; height: 3px; animation: blinkStar 4s infinite ease-in-out; box-shadow: 0 0 4px #fff; }
-
-        /* 星のまたたきアニメーション */
-        @keyframes blinkStar {
-            0%, 100% { opacity: 0.2; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.2); }
+            pointer-events: none; /* 下にあるボタンのクリックを邪魔しない */
         }
 
         /* 要塞の統制コンソール（メインUI） */
@@ -57,12 +38,12 @@
             text-align: center;
             border: 2px solid #ff0055;
             padding: 40px;
-            background: rgba(6, 6, 12, 0.85); /* 星が透けるよう調整 */
+            background: rgba(5, 5, 10, 0.85);
             box-shadow: 0 0 30px rgba(255, 0, 85, 0.4);
             border-radius: 10px;
             max-width: 600px;
             width: 90%;
-            backdrop-filter: blur(4px); /* 背後の星をわずかににじませる近未来シールド */
+            backdrop-filter: blur(4px);
             box-sizing: border-box;
         }
 
@@ -107,7 +88,7 @@
         }
         .btn-green:hover {
             background: #00ffcc;
-            color: #06060c;
+            color: #05050a;
             box-shadow: 0 0 30px #00ffcc;
             transform: scale(1.03);
         }
@@ -120,7 +101,7 @@
         }
         .btn-pink:hover {
             background: #ff0055;
-            color: #06060c;
+            color: #05050a;
             box-shadow: 0 0 30px #ff0055;
             transform: scale(1.03);
         }
@@ -135,8 +116,8 @@
 </head>
 <body>
 
-    <!-- 満天の星々を展開するセクター -->
-    <div class="star-field" id="cosmos"></div>
+    <!-- 彗星と火花の星々を描画する高尚な電子キャンバス -->
+    <canvas id="comet-canvas"></canvas>
 
     <div class="container">
         <h1>神島玲奈 宇宙哲学新要塞</h1>
@@ -145,7 +126,7 @@
         <p>「読者をサスペンスとロマンへ没頭させる高尚なゲーミング遊び場」</p>
         <p style="color: #8888aa; font-size: 0.9rem; margin-bottom: 40px;">※現在、副官の手により要塞拡張工事中</p>
 
-        <!-- 【結合完了】2つの重要セクターへのワープゲートボタン -->
+        <!-- 各重要セクターへのワープゲートボタン -->
         <a href="works.html" class="btn-works btn-green">WORKS</a>
         <br>
         <a href="consultation.html" class="btn-works btn-pink">AI CONSULTATION</a>
@@ -156,20 +137,119 @@
     </div>
 
     <script>
-        // 【自動星々生成スクリプト】
-        const cosmos = document.getElementById('cosmos');
-        const starCount = 100;
-        const sizes = ['size-s', 'size-m', 'size-l'];
+        const canvas = document.getElementById('comet-canvas');
+        const ctx = canvas.getContext('2d');
 
-        for (let i = 0; i < starCount; i++) {
-            const star = document.createElement('div');
-            const randomSize = sizes[Math.floor(Math.random() * sizes.length)];
-            star.classList.add('star', randomSize);
-            star.style.top = Math.random() * 100 + '%';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.animationDelay = Math.random() * 4 + 's';
-            cosmos.appendChild(star);
+        // キャンバスのサイズを画面全体に同期
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const particles = [];
+        const mouse = { x: null, y: null };
+
+        // マウスの軌跡（またはタッチ操作）を感知
+        window.addEventListener('mousemove', function(e) {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+            // マウスが動くたびに星の子供（火花）を生成
+            for (let i = 0; i < 2; i++) {
+                particles.push(new Particle(mouse.x, mouse.y));
+            }
+        });
+
+        // スマートフォン等のタッチ操作にもフォースを同期
+        window.addEventListener('touchmove', function(e) {
+            mouse.x = e.touches[0].clientX;
+            mouse.y = e.touches[0].clientY;
+            for (let i = 0; i < 2; i++) {
+                particles.push(new Particle(mouse.x, mouse.y));
+            }
+        });
+
+        // 星の子供（火花粒子）のクラス定義
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                // 彗星の尾のようにわずかに四方に散る速度
+                this.speedX = (Math.random() - 0.5) * 2;
+                this.speedY = (Math.random() - 0.5) * 2;
+                // 星の子供の初期サイズ
+                this.size = Math.random() * 3 + 1;
+                // 色は閣下のネオンピンクとサイバーグリーン、ホワイトの煌めき
+                const colors = ['#00ffcc', '#ff0055', '#ffffff'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                // 生存時間（透明度）
+                this.alpha = 1;
+                this.decay = Math.random() * 0.02 + 0.01; // 消えていく速度
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.alpha -= this.decay;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                // 火花のような光彩（グロー効果）
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // 定常背景として、あらかじめ宇宙にただよう常駐の星々も15個配置
+        const staticStars = [];
+        for (let i = 0; i < 15; i++) {
+            staticStars.push({
+                x: Math.random(),
+                y: Math.random(),
+                size: Math.random() * 2 + 0.5,
+                angle: Math.random() * Math.PI
+            });
+        }
+
+        // 要塞の描画ループ（アニメーションフレーム）
+        function animate() {
+            // 前のフレームをうっすら残して残像（彗星の尾）を作る
+            ctx.fillStyle = 'rgba(5, 5, 10, 0.3)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 常駐の星々を静かにまたたかせる
+            staticStars.forEach(star => {
+                star.angle += 0.02;
+                ctx.save();
+                ctx.globalAlpha = 0.3 + Math.abs(Math.sin(star.angle)) * 0.7;
+                ctx.beginPath();
+                ctx.arc(star.x * canvas.width, star.y * canvas.height, star.size, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+                ctx.restore();
+            });
+
+            // マウスを追いかける星の子供たちを更新・描画
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                // 完全に透明になった火花は消滅（メモリ解放）
+                if (particles[i].alpha <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+        animate();
     </script>
 </body>
 </html>
