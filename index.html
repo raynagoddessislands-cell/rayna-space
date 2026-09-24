@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>宇宙哲学新要塞 - 神島玲奈指令官の領域</title>
-    <!-- 【新兵装】地球上のあらゆるスマホへSFフォントを配備する通信リンク -->
+    <!-- 地球上のあらゆるスマホへSFフォントを配備する通信リンク -->
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         body {
-            background-color: #05050a;
+            background-color: #040408; /* さらに深い、真の宇宙の深淵 */
             color: #00ffcc;
-            /* 英語はSFモノスペース、日本語はシャープなゴシックを強制指定 */
             font-family: 'Share Tech Mono', 'Courier New', 'Noto Sans JP', sans-serif;
             margin: 0;
             padding: 0;
@@ -19,7 +18,6 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            /* スマホの上下スクロールによるエフェクトの切れを防止 */
             min-height: -webkit-fill-available;
             overflow: hidden;
             text-shadow: 0 0 10px #00ffcc;
@@ -30,41 +28,41 @@
             height: -webkit-fill-available;
         }
 
-        /* マウス＆タッチストーカー用電子キャンバスの絶対固定 */
+        /* マウス＆タッチストーカー用電子キャンバス（銀河空間） */
         #comet-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 0; /* 背後と前面の境界線上に配置 */
+            z-index: 0;
             pointer-events: none;
         }
 
-        /* 要塞の統制コンソール（スマホの画面幅に合わせて可変） */
+        /* 要塞の統制コンソール（メインUI） */
         .container {
             text-align: center;
             border: 2px solid #ff0055;
             padding: 30px 20px;
-            background: rgba(5, 5, 10, 0.88);
-            box-shadow: 0 0 30px rgba(255, 0, 85, 0.4);
+            background: rgba(4, 4, 8, 0.88);
+            box-shadow: 0 0 35px rgba(255, 0, 85, 0.4);
             border-radius: 10px;
             max-width: 500px;
             width: 88%;
             backdrop-filter: blur(4px);
             box-sizing: border-box;
-            z-index: 10; /* タッチを邪魔しないよう前面に配置 */
+            z-index: 10;
             position: relative;
         }
 
-        /* 【新兵装】スマホ画面でも絶対に1行で美しく収まる可変タイトル */
+        /* スマホ画面でも絶対に1行で美しく収まる可変タイトル */
         h1 {
             color: #ffffff;
             font-family: 'Noto Sans JP', sans-serif;
             font-size: clamp(1.2rem, 5.5vw, 2rem);
             margin: 0 0 10px 0;
             text-shadow: 0 0 20px #ff0055;
-            white-space: nowrap; /* 絶対に途中で折り返さない */
+            white-space: nowrap;
             letter-spacing: 1px;
         }
 
@@ -81,7 +79,7 @@
             margin: 10px 0;
         }
 
-        /* 共通ボタン基本仕様（スマホの押しやすさを考慮） */
+        /* 共通ボタン基本仕様 */
         .btn-works {
             display: inline-block;
             background: transparent;
@@ -96,7 +94,7 @@
             box-sizing: border-box;
             width: 100%;
             max-width: 320px;
-            -webkit-tap-highlight-color: transparent; /* スマホタップ時の青い影を消去 */
+            -webkit-tap-highlight-color: transparent;
         }
 
         .btn-green {
@@ -107,7 +105,7 @@
         }
         .btn-green:hover, .btn-green:active {
             background: #00ffcc;
-            color: #05050a;
+            color: #040408;
             box-shadow: 0 0 30px #00ffcc;
         }
 
@@ -118,7 +116,7 @@
         }
         .btn-pink:hover, .btn-pink:active {
             background: #ff0055;
-            color: #05050a;
+            color: #040408;
             box-shadow: 0 0 30px #ff0055;
         }
 
@@ -165,22 +163,19 @@
 
         const particles = [];
 
-        // マウス移動（PC用フォース）
         window.addEventListener('mousemove', function(e) {
             spawnParticles(e.clientX, e.clientY);
         });
 
-        // 【スマホ最適化】指でのタッチ・ドラッグを完全に感知して同期
         window.addEventListener('touchmove', function(e) {
             if (e.touches.length > 0) {
-                spawnParticles(e.touches[0].clientX, e.touches[0].clientY);
+                spawnParticles(e.touches.clientX, e.touches.clientY);
             }
         }, { passive: true });
 
-        // 【スマホ最適化】タップした瞬間にもその座標に火花を散らす
         window.addEventListener('touchstart', function(e) {
             if (e.touches.length > 0) {
-                spawnParticles(e.touches[0].clientX, e.touches[0].clientY, 5); // タップ時は多めに散らす
+                spawnParticles(e.touches.clientX, e.touches.clientY, 6); // タップ時は多めに星を散らす
             }
         }, { passive: true });
 
@@ -190,17 +185,20 @@
             }
         }
 
+        // 星の子供（五色色彩火花）クラス
         class Particle {
             constructor(x, y) {
                 this.x = x;
                 this.y = y;
-                this.speedX = (Math.random() - 0.5) * 2.5;
-                this.speedY = (Math.random() - 0.5) * 2.5;
+                // 【超強化】飛び散る勢いを高め、火花らしさを極限へ
+                this.speedX = (Math.random() - 0.5) * 3.5;
+                this.speedY = (Math.random() - 0.5) * 3.5;
                 this.size = Math.random() * 3 + 1;
-                const colors = ['#00ffcc', '#ff0055', '#ffffff'];
+                // 【超強化】色彩豊かに煌めく5つのカラーマトリクス
+                const colors = ['#00ffcc', '#ff0055', '#ffffff', '#3399ff', '#ffcc00'];
                 this.color = colors[Math.floor(Math.random() * colors.length)];
                 this.alpha = 1;
-                this.decay = Math.random() * 0.02 + 0.015; // スマホでの描写不可を避けるため微調整
+                this.decay = Math.random() * 0.025 + 0.015;
             }
 
             update() {
@@ -215,35 +213,39 @@
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fillStyle = this.color;
-                ctx.shadowBlur = 6;
+                ctx.shadowBlur = 8;
                 ctx.shadowColor = this.color;
                 ctx.fill();
                 ctx.restore();
             }
         }
 
-        // 常駐の星々（スマホ画面サイズに合わせて12個に調整）
+        // 【超強化】常駐の煌めく星々を「40個」の満天・銀河仕様へ大増幅
         const staticStars = [];
-        for (let i = 0; i < 12; i++) {
+        const starCount = 40;
+        for (let i = 0; i < starCount; i++) {
             staticStars.push({
                 x: Math.random(),
                 y: Math.random(),
-                size: Math.random() * 1.5 + 0.5,
-                angle: Math.random() * Math.PI
+                size: Math.random() * 1.8 + 0.4,
+                angle: Math.random() * Math.PI,
+                speed: Math.random() * 0.02 + 0.01 // またたく速度をランダム化
             });
         }
 
         function animate() {
-            ctx.fillStyle = 'rgba(5, 5, 10, 0.25)';
+            ctx.fillStyle = 'rgba(4, 4, 8, 0.25)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             staticStars.forEach(star => {
-                star.angle += 0.015;
+                star.angle += star.speed;
                 ctx.save();
-                ctx.globalAlpha = 0.2 + Math.abs(Math.sin(star.angle)) * 0.8;
+                ctx.globalAlpha = 0.15 + Math.abs(Math.sin(star.angle)) * 0.85;
                 ctx.beginPath();
                 ctx.arc(star.x * canvas.width, star.y * canvas.height, star.size, 0, Math.PI * 2);
                 ctx.fillStyle = '#ffffff';
+                // 10個に1個の割合で青白い一等星を混ぜて美しく
+                if (Math.random() < 0.01) ctx.fillStyle = '#00ffcc'; 
                 ctx.fill();
                 ctx.restore();
             });
