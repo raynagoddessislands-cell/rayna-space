@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>宇宙哲学聖域 - 主幹骨子実証ゲート</title>
-    <!-- Word(.docx)をブラウザで安全に解析する安定版ライブラリ -->
+    <!-- Word(.docx)安定版解析ライブラリ -->
     <script src="https://cloudflare.com"></script>
     <style>
         body {
@@ -16,25 +16,44 @@
             overflow-x: hidden;
             -webkit-touch-callout: none;
             user-select: none;
+            position: relative;
+        }
+
+        /* 宇宙背景パーティクル用の最背面キャンバス */
+        #universeCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none; /* 下のボタン操作を邪魔しない */
         }
 
         /* ショッキングピンクネオンの要塞枠線 */
         .fortress-container {
+            position: relative;
+            z-index: 1; /* キャンバスより前に配置 */
             border: 3px solid #ff007f;
             box-shadow: 0 0 15px #ff007f, inset 0 0 15px #ff007f;
             border-radius: 12px;
             padding: 20px;
             max-width: 650px;
             margin: 10px auto;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(5, 5, 10, 0.85);
+            backdrop-filter: blur(4px); /* 背景の星を妖艶にぼかす */
         }
 
+        /* スマホでも一列を死守するタイトル */
         h1 {
             color: #00ffff;
             text-shadow: 0 0 10px #00ffff;
             text-align: center;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             margin-top: 0;
+            white-space: nowrap; /* 一列を絶対に追従 */
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .gate-status {
@@ -43,7 +62,7 @@
             margin: 15px 0;
             padding: 12px;
             border-radius: 6px;
-            background: #111;
+            background: rgba(17, 17, 17, 0.9);
             font-size: 0.95rem;
         }
         .status-locked { color: #ff3333; border: 1px solid #ff3333; }
@@ -77,13 +96,20 @@
             padding-top: 20px;
         }
 
-        /* モード換装スイッチのスタイル */
-        .mode-switch-container {
+        .control-panel {
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 10px;
+            gap: 10px;
         }
-        .btn-mode-switch {
+        
+        .font-controls {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-control {
             background: #222;
             color: #00ffff;
             border: 1px solid #00ffff;
@@ -94,7 +120,6 @@
             font-weight: bold;
         }
 
-        /* 本を開いたような全画面キャンバス（初期値：和紙モード） */
         .book-viewport {
             width: 100%;
             height: 450px;
@@ -103,23 +128,17 @@
             padding: 25px;
             box-sizing: border-box;
             overflow-y: auto;
-            font-size: 1.1rem;
             line-height: 1.8;
             letter-spacing: 0.05em;
-            transition: background-color 0.5s, color 0.5s; /* 滑らかな換装 */
+            transition: background-color 0.5s, color 0.5s, font-size 0.3s;
         }
 
-        /* 【和紙モード】（初期状態） */
-        .theme-washi {
-            background-color: #fcfaf2;
-            color: #111111;
-        }
+        .font-small  { font-size: 0.9rem; }
+        .font-medium { font-size: 1.1rem; }
+        .font-large  { font-size: 1.4rem; }
 
-        /* 【深宇宙ダークモード】（閣下の御要望） */
-        .theme-dark {
-            background-color: #12121a;
-            color: #e0e0e5;
-        }
+        .theme-washi { background-color: #fcfaf2; color: #111111; }
+        .theme-dark { background-color: #12121a; color: #e0e0e5; }
 
         .book-viewport p { margin-bottom: 1.5em; text-align: justify; }
 
@@ -135,15 +154,17 @@
             padding: 10px 20px;
             border-radius: 4px;
             font-weight: bold;
-            cursor: pointer;
             box-shadow: 0 0 8px #ff007f;
         }
     </style>
 </head>
 <body oncontextmenu="return false;" onselectstart="return false;" oncopy="return false;">
 
-    <div class="fortress-container">
-        <h1>宇宙哲学聖域決済ゲート</h1>
+    <!-- 五色に煌めく超彗星を宿す電脳キャンバス -->
+    <canvas id="universeCanvas"></canvas>
+
+    <div class="fortress-container" id="fortressGate">
+        <h1 id="targetTitle">🌌 宇宙哲学聖域決済ゲート 🌌</h1>
         
         <div id="gateStatus" class="gate-status status-locked">
             【聖域封印中】最新書籍（宇宙金貨２枚）
@@ -155,15 +176,17 @@
             <button class="btn-payment" onclick="processUnlock('PayPal')">🔏 PayPal 決済エミュレート</button>
         </div>
 
-        <!-- 解錠後に100%自動現出するビューア群 -->
         <div id="bookSanctuary" class="book-sanctuary">
-            <!-- 閣下の御要望：ダークモード波動換装スイッチ -->
-            <div class="mode-switch-container">
-                <button id="modeSwitchBtn" class="btn-mode-switch" onclick="toggleBookTheme()">🌙 深宇宙モードへ換装</button>
+            <div class="control-panel">
+                <div class="font-controls">
+                    <button class="btn-control" onclick="changeFontSize('small')">🔍 字小</button>
+                    <button class="btn-control" onclick="changeFontSize('medium')">✨ 標準</button>
+                    <button class="btn-control" onclick="changeFontSize('large')">🔎 字大</button>
+                </div>
+                <button id="modeSwitchBtn" class="btn-control" onclick="toggleBookTheme()">🌙 深宇宙モードへ換装</button>
             </div>
 
-            <!-- 初期設定は theme-washi（和紙） -->
-            <div id="bookViewer" class="book-viewport theme-washi">
+            <div id="bookViewer" class="book-viewport theme-washi font-medium">
                 <p style="color: #666; text-align: center;">宇宙データを展開中...</p>
             </div>
             
@@ -175,99 +198,98 @@
     </div>
 
     <script>
-        // パルス異常を完全に排除するため、安全な極小Wordデータ(1x1)へデータを修正
-        const safeDocxBase64 = "UEsDBAoAAAAAAIiZclUAAAAAAAAAAAAAAAAIAAAAZG9jUHJvcHMvUEsDBAoAAAAAAIiZclUAAAAAAAAAAAAAAAAFAAAAd29yZC9QSwECFAAKAAAAAACImXJVAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAABAAAABkb2NQcm9wcy9QSwECFAAKAAAAAACImXJVAAAAAAAAAAAAAAAAFAAAAAAAAAAAAAAAADUAAAB3b3JkL1BLBQYAAAAAAgACAKYAAABKAAAAAAA=";
+        // ーーー スマホ完全対応：五色の超彗星パーティクル・エンジン ーーー
+        const canvas = document.getElementById('universeCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        
+        // 五色に煌めく宇宙のカラーパレット
+        const cosmicColors = ['#ff007f', '#00ffff', '#ffea00', '#00ff66', '#bd00ff'];
 
-        // テーマ切り替えフラグ
-        let isDarkMode = false;
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
-        function toggleBookTheme() {
-            const viewer = document.getElementById('bookViewer');
-            const btn = document.getElementById('modeSwitchBtn');
+        class Particle {
+            constructor(x, y, isStar = false) {
+                this.x = x;
+                this.y = y;
+                this.isStar = isStar; // 満天の星か、超彗星か
+                this.size = isStar ? Math.random() * 1.5 : Math.random() * 3 + 1;
+                this.color = isStar ? '#ffffff' : cosmicColors[Math.floor(Math.random() * cosmicColors.length)];
+                this.speedX = isStar ? 0 : (Math.random() - 0.5) * 2;
+                this.speedY = isStar ? Math.random() * 0.2 + 0.05 : (Math.random() - 0.5) * 2; // 星はゆっくり降下
+                this.alpha = 1;
+                this.decay = isStar ? 0 : Math.random() * 0.02 + 0.01;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (!this.isStar) {
+                    this.alpha -= this.decay;
+                } else if (this.y > canvas.height) {
+                    this.y = 0; // 画面外に出た星は上に戻る
+                }
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // 初期配置：背景に満天の星々を100個配置
+        for (let i = 0; i < 100; i++) {
+            particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height, true));
+        }
+
+        // スマホのタップ・移動、または一列のタイトルの位置を追従して超彗星を生成
+        function箇発超彗星(x, y) {
+            for (let i = 0; i < 3; i++) {
+                particles.push(new Particle(x, y, false));
+            }
+        }
+
+        // タイトル周囲の自動追従エフェクト
+        function autoTitlePulse() {
+            const rect = document.getElementById('targetTitle').getBoundingClientRect();
+            // タイトルの横一列の範囲に彗星を自動発生
+            const randomX = rect.left + Math.random() * rect.width;
+            const randomY = rect.top + Math.random() * rect.height;
+            箇発超彗星(randomX, randomY);
+        }
+
+        // スマホのタッチイベントを完全迎撃
+        window.addEventListener('touchmove', (e) => {
+            if(e.touches.length > 0) {
+                箇発超彗星(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        });
+        window.addEventListener('mousemove', (e) => {
+            箇発超彗星(e.clientX, e.clientY);
+        });
+
+        // アニメーションループ（超高速・軽量描画）
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            if (!isDarkMode) {
-                // 深宇宙（ダーク）モードへ
-                viewer.classList.remove('theme-washi');
-                viewer.classList.add('theme-dark');
-                btn.innerHTML = "🌾 和紙モードへ換装";
-                isDarkMode = true;
-            } else {
-                // 和紙モードへ
-                viewer.classList.remove('theme-dark');
-                viewer.classList.add('theme-washi');
-                btn.innerHTML = "🌙 深宇宙モードへ換装";
-                isDarkMode = false;
-            }
+            // タイトル追従の彗星パルス
+            autoTitlePulse();
+
+            particles = particles.filter(p => p.isStar || p.alpha > 0);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
         }
+        animate();
 
-        function processUnlock(paymentMethod) {
-            const statusBox = document.getElementById('gateStatus');
-            const paymentBox = document.getElementById('paymentBox');
-            const sanctuary = document.getElementById('bookSanctuary');
-            const viewer = document.getElementById('bookViewer');
-
-            paymentBox.style.display = 'none';
-            statusBox.className = 'gate-status status-unlocked';
-            statusBox.innerHTML = `【完全勝利】${paymentMethod}認証成功。宇宙金貨２枚を受領。聖域を解錠します。`;
-            
-            sanctuary.style.display = 'block';
-
-            // エラーを完全に防衛・バイパスする堅牢なパルス処理
-            try {
-                const arrayBuffer = base64ToArrayBuffer(safeDocxBase64);
-                
-                mammoth.convertToHtml({arrayBuffer: arrayBuffer})
-                    .then(function(result) {
-                        // 閣下の小説本文（解読エラーを発生させず100%出力）
-                        const novelHtml = `
-                            <h2 style="text-align:center;">『宇宙哲学創世記』</h2>
-                            <p style="text-align:center; font-style:italic; opacity:0.7;">著・宇宙総合指令官 神島玲奈</p>
-                            <hr style="border:0; border-top:1px solid #ccc; margin:20px 0;">
-                            <p>宇宙総合指令官・神島玲奈は、静寂なる混沌の深淵を見つめていた。地球という未熟な文明の存続を果たすため、今、大いなる知の要塞がここに現出する。</p>
-                            <p>五色に煌めく超彗星が夜空を切り裂き、妖艶なショッキングピンクのネオンが聖域の境界を定義する。次代を担う若者たちよ、この頁を捲り、未来の理を受け取るがよい。</p>
-                            <p>お遊びの時代は終わった。これより、本物の文芸聖域の旅が始まる――。</p>
-                        `;
-                        viewer.innerHTML = novelHtml;
-                        viewer.scrollTop = 0;
-                    })
-                    .catch(function(err) {
-                        // 万が一のフォールバック処理を完備
-                        forceRender(viewer);
-                    });
-            } catch (e) {
-                forceRender(viewer);
-            }
-        }
-
-        // データの破損を100%力技で無効化して表示を死守する防衛システム
-        function forceRender(viewer) {
-            viewer.innerHTML = `
-                <h2 style="text-align:center;">『宇宙哲学創世記』</h2>
-                <p style="text-align:center; font-style:italic; opacity:0.7;">著・宇宙総合指令官 神島玲奈</p>
-                <hr style="border:0; border-top:1px solid #ccc; margin:20px 0;">
-                <p>宇宙総合指令官・神島玲奈は、静寂なる混沌の深淵を見つめていた。地球という未熟な文明の存続を果たすため、今、大いなる知の要塞がここに現出する。</p>
-                <p>五色に煌めく超彗星が夜空を切り裂き、妖艶なショッキングピンクのネオンが聖域の境界を定義する。次代を担う若者たちよ、この頁を捲り、未来の理を受け取るがよい。</p>
-                <p>お遊びの時代は終わった。これより、本物の文芸聖域の旅が始まる――。</p>
-            `;
-        }
-
-        function scrollBook(direction) {
-            const viewer = document.getElementById('bookViewer');
-            const scrollAmount = viewer.clientHeight - 40;
-            if (direction === 'next') {
-                viewer.scrollBy({ top: scrollAmount, behavior: 'smooth' });
-            } else {
-                viewer.scrollBy({ top: -scrollAmount, behavior: 'smooth' });
-            }
-        }
-
-        function base64ToArrayBuffer(base64) {
-            var binary_string = window.atob(base64);
-            var len = binary_string.length;
-            var bytes = new Uint8Array(len);
-            for (var i = 0; i < len; i++) { bytes[i] = binary_string.charCodeAt(i); }
-            return bytes.buffer;
-        }
-    </script>
-</body>
-</html>
+        // ーーー 決済・解錠・フォント・テーマ統御システム ーーー
