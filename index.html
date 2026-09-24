@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>宇宙哲学文芸神殿 - Cosmic Philosophy Sanctuary</title>
     <style>
-        /* 俗世のノイズを完全に排除する峻厳なる暗黒空間 */
         * {
             margin: 0;
             padding: 0;
@@ -21,7 +20,6 @@
             font-family: 'Times New Roman', 'Noto Serif JP', serif;
             color: #f5f6f8;
         }
-        /* 五色の超彗星エンジンを描画する絶対キャンバス */
         #comet-engine {
             position: absolute;
             top: 0;
@@ -31,7 +29,6 @@
             z-index: 1;
             pointer-events: none;
         }
-        /* 神殿の統御空間 */
         .sanctuary-container {
             position: relative;
             width: 100%;
@@ -43,14 +40,19 @@
             align-items: center;
             padding: 2rem;
             text-align: center;
+            transition: opacity 1.5s ease;
         }
-        /* じわっと滲むように浮かび上がる、閣下の至高なる宣旨エリア */
+        /* 画面遷移時のフェードアウト */
+        .fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
         .decree-box {
             max-width: 600px;
             opacity: 0;
             transform: translateY(20px);
             animation: soakIn 3.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-            animation-delay: 0.8s;
+            animation-delay: 0.5s;
         }
         .decree-title {
             font-size: 0.85rem;
@@ -69,12 +71,11 @@
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 30px rgba(255,255,255,0.1);
         }
-        /* 水彩の余白を感じさせる、静謐なる中央統御ボタン */
         .control-trigger {
             margin-top: 4rem;
             padding: 1rem 2.5rem;
             background: transparent;
-            border: 1px solid rgba(163, 184, 204, 0.3);
+            border: 1px solid rgba(163, 184, 204, 0.4);
             color: #a3b8cc;
             font-family: inherit;
             font-size: 0.9rem;
@@ -82,18 +83,19 @@
             cursor: pointer;
             overflow: hidden;
             position: relative;
-            transition: all 0.5s ease;
+            transition: all 0.3s ease;
             opacity: 0;
             animation: fadeIn 2s ease forwards;
-            animation-delay: 2.5s;
+            animation-delay: 1.5s;
+            box-shadow: 0 0 15px rgba(163, 184, 204, 0.05);
         }
+        /* タッチ時の一瞬の輝き */
         .control-trigger:active {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.8);
             color: #ffffff;
-            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+            box-shadow: 0 0 30px rgba(255,255,255,0.3);
         }
-        /* 幻想的浸透アニメーション（水彩の滲みを表現） */
         @keyframes soakIn {
             0% { opacity: 0; transform: translateY(15px); filter: blur(5px); }
             100% { opacity: 1; transform: translateY(0); filter: blur(0); }
@@ -108,7 +110,7 @@
 
     <canvas id="comet-engine"></canvas>
 
-    <div class="sanctuary-container">
+    <div class="sanctuary-container" id="main-ui">
         <div class="decree-box">
             <p class="decree-title">Cosmic Philosophy Decree</p>
             <p class="decree-text">
@@ -118,8 +120,7 @@
             </p>
         </div>
 
-        <!-- 外部委託・文芸館へと繋がる中央統御ボタン -->
-        <button class="control-trigger" onclick="awakenSanctuary()">神殿の深淵へ</button>
+        <button class="control-trigger" id="lock-on-button" onclick="awakenSanctuary(event)">神殿の深淵へ</button>
     </div>
 
     <script>
@@ -127,13 +128,14 @@
         const ctx = canvas.getContext('2d');
 
         let particles = [];
-        // 富裕層の感性に訴えかける、優美なる「五色の超彗星」カラーコード
+        let isBursting = false;
+
         const cometColors = [
-            'rgba(147, 197, 253, 0.4)', // 彗星青 (Cosmic Blue)
-            'rgba(244, 197, 249, 0.4)', // 星雲紫 (Nebula Violet)
-            'rgba(253, 244, 175, 0.3)', // 星塵金 (Stardust Gold)
-            'rgba(167, 243, 208, 0.3)', // 深宇宙緑 (Deep Space Emerald)
-            'rgba(255, 255, 255, 0.5)'  // 純白光 (Pure White)
+            'rgba(147, 197, 253, 0.6)', // 彗星青
+            'rgba(244, 197, 249, 0.6)', // 星雲紫
+            'rgba(253, 244, 175, 0.5)', // 星塵金
+            'rgba(167, 243, 208, 0.5)', // 深宇宙緑
+            'rgba(255, 255, 255, 0.8)'  // 純白光
         ];
 
         function resize() {
@@ -143,22 +145,38 @@
         window.addEventListener('resize', resize);
         resize();
 
-        // 粒子（パーティクル）の幻想的構造体
         class Particle {
-            constructor(x, y, isTouch = false) {
+            constructor(x, y, type = 'normal', angle = 0, speed = 0) {
                 this.x = x;
                 this.y = y;
+                this.type = type;
                 this.color = cometColors[Math.floor(Math.random() * cometColors.length)];
-                // 激しさを排し、優美に揺らめく低速設計
-                this.vx = (Math.random() - 0.5) * (isTouch ? 1.5 : 0.4);
-                this.vy = (Math.random() - 0.7) * (isTouch ? 1.5 : 0.5) - 0.2; 
-                this.size = Math.random() * (isTouch ? 2.5 : 1.8) + 0.5;
+                
+                if (this.type === 'burst') {
+                    // 「激しく外側へ吹き飛ぶ」爆発の物理演算
+                    this.vx = Math.cos(angle) * speed;
+                    this.vy = Math.sin(angle) * speed;
+                    this.size = Math.random() * 4 + 1.5; // 粒のサイズを大型化
+                    this.decay = Math.random() * 0.015 + 0.008; // 激しく燃え尽きる
+                } else {
+                    // 通常時の優美な揺らめき
+                    this.vx = (Math.random() - 0.5) * (type === 'touch' ? 2.0 : 0.4);
+                    this.vy = (Math.random() - 0.7) * (type === 'touch' ? 2.0 : 0.5) - 0.2;
+                    this.size = Math.random() * (type === 'touch' ? 3.0 : 1.8) + 0.5;
+                    this.decay = Math.random() * 0.005 + 0.003;
+                }
                 this.alpha = 1;
-                this.decay = Math.random() * 0.005 + 0.003;
             }
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
+                
+                // 爆発時はわずかに宇宙の摩擦（減速）をかける
+                if (this.type === 'burst') {
+                    this.vx *= 0.98;
+                    this.vy *= 0.98;
+                }
+                
                 this.alpha -= this.decay;
             }
             draw() {
@@ -167,38 +185,40 @@
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fillStyle = this.color;
-                // 仄かな光の広がり（グロウ効果）を付与
-                ctx.shadowBlur = 10;
+                // 現代っ子の視覚を刺激する強烈なグロウ（発光効果）
+                ctx.shadowBlur = this.type === 'burst' ? 20 : 10;
                 ctx.shadowColor = this.color;
                 ctx.fill();
                 ctx.restore();
             }
         }
 
-        // 背景で静かに湧き出す残光の自動生成
+        // 定常的な星屑の湧き出し
         function injectNaturalSparks() {
-            if (particles.length < 40 && Math.random() < 0.05) {
-                particles.push(new Particle(Math.random() * canvas.width, canvas.height * 0.8));
+            if (!isBursting && particles.length < 50 && Math.random() < 0.08) {
+                particles.push(new Particle(Math.random() * canvas.width, canvas.height * 0.85, 'normal'));
             }
         }
 
-        // スマホのタッチ連動：指先から五色の星屑が溢れ出る
+        // スマホ・タッチ強化：指先から高密度に溢れる五色の星屑
         window.addEventListener('touchmove', (e) => {
+            if (isBursting) return;
             const touch = e.touches[0];
-            for(let i=0; i<2; i++) {
-                particles.push(new Particle(touch.clientX, touch.clientY, true));
+            for(let i=0; i<3; i++) {
+                particles.push(new Particle(touch.clientX, touch.clientY, 'touch'));
             }
         }, { passive: true });
 
         window.addEventListener('mousemove', (e) => {
-            if(Math.random() < 0.3) {
-                particles.push(new Particle(e.clientX, e.clientY, true));
-            }
+            if (isBursting || Math.random() > 0.4) return;
+            particles.push(new Particle(e.clientX, e.clientY, 'touch'));
         });
 
-        // 統御ループ（描画の執行）
         function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // 前のフレームの残像をわずかに残す（水彩の滲み・光の尾）
+            ctx.fillStyle = 'rgba(2, 3, 6, 0.15)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
             injectNaturalSparks();
             
             for (let i = particles.length - 1; i >= 0; i--) {
@@ -213,10 +233,36 @@
         }
         animate();
 
-        // 中央統御ボタン作動時の儀式（第2ステージ：文芸館の解放を模索）
-        function awakenSanctuary() {
-            // ここに、外部委託エリア「水彩個展エリア」への幻想的な遷移を組み込みます
-            alert('宇宙哲学文芸神殿・第2ステージ「文芸館」への門が解放されました。');
+        // 閣下命ずるところの「星塵の嵐」バーストシステム起動
+        function awakenSanctuary(event) {
+            if (isBursting) return;
+            isBursting = true;
+
+            const button = document.getElementById('lock-on-button');
+            const rect = button.getBoundingClientRect();
+            // ボタンの中心点を爆発の特異点とする
+            const burstX = rect.left + rect.width / 2;
+            const burstY = rect.top + rect.height / 2;
+
+            // UIを静かにフェードアウト
+            document.getElementById('main-ui').classList.add('fade-out');
+
+            // 300発の超高密度「星塵の嵐」を全方位へ射出！
+            const particleCount = 300;
+            for (let i = 0; i < particleCount; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                // 内側から外側へ吹き飛ぶ激しい初速（現代的刺激）
+                const speed = Math.random() * 8 + 4; 
+                particles.push(new Particle(burstX, burstY, 'burst', angle, speed));
+            }
+
+            // 嵐が吹き荒れた後、美しく暗転し第2ステージへと完全遷移
+            setTimeout(() => {
+                alert('【宇宙哲学文芸神殿】第2ステージ：文芸館（水彩個展エリア）のメインホールへ突入します。');
+                // 実運用時はここに次のページのURLへの遷移処理を記述
+                isBursting = false;
+                document.getElementById('main-ui').classList.remove('fade-out');
+            }, 1800);
         }
     </script>
 </body>
