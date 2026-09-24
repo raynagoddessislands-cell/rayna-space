@@ -6,7 +6,7 @@
     <title>宇宙哲学神殿 - Cosmic Philosophy Sanctuary</title>
     
     <!-- 案B：宇宙哲学の神聖紋章（ファビコン） -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://w3.org' viewBox='0 0 100 100'%3E%3Cstyle%3E.line%7Bfill:none;stroke:%23e2b86b;stroke-width:1.2;stroke-miterlimit:10;opacity:0.85;%7D.glow%7Bfilter:url(%23g);%7D%3C/style%3E%3Cdefs%3E%3Cfilter id='g' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeGaussianBlur stdDeviation='1.5' result='blur'/%3E%3CfeMerge%3E%3CfeMergeNode in='blur'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3CfeMerge%3E%3Cfilter%3E%3C/defs%3E%3Ccircle class='line' cx='50' cy='50' r='45' style='stroke-dasharray:1, 3;'/%3E%3Ccircle class='line glow' cx='50' cy='50' r='38'/%3E%3Cpolygon class='line' points='50,18 78,65 22,65'/%3E%3Cpolygon class='line' points='50,82 22,35 78,35'/%3E%3Ccircle class='line glow' cx='50' cy='50' r='5' fill='%23e2b86b'/%3E%3Cpath class='line' d='M50,2 L50,98 M2,50 L98,50' style='opacity:0.3; stroke-dasharray:2, 4;'/%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://w3.org' viewBox='0 0 100 100'%3E%3Cstyle%3E.line%7Bfill:none;stroke:%23e2b86b;stroke-width:1.2;stroke-miterlimit:10;opacity:0.85;%7D.glow%7Bfilter:url(%23g);%7D%3C/style%3E%3Cdefs%3E%3Cfilter id='g' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeGaussianBlur stdDeviation='1.5' result='blur'/%3E%3CfeMerge%3E%3CfeMergeNode in='blur'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Ccircle class='line' cx='50' cy='50' r='45' style='stroke-dasharray:1, 3;'/%3E%3Ccircle class='line glow' cx='50' cy='50' r='38'/%3E%3Cpolygon class='line' points='50,18 78,65 22,65'/%3E%3Cpolygon class='line' points='50,82 22,35 78,35'/%3E%3Ccircle class='line glow' cx='50' cy='50' r='5' fill='%23e2b86b'/%3E%3Cpath class='line' d='M50,2 L50,98 M2,50 L98,50' style='opacity:0.3; stroke-dasharray:2, 4;'/%3E%3C/svg%3E">
 
     <style>
         * {
@@ -20,10 +20,11 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background: #020306;
+            background-color: #020306;
             font-family: 'Times New Roman', 'Noto Serif JP', serif;
             color: #f5f6f8;
         }
+        /* 超彗星エンジンが確実に背面で駆動する絶対レイヤー */
         #comet-engine {
             position: absolute;
             top: 0;
@@ -31,11 +32,9 @@
             width: 100%;
             height: 100%;
             z-index: 1;
-            pointer-events: none;
+            display: block;
         }
-        
-        /* 構造レイヤーの基本定義 */
-        .stage-layer {
+        .sanctuary-container {
             position: relative;
             width: 100%;
             height: 100%;
@@ -46,44 +45,14 @@
             align-items: center;
             padding: 2rem;
             text-align: center;
-            transition: opacity 1.5s cubic-bezier(0.25, 1, 0.5, 1), transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+            background: transparent;
         }
-
-        /* フェーズ1: 城門空間 */
-        #phase-1-gate {
-            position: absolute;
-            top: 0;
-            left: 0;
-            opacity: 1;
-        }
-        #phase-1-gate.hidden {
-            opacity: 0;
-            transform: scale(0.95);
-            pointer-events: none;
-        }
-
-        /* フェーズ2: 第二階層（未明の全き領域）*/
-        #phase-2-abyss {
-            position: absolute;
-            top: 0;
-            left: 0;
-            opacity: 0;
-            transform: scale(1.05);
-            pointer-events: none;
-        }
-        #phase-2-abyss.active {
-            opacity: 1;
-            transform: scale(1);
-            pointer-events: auto;
-        }
-
-        /* テキスト表示システム */
         .decree-box {
             max-width: 600px;
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(15px);
             animation: soakIn 3.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-            animation-delay: 0.5s;
+            animation-delay: 0.3s;
         }
         .decree-title {
             font-size: 0.85rem;
@@ -93,8 +62,8 @@
             margin-bottom: 2rem;
         }
         .decree-text {
-            font-size: 1.35rem;
-            line-height: 2.3;
+            font-size: 1.4rem;
+            line-height: 2.2;
             letter-spacing: 0.25em;
             font-weight: 300;
             background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
@@ -102,19 +71,6 @@
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 30px rgba(255,255,255,0.1);
         }
-
-        /* 第二階層専用の深淵なる宣旨 */
-        .abyss-text {
-            font-size: 1.25rem;
-            line-height: 2.5;
-            letter-spacing: 0.3em;
-            color: #f5f6f8;
-            background: linear-gradient(135deg, #ffffff 0%, #e2b86b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* 中央統御ボタン */
         .control-trigger {
             margin-top: 4rem;
             padding: 1rem 2.5rem;
@@ -125,10 +81,12 @@
             font-size: 0.9rem;
             letter-spacing: 0.3em;
             cursor: pointer;
+            overflow: hidden;
             transition: all 0.3s ease;
             opacity: 0;
             animation: fadeIn 2s ease forwards;
-            animation-delay: 1.5s;
+            animation-delay: 1.2s;
+            box-shadow: 0 0 15px rgba(163, 184, 204, 0.05);
         }
         .control-trigger:active {
             background: rgba(255, 255, 255, 0.1);
@@ -136,30 +94,6 @@
             color: #ffffff;
             box-shadow: 0 0 30px rgba(255,255,255,0.3);
         }
-
-        /* 案Bの幾何学的軌道（背景演出） */
-        .orbit-bg {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            border: 1px solid rgba(226, 184, 107, 0.15);
-            border-radius: 50%;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 3s ease;
-        }
-        .orbit-bg::before {
-            content: '';
-            position: absolute;
-            top: -1px; left: -1px; right: -1px; bottom: -1px;
-            border: 1px dashed rgba(226, 184, 107, 0.08);
-            border-radius: 50%;
-            animation: spin 120s linear infinite;
-        }
-        #phase-2-abyss.active .orbit-bg {
-            opacity: 1;
-        }
-
         @keyframes soakIn {
             0% { opacity: 0; transform: translateY(15px); filter: blur(5px); }
             100% { opacity: 1; transform: translateY(0); filter: blur(0); }
@@ -168,18 +102,13 @@
             0% { opacity: 0; }
             100% { opacity: 1; }
         }
-        @keyframes spin {
-            100% { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body>
 
-    <!-- 統合粒子・軌道シミュレーター -->
     <canvas id="comet-engine"></canvas>
 
-    <!-- 【フェーズ1：城門空間】 -->
-    <div class="stage-layer" id="phase-1-gate">
+    <div class="sanctuary-container">
         <div class="decree-box">
             <p class="decree-title">Cosmic Philosophy Decree</p>
             <p class="decree-text">
@@ -188,21 +117,8 @@
                 深遠なる美の神殿へ歩みを進めよ。
             </p>
         </div>
-        <button class="control-trigger" id="lock-on-button" onclick="transitionToAbyss(event)">神殿の深淵へ</button>
-    </div>
 
-    <!-- 【フェーズ2：真理の第二階層（未明の全き領域）】 -->
-    <div class="stage-layer" id="phase-2-abyss">
-        <div class="orbit-bg"></div>
-        <div class="decree-box">
-            <p class="decree-title" style="color: #e2b86b; letter-spacing: 0.6em;">階層識別：未明の全き領域</p>
-            <p class="decree-text abyss-text">
-                地球の夜明け前、四時の静寂にのみ<br>
-                宇宙の運行はその真理を明かす。<br><br>
-                俗世の価値、安き洗脳をすべて剥ぎ取り、<br>
-                総合指令官の大局観に魂を委ねよ。
-            </p>
-        </div>
+        <button class="control-trigger" id="lock-on-button" onclick="triggerBurst(event)">神殿の深淵へ</button>
     </div>
 
     <script>
@@ -210,69 +126,131 @@
         const ctx = canvas.getContext('2d');
 
         let particles = [];
-        let engineMode = 'normal'; // normal, burst, abyss
+        let isBursting = false;
 
+        // 閣下の美学を体現する、優美なる「五色の超彗星」
         const cometColors = [
-            'rgba(147, 197, 253, 0.6)', // 彗星青
-            'rgba(244, 197, 249, 0.6)', // 星雲紫
-            'rgba(253, 244, 175, 0.5)', // 星塵金
-            'rgba(167, 243, 208, 0.5)', // 深宇宙緑
-            'rgba(255, 255, 255, 0.8)'  // 純白光
+            'rgba(147, 197, 253, 0.55)', // 彗星青 (Cosmic Blue)
+            'rgba(244, 197, 249, 0.55)', // 星雲紫 (Nebula Violet)
+            'rgba(253, 244, 175, 0.45)', // 星塵金 (Stardust Gold)
+            'rgba(167, 243, 208, 0.45)', // 深宇宙緑 (Deep Space Emerald)
+            'rgba(255, 255, 255, 0.75)'  // 純白光 (Pure White)
         ];
 
-        function resize() {
+        // 画面サイズ取得のバグを完全に修正する絶対同期ロジック
+        function initCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
-        window.addEventListener('resize', resize);
-        resize();
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
 
         class Particle {
-            constructor(x, y, mode = 'normal', angle = 0, speed = 0) {
+            constructor(x, y, type = 'normal', angle = 0, speed = 0) {
                 this.x = x;
                 this.y = y;
-                this.mode = mode;
+                this.type = type;
                 this.color = cometColors[Math.floor(Math.random() * cometColors.length)];
                 
-                if (this.mode === 'burst') {
+                if (this.type === 'burst') {
+                    // 内側から外側へ激しく吹き飛ぶ物理軌道
                     this.vx = Math.cos(angle) * speed;
                     this.vy = Math.sin(angle) * speed;
-                    this.size = Math.random() * 4 + 1.5;
+                    this.size = Math.random() * 3.5 + 1.5;
                     this.decay = Math.random() * 0.012 + 0.006;
-                } else if (this.mode === 'abyss') {
-                    // 三次元的ワープ（奥から手前へ迫り来る粒子）
-                    this.targetX = x;
-                    this.targetY = y;
-                    this.x = canvas.width / 2 + (Math.random() - 0.5) * 50;
-                    this.y = canvas.height / 2 + (Math.random() - 0.5) * 50;
-                    this.vx = (this.targetX - this.x) * 0.015;
-                    this.vy = (this.targetY - this.y) * 0.015;
-                    this.size = 0.1;
-                    this.decay = Math.random() * 0.003 + 0.001;
                 } else {
-                    this.vx = (Math.random() - 0.5) * (mode === 'touch' ? 2.0 : 0.4);
-                    this.vy = (Math.random() - 0.7) * (mode === 'touch' ? 2.0 : 0.5) - 0.2;
-                    this.size = Math.random() * (mode === 'touch' ? 3.0 : 1.8) + 0.5;
+                    // 風雅に、静かに下から上へと昇る残光
+                    this.vx = (Math.random() - 0.5) * (type === 'touch' ? 1.8 : 0.4);
+                    this.vy = (Math.random() - 0.7) * (type === 'touch' ? 1.8 : 0.5) - 0.2;
+                    this.size = Math.random() * (type === 'touch' ? 2.8 : 1.6) + 0.5;
                     this.decay = Math.random() * 0.005 + 0.003;
                 }
                 this.alpha = 1;
             }
             update() {
-                if (this.mode === 'abyss') {
-                    this.x += this.vx;
-                    this.y += this.vy;
-                    this.size += 0.04; // 近づくにつれて拡大
-                    // 加速演算
-                    this.vx *= 1.02;
-                    this.vy *= 1.02;
-                } else {
-                    this.x += this.vx;
-                    this.y += this.vy;
-                    if (this.mode === 'burst') {
-                        this.vx *= 0.98;
-                        this.vy *= 0.98;
-                    }
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                if (this.type === 'burst') {
+                    this.vx *= 0.97;
+                    this.vy *= 0.97;
                 }
                 this.alpha -= this.decay;
             }
             draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = this.type === 'burst' ? 15 : 10;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // 定常的な星屑の湧き出し（黒画面化を絶対に防ぐ自動供給）
+        function injectNaturalSparks() {
+            if (particles.length < 45 && Math.random() < 0.07) {
+                particles.push(new Particle(Math.random() * canvas.width, canvas.height * 0.85, 'normal'));
+            }
+        }
+
+        // スマホ環境のタッチ連動（星屑の追従）
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                const t = e.touches[0];
+                particles.push(new Particle(t.clientX, t.clientY, 'touch'));
+            }
+        }, { passive: true });
+
+        window.addEventListener('mousemove', (e) => {
+            if (Math.random() < 0.4) {
+                particles.push(new Particle(e.clientX, e.clientY, 'touch'));
+            }
+        });
+
+        // 完全に復旧した無限描画ループ（フェニックスのシルエットを結像する半透明レイヤー仕様）
+        function renderLoop() {
+            ctx.fillStyle = 'rgba(2, 3, 6, 0.14)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            injectNaturalSparks();
+            
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                if (particles[i].alpha <= 0) {
+                    particles.splice(i, 1);
+                } else {
+                    particles[i].draw();
+                }
+            }
+            requestAnimationFrame(renderLoop);
+        }
+        // ループの確実な即時起動
+        renderLoop();
+
+        // 御下命：「内側から外側へ激しく吹き飛ぶ星塵の嵐」
+        function triggerBurst(event) {
+            const button = document.getElementById('lock-on-button');
+            const rect = button.getBoundingClientRect();
+            const burstX = rect.left + rect.width / 2;
+            const burstY = rect.top + rect.height / 2;
+
+            const particleCount = 300;
+            for (let i = 0; i < particleCount; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 8 + 3; 
+                particles.push(new Particle(burstX, burstY, 'burst', angle, speed));
+            }
+
+            // 余計なフェーズ遷移をスクラップし、バースト後は静かに元の美しき神殿へと収束
+            button.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                button.style.transform = 'scale(1)';
+            }, 150);
+        }
+    </script>
+</body>
+</html>
