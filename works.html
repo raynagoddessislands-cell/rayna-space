@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>宇宙哲学新要塞 - WORKSアーカイブ</title>
-    <!-- 地球上のあらゆるスマホへSFフォントを配備する通信リンク -->
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
+        /* ========================================================
+           【絶対聖域シールド】ページ全体で文字ドラッグ・選択を強制フリーズ
+           ======================================================== */
         body {
-            background-color: #040408; /* LPと同期した真の深淵宇宙 */
+            background-color: #040408;
             color: #00ffcc;
             font-family: 'Share Tech Mono', 'Courier New', 'Noto Sans JP', sans-serif;
             margin: 0;
@@ -20,11 +22,16 @@
             min-height: -webkit-fill-available;
             overflow-x: hidden;
             position: relative;
+
+            /* ドラッグ選択をすべてのブラウザで根こそぎ禁止 */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
         html { height: -webkit-fill-available; }
 
-        /* 【大修復】z-indexを「-1」に強制指定し、絶対にボタンの手前にしゃしゃり出ないよう最背面に監禁 */
         #comet-canvas {
             position: fixed;
             top: 0;
@@ -32,10 +39,9 @@
             width: 100vw;
             height: 100vh;
             z-index: -1; 
-            pointer-events: none; /* クリックを100%透過させる */
+            pointer-events: none;
         }
 
-        /* 【大修復】z-indexを「10」にし、透明な板の上へ確実に浮かび上がらせる */
         .header-nav {
             width: 100%;
             max-width: 800px;
@@ -61,7 +67,6 @@
             box-shadow: 0 0 15px #ff007f;
         }
 
-        /* 【大修復】z-indexを「10」に固定 */
         h2 {
             font-family: 'Noto Sans JP', sans-serif;
             font-size: clamp(1.4rem, 6vw, 2rem);
@@ -72,7 +77,6 @@
             position: relative;
         }
 
-        /* 【大修復】z-indexを「10」に固定 */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -83,7 +87,6 @@
             position: relative;
         }
 
-        /* 作品セクタースロット */
         .card {
             background: rgba(4, 4, 8, 0.92);
             padding: 25px;
@@ -130,7 +133,6 @@
             text-shadow: 0 0 5px #ff007f;
         }
 
-        /* 購買ゲートへワープするアクティブボタン */
         .btn-gate {
             display: block;
             text-align: center;
@@ -146,7 +148,7 @@
             box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
             -webkit-tap-highlight-color: transparent;
             position: relative;
-            z-index: 20; /* ボタン単体をさらに最前面へ */
+            z-index: 20; 
         }
         .btn-gate:hover {
             background: #00ffcc;
@@ -157,7 +159,6 @@
 </head>
 <body>
 
-    <!-- 銀河空間キャンバス（強制最背面送り完了） -->
     <canvas id="comet-canvas"></canvas>
 
     <div class="header-nav">
@@ -167,17 +168,15 @@
     <h2>【作品アーカイブ領域】</h2>
 
     <div class="grid">
-        <!-- スロット1：有料宇宙哲学書 -->
         <div class="card">
             <div class="card-type">[VOLUME 01 / 有料図書館閲覧権]</div>
             <div class="card-title">宇宙哲学分冊 第1巻（仮）</div>
             <p class="story-text">ここにサスペンスとロマンを孕んだ、人類の意識を進化させる閣下の真のあらすじが展開されます。</p>
             <div class="card-price">価格: ￥2,000</div>
-            <!-- 【新テスト線】先ほど構築が決定した「分離実験室 test-gate.html」へと直結させました！ -->
+            <!-- 先ほど100%成功した、解錠実験室（test-gate.html）へ直結 -->
             <a href="test-gate.html" class="btn-gate">決済ゲートを起動</a>
         </div>
 
-        <!-- スロット2：UFOスケルトンPDF -->
         <div class="card" style="border-color: #00ffcc; box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);">
             <div class="card-type" style="color: #00ffcc; text-shadow: 0 0 5px #00ffcc;">[DATA FILE / 極秘付録]</div>
             <div class="card-title">オリジナルUFOスケルトン設計図</div>
@@ -190,68 +189,41 @@
     <script>
         const canvas = document.getElementById('comet-canvas');
         const ctx = canvas.getContext('2d');
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas); resizeCanvas();
         const particles = [];
-
         window.addEventListener('mousemove', function(e) { spawnParticles(e.clientX, e.clientY); });
-        window.addEventListener('touchmove', function(e) {
-            if (e.touches.length > 0) spawnParticles(e.touches.clientX, e.touches.clientY);
-        }, { passive: true });
-        window.addEventListener('touchstart', function(e) {
-            if (e.touches.length > 0) spawnParticles(e.touches.clientX, e.touches.clientY, 6);
-        }, { passive: true });
-
-        function spawnParticles(x, y, count = 2) {
-            for (let i = 0; i < count; i++) { particles.push(new Particle(x, y)); }
-        }
-
+        window.addEventListener('touchmove', function(e) { if (e.touches.length > 0) spawnParticles(e.touches.clientX, e.touches.clientY); }, { passive: true });
+        window.addEventListener('touchstart', function(e) { if (e.touches.length > 0) spawnParticles(e.touches.clientX, e.touches.clientY, 6); }, { passive: true });
+        function spawnParticles(x, y, count = 2) { for (let i = 0; i < count; i++) { particles.push(new Particle(x, y)); } }
         class Particle {
             constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.speedX = (Math.random() - 0.5) * 3.5;
-                this.speedY = (Math.random() - 0.5) * 3.5;
-                this.size = Math.random() * 3 + 1;
-                const colors = ['#00ffcc', '#ff0055', '#ffffff', '#3399ff', '#ffcc00'];
-                this.color = colors[Math.floor(Math.random() * colors.length)];
-                this.alpha = 1;
-                this.decay = Math.random() * 0.025 + 0.015;
+                this.x = x; this.y = y; this.speedX = (Math.random() - 0.5) * 3.5; this.speedY = (Math.random() - 0.5) * 3.5; this.size = Math.random() * 3 + 1;
+                const colors = ['#00ffcc', '#ff0055', '#ffffff', '#3399ff', '#ffcc00']; this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.alpha = 1; this.decay = Math.random() * 0.025 + 0.015;
             }
             update() { this.x += this.speedX; this.y += this.speedY; this.alpha -= this.decay; }
-            draw() {
-                ctx.save(); ctx.globalAlpha = this.alpha; ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = this.color;
-                ctx.shadowBlur = 8; ctx.shadowColor = this.color; ctx.fill(); ctx.restore();
-            }
+            draw() { ctx.save(); ctx.globalAlpha = this.alpha; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = this.color; ctx.shadowBlur = 8; ctx.shadowColor = this.color; ctx.fill(); ctx.restore(); }
         }
-
         const staticStars = [];
-        for (let i = 0; i < 40; i++) {
-            staticStars.push({
-                x: Math.random(), y: Math.random(), size: Math.random() * 1.8 + 0.4,
-                angle: Math.random() * Math.PI, speed: Math.random() * 0.02 + 0.01
-            });
-        }
+        for (let i = 0; i < 40; i++) { staticStars.push({ x: Math.random(), y: Math.random(), size: Math.random() * 1.8 + 0.4, angle: Math.random() * Math.PI, speed: Math.random() * 0.02 + 0.01 }); }
+
+        // ========================================================
+        // 【絶対聖域シールド】右クリック及びコピーショートカットを強制遮断
+        // ========================================================
+        window.addEventListener('contextmenu', function(e) { e.preventDefault(); }, false);
+        window.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.keyCode === 67) {
+                e.preventDefault();
+                alert('【警告】セキュリティシールド作動：この聖域の知的財産はコピー不可能です。');
+                return false;
+            }
+        });
 
         function animate() {
             ctx.fillStyle = 'rgba(4, 4, 8, 0.25)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-            staticStars.forEach(star => {
-                star.angle += star.speed; ctx.save();
-                ctx.globalAlpha = 0.15 + Math.abs(Math.sin(star.angle)) * 0.85; ctx.beginPath();
-                ctx.arc(star.x * canvas.width, star.y * canvas.height, star.size, 0, Math.PI * 2);
-                ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.restore();
-            });
-            for (let i = particles.length - 1; i >= 0; i--) {
-                particles[i].update(); particles[i].draw();
-                if (particles[i].alpha <= 0) particles.splice(i, 1);
-            }
+            staticStars.forEach(star => { star.angle += star.speed; ctx.save(); ctx.globalAlpha = 0.15 + Math.abs(Math.sin(star.angle)) * 0.85; ctx.beginPath(); ctx.arc(star.x * canvas.width, star.y * canvas.height, star.size, 0, Math.PI * 2); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.restore(); });
+            for (let i = particles.length - 1; i >= 0; i--) { particles[i].update(); particles[i].draw(); if (particles[i].alpha <= 0) particles.splice(i, 1); }
             requestAnimationFrame(animate);
         }
         animate();
