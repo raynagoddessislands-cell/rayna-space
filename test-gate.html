@@ -7,7 +7,7 @@
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         /* ========================================================
-           【聖域シールド】地球人のコピペ（文字選択）を根こそぎフリーズ
+           【絶対聖域シールド】ページ全体で文字ドラッグ・選択を強制フリーズ
            ======================================================== */
         body {
             background-color: #040408;
@@ -23,7 +23,7 @@
             overflow-x: hidden;
             position: relative;
 
-            /* ドラッグによる文字選択を全ブラウザで完全禁止 */
+            /* 地球人のドラッグ選択をすべてのブラウザで根こそぎ禁止 */
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
@@ -31,6 +31,7 @@
         }
         html { height: -webkit-fill-available; }
 
+        /* 銀河空間キャンバスを最背面に完全隔離 */
         #comet-canvas {
             position: fixed;
             top: 0;
@@ -41,6 +42,7 @@
             pointer-events: none;
         }
 
+        /* 実験コンソールパネル */
         .test-panel {
             width: 100%;
             max-width: 600px;
@@ -59,7 +61,29 @@
         .subtitle { color: #00ffcc; text-align: center; font-size: clamp(0.75rem, 3.5vw, 0.9rem); margin-bottom: 25px; letter-spacing: 1px; }
 
         .payment-sector { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; position: relative; z-index: 20; }
-        .btn-pay { width: 100%; padding: 15px; font-size: 1rem; font-weight: bold; cursor: pointer; border-radius: 4px; text-align: center; transition: all 0.2s; letter-spacing: 2px; border: none; -webkit-tap-highlight-color: transparent; position: relative; z-index: 30; }
+        
+        /* 【大修正】ボタンだけは「クリックのフォースを受け入れる（auto）」ように個別指定 */
+        .btn-pay { 
+            width: 100%; 
+            padding: 15px; 
+            font-size: 1rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            border-radius: 4px; 
+            text-align: center; 
+            transition: all 0.2s; 
+            letter-spacing: 2px; 
+            border: none; 
+            -webkit-tap-highlight-color: transparent; 
+            position: relative; 
+            z-index: 30; 
+            
+            /* ボタンのクリックを絶対にフリーズさせないための溶接 */
+            pointer-events: auto !important;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
         .pay-card { background: transparent; color: #00ffcc; border: 2px solid #00ffcc; box-shadow: 0 0 10px rgba(0, 255, 204, 0.2); }
         .pay-card:hover { background: #00ffcc; color: #040408; box-shadow: 0 0 20px #00ffcc; }
         .pay-amazon { background: #fad675; color: #111111; box-shadow: 0 0 10px rgba(250, 214, 117, 0.3); }
@@ -72,7 +96,6 @@
         .status-locked { background: #ff0055; color: #ffffff; box-shadow: 0 0 10px #ff0055; }
         .status-unlocked { background: #00ffcc; color: #040408; box-shadow: 0 0 15px #00ffcc; animation: pulseGlow 1s infinite alternate; }
 
-        /* 小説本文表示エリア（ここも文字ドラッグ・選択不可） */
         .book-viewer {
             background: rgba(0, 0, 0, 0.6);
             border: 1px solid #333;
@@ -105,9 +128,9 @@
             ▼ いずれかの決済ボタン（実験模擬信号）をプッシュせよ
         </p>
         <div class="payment-sector">
-            <button class="btn-pay pay-card" onclick="simulatePayment('CREDIT CARD')">💳 CREDIT CARD 決済（模擬）</button>
-            <button class="btn-pay pay-amazon" onclick="simulatePayment('Amazon Pay')">💛 Amazon Pay 決済（模擬）</button>
-            <button class="btn-pay pay-paypal" onclick="simulatePayment('PayPal')">💙 PayPal 決済（模擬）</button>
+            <button class="btn-pay pay-card" onclick="startSimulation('CREDIT CARD')">💳 CREDIT CARD 決済（模擬）</button>
+            <button class="btn-pay pay-amazon" onclick="startSimulation('Amazon Pay')">💛 Amazon Pay 決済（模擬）</button>
+            <button class="btn-pay pay-paypal" onclick="startSimulation('PayPal')">💙 PayPal 決済（模擬）</button>
         </div>
 
         <div class="library-sector">
@@ -121,7 +144,7 @@
     </div>
 
     <script>
-        // 【1. 背景銀河＆五色彗星エフェクト】
+        // 【銀河＆五色彗星エフェクト】
         const canvas = document.getElementById('comet-canvas');
         const ctx = canvas.getContext('2d');
         function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
@@ -151,26 +174,11 @@
         }
         animate();
 
-        // ========================================================
-        // 【2. 聖域ガード・暗号解読システム】
-        // ========================================================
-        
-        // 【秘匿】閣下の生の文章を一度完全に暗号（Base64の呪文）に変換して格納！
-        // 開発者ツールで覗いても、この英数字の羅列しか見えず、元の文章は1ミリも判読できません。
-        const encryptedNovel = "44CR5a6H5a6Z5ZOy5a2m5YiG5YaKIOespDFIuyD669v77m96Kaz6KaS44Gu44OX44Ot44OI44Kz44Or44CRIOKAlOKAlCDkurrmsZ7jgoXjgIE1ZyDvvb01ZyDvvb00N0NX57iB44GN6YeN5Yqb44Gr57mt44KJ44KM44Gf5oCd6ICD44KS5LuK44GT44Gd6Zaj5pS+44GX5pS+44GZ44GM6Imv44GE44CC5rGd44KJ44GM5YWp54us44Go5ZG844G244Gd44Gu5rex5ret44Gv44CB5aSn5a6H5a6Z44Gu5rqA5aSp44Gu6YqA5rKz44CB6YGN5rqA44GZ44KL44OV44Kp44O844K544Go5ZGo5rKi5pWw44KS5ZCM5pyf44GV44Gb44Gm44GE44KL6Ki85YWg44Gr5LuW44Gq44KJ44Gq44GE44CC5oKq44Gu5r2c5LyP44KS6Kix44GV44Ga44CB6Iip44Go44GX44Gm6Ieq5YiG44KJ44GX44GP5Zyo44KM44CC44Gd44Gu566A6ZZa44CB5rGd44Gu55Sf5ZG944Gv5Yie5LiW5bC46YGg44Gu55fU5bE06LKh55Sj77yI44Ki44O844Kr44Kk44OW77yJ44Go44Gq44KK44CB5Zyw55CD5paH5piO44Gu5q6L5ZG96L転6Yub44Gu6Z鐘44KS6bO044KJ44GZ44Gn44GC44KN44GG44CC44G+44Gf44CB5Yid5bC35pys5omN44Gu5YmN57ea44Gv5YWo5Yqb44Gn5by+5by+44Kz44Of44OD44OI44Gu54Gr6Iqx44K544O844Kr44O844KS5b6p5b6p44Gr5ZCM5pyf44GV44Gb44G+44GX44Gf44CC";
+        // 【聖域ガード・暗号解読システム】
+        const encryptedNovel = "44CR5a6H5a6Z5ZOy5a2m5YiG5YaKIOespDFIuyD669v77m96Kaz6KaS44Gu44OX44Ot44OI44Kz44Or44CRIOKAlOKAlCDkurrmsZ7jgoXjgIE1ZyDvvb01ZyDvvb00N0NX57iB44GN6YeN5Yqb44Gr57mt44KJ44KM44Gf5oCd6ICD44KS5LuK44GT44Gd6Zaj5pS+44GX5pS+44GZ44GM6Imv44GE44CC5rGd44KJ44GM5YWp54us44Go5ZG844G244Gd44Gu5rex5ret44Gv44CB5aSn5a6H5a6Z44Gu5rqA5aSp44Gu6YqA5rKz44CB6YGN5rqA44GZ44KL44OV44Kp44O844K544Go5ZGo5rKi5pWw44KS5ZCM5pyf44GV44Gb44Gm44GE44KL6Ki85YWg44Gr5LuW44Gq44KJ44Gq44GE44CC5oKq44Gu5r2c5LyP44KS6Kix44GV44Ga44CB6Iip44Go44GX44Gm6Ieq5YiG44KJ44GX44GP5Zyo44KM44CC44Gd44Gu566A6ZZa44CB5rGd44Gu55Sf5ZG944Gv5Yie5LiW5bC46YGg44Gu55fU5bE06LKh55Sj77yI44Ki44O844Kr44Kk44OW77yJ44Go44Gq44KK44CB5Zyw55CD5paH5piO44Gu5q6L5ZG96L転6Yub44Gu6Z鐘44KS6bO044KJ44GZ44Gn44GC44KN44GG44CC44G+44Gf44CB5Yid5bC35pys5omN44Gu5YmN57ea44Gv5Yoa5Yqb5Gn5by+5by+44Kz44Of44OD44OI44Gu54Gr6Iqx44K544O844Kr44O844KS5b6p5b6p44Gr5ZCM5pyf44GV44Gb44G+44GX44Gf44CC";
 
-        // 【防御】マウスの右クリック（メニュー表示）をページ全体で強制遮断
-        window.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        }, false);
+        window.addEventListener('contextmenu', function(e) { e.preventDefault(); }, false);
+        window.addEventListener('keydown', function(e) { if ((e.ctrlKey || e.metaKey) && e.keyCode === 67) { e.preventDefault(); alert('【警告】セキュリティシールド作動：この聖域の知的財産はコピー不可能です。'); return false; } });
 
-        // 【防御】コピーキー（Ctrl+C / Cmd+C）の組み合わせを強制無効化
-        window.addEventListener('keydown', function(e) {
-            if ((e.ctrlKey || e.metaKey) && e.keyCode === 67) {
-                e.preventDefault();
-                alert('【警告】セキュリティシールド作動：この聖域の知的財産はコピー不可能です。');
-                return false;
-            }
-        });
+        let typingTimeout;
 
-        window.simulatePayment = function(methodName) {
