@@ -2,170 +2,163 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>宇宙哲学新要塞 - WORKSアーカイブ</title>
+    <!-- 地球上のあらゆるスマホへSFフォントを配備する通信リンク -->
+    <link href="https://googleapis.com" rel="stylesheet">
     <style>
         body {
-            background-color: #0a0a16;
+            background-color: #040408; /* LPと同期した真の深淵宇宙 */
             color: #00ffcc;
-            font-family: 'Courier New', Courier, monospace, sans-serif;
+            font-family: 'Share Tech Mono', 'Courier New', 'Noto Sans JP', sans-serif;
             margin: 0;
-            padding: 40px 20px;
+            padding: 40px 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            min-height: -webkit-fill-available;
+            overflow-x: hidden;
+            position: relative;
         }
 
+        html { height: -webkit-fill-available; }
+
+        /* 【大修復】z-indexを「-1」に強制指定し、絶対にボタンの手前にしゃしゃり出ないよう最背面に監禁 */
+        #comet-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; 
+            pointer-events: none; /* クリックを100%透過させる */
+        }
+
+        /* 【大修復】z-indexを「10」にし、透明な板の上へ確実に浮かび上がらせる */
         .header-nav {
             width: 100%;
             max-width: 800px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
+            z-index: 10;
+            position: relative;
         }
 
-        /* トップへ戻るための帰還ボタン */
         .btn-back {
-            color: #ff0055;
+            color: #ff007f;
             text-decoration: none;
-            border: 1px solid #ff0055;
+            border: 1px solid #ff007f;
             padding: 5px 15px;
             font-size: 0.9rem;
             transition: all 0.3s;
+            text-shadow: 0 0 5px #ff007f;
+            box-shadow: 0 0 10px rgba(255, 0, 127, 0.2);
+            -webkit-tap-highlight-color: transparent;
         }
         .btn-back:hover {
-            background: #ff0055;
+            background: #ff007f;
             color: #fff;
-            box-shadow: 0 0 10px #ff0055;
+            box-shadow: 0 0 15px #ff007f;
         }
 
+        /* 【大修復】z-indexを「10」に固定 */
         h2 {
-            font-size: 2rem;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: clamp(1.4rem, 6vw, 2rem);
             text-shadow: 0 0 15px #00ffcc;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             letter-spacing: 2px;
+            z-index: 10;
+            position: relative;
         }
 
+        /* 【大修復】z-indexを「10」に固定 */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
             width: 100%;
             max-width: 800px;
+            z-index: 10;
+            position: relative;
         }
 
-        /* 作品を格納するセクタースロット */
+        /* 作品セクタースロット */
         .card {
-            background: rgba(20, 20, 40, 0.6);
+            background: rgba(4, 4, 8, 0.92);
             padding: 25px;
             border-radius: 8px;
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
+            border: 2px solid #ff007f;
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.3);
         }
-
-        /* 【新兵装】スロット01専用：ピンクのネオンパルスアニメーション */
-        .card-vol1 {
-            border: 2px solid #ff0055;
-            animation: neonPulsePink 3s infinite alternate;
-        }
-
-        /* 【新兵装】スロット02専用：グリーンのネオンパルスアニメーション */
-        .card-ufo {
-            border: 2px solid #00ffcc;
-            animation: neonPulseGreen 3s infinite alternate;
-        }
-
         .card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.5);
         }
 
         .card-type {
             font-size: 0.8rem;
+            color: #ff007f;
             font-weight: bold;
             letter-spacing: 1px;
+            text-shadow: 0 0 5px #ff007f;
         }
-        .text-pink { color: #ff0055; text-shadow: 0 0 5px #ff0055; }
-        .text-green { color: #00ffcc; text-shadow: 0 0 5px #00ffcc; }
 
         .card-title {
             color: #fff;
-            font-size: 1.3rem;
-            margin: 10px 0;
-            text-shadow: 0 0 8px rgba(255,255,255,0.5);
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: clamp(1.1rem, 4vw, 1.3rem);
+            margin: 15px 0;
+            text-shadow: 0 0 8px rgba(255,255,255,0.3);
         }
 
-        /* 【新兵装】タイピングテキストを格納するコンテナ */
         .story-text {
             color: #aaa;
             font-size: 0.9rem;
-            min-height: 4.5em; /* テキスト出現中のガタつき防止 */
-            line-height: 1.5;
-        }
-
-        /* カーソルが点滅する演出 */
-        .story-text::after {
-            content: '_';
-            animation: blink 0.8s infinite;
+            line-height: 1.6;
+            margin-bottom: 20px;
         }
 
         .card-price {
-            font-size: 1.1rem;
+            color: #ff007f;
+            font-size: 1.2rem;
             font-weight: bold;
             margin: 15px 0;
+            text-shadow: 0 0 5px #ff007f;
         }
 
-        /* 購買・閲覧ゲートを起動するボタン */
+        /* 購買ゲートへワープするアクティブボタン */
         .btn-gate {
             display: block;
             text-align: center;
             background: transparent;
-            padding: 10px;
+            color: #00ffcc;
+            border: 2px solid #00ffcc;
+            padding: 12px;
             text-decoration: none;
             font-weight: bold;
             transition: all 0.3s;
             cursor: pointer;
+            letter-spacing: 2px;
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+            -webkit-tap-highlight-color: transparent;
+            position: relative;
+            z-index: 20; /* ボタン単体をさらに最前面へ */
         }
-        
-        .btn-gate-pink {
-            color: #ff0055;
-            border: 1px solid #ff0055;
-        }
-        .btn-gate-pink:hover {
-            background: #ff0055;
-            color: #0a0a16;
-            box-shadow: 0 0 15px #ff0055;
-        }
-
-        .btn-gate-green {
-            color: #00ffcc;
-            border: 1px solid #00ffcc;
-        }
-        .btn-gate-green:hover {
+        .btn-gate:hover {
             background: #00ffcc;
-            color: #0a0a16;
-            box-shadow: 0 0 15px #00ffcc;
-        }
-
-        /* アニメーション定義：ピンクパルス */
-        @keyframes neonPulsePink {
-            0% { box-shadow: 0 0 5px rgba(255, 0, 85, 0.2); border-color: rgba(255, 0, 85, 0.5); }
-            100% { box-shadow: 0 0 20px rgba(255, 0, 85, 0.6); border-color: rgba(255, 0, 85, 1); }
-        }
-
-        /* アニメーション定義：グリーンパルス */
-        @keyframes neonPulseGreen {
-            0% { box-shadow: 0 0 5px rgba(0, 255, 204, 0.2); border-color: rgba(0, 255, 204, 0.5); }
-            100% { box-shadow: 0 0 20px rgba(0, 255, 204, 0.6); border-color: rgba(0, 255, 204, 1); }
-        }
-
-        /* カーソル点滅 */
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+            color: #040408;
+            box-shadow: 0 0 25px #00ffcc;
         }
     </style>
 </head>
 <body>
+
+    <!-- 銀河空間キャンバス（強制最背面送り完了） -->
+    <canvas id="comet-canvas"></canvas>
 
     <div class="header-nav">
         <a href="index.html" class="btn-back">◀ 要塞中心核へ帰還</a>
@@ -175,55 +168,93 @@
 
     <div class="grid">
         <!-- スロット1：有料宇宙哲学書 -->
-        <div class="card card-vol1">
-            <div class="card-type text-pink">[VOLUME 01 / 電子図書館閲覧権]</div>
+        <div class="card">
+            <div class="card-type">[VOLUME 01 / 有料図書館閲覧権]</div>
             <div class="card-title">宇宙哲学分冊 第1巻（仮）</div>
-            <!-- タイピング演出が流れる領域 -->
-            <div class="story-text" id="type-vol1"></div>
-            <div class="card-price text-pink">価格: ￥2,000</div>
-            <div class="btn-gate btn-gate-pink" onclick="triggerPurchase()">決済ゲートを起動</div>
+            <p class="story-text">ここにサスペンスとロマンを孕んだ、人類の意識を進化させる閣下の真のあらすじが展開されます。</p>
+            <div class="card-price">価格: ￥2,000</div>
+            <!-- 【新テスト線】先ほど構築が決定した「分離実験室 test-gate.html」へと直結させました！ -->
+            <a href="test-gate.html" class="btn-gate">決済ゲートを起動</a>
         </div>
 
         <!-- スロット2：UFOスケルトンPDF -->
-        <div class="card card-ufo">
-            <div class="card-type text-green">[DATA FILE / 極秘付録]</div>
+        <div class="card" style="border-color: #00ffcc; box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);">
+            <div class="card-type" style="color: #00ffcc; text-shadow: 0 0 5px #00ffcc;">[DATA FILE / 極秘付録]</div>
             <div class="card-title">オリジナルUFOスケルトン設計図</div>
-            <!-- タイピング演出が流れる領域 -->
-            <div class="story-text" id="type-ufo"></div>
-            <div class="card-price text-green">価格: ￥0 (限定特典)</div>
-            <div class="btn-gate btn-gate-green" onclick="alert('UFO設計図のダウンロードリンク、または簡易ビューアへ接続します。')">データを開く</div>
+            <p class="story-text">機密解除されたUFOの構造を完全可視化した、特製スケルトンPDFデータ。</p>
+            <div class="card-price" style="color: #00ffcc; text-shadow: 0 0 5px #00ffcc;">価格: ￥0 (限定特典)</div>
+            <a href="#" class="btn-gate" style="color: #00ffcc; border-color: #00ffcc; z-index: 20;" onclick="alert('UFO設計図のダウンロードを開始、または簡易ビューアへ接続します。')">データを開く</a>
         </div>
     </div>
 
     <script>
-        // 【新兵装】タイピングエフェクト制御スクリプト
-        const textVol1 = "ここにサスペンスとロマンを孕んだ、人類の意識を進化させるあらすじが展開されます。現在、副官の手により文章の同期（アップデート）を待機中…。";
-        const textUFO = "機密解除されたUFOの内部構造を完全可視化した、特製スケルトンPDFデータ。閲覧には高尚な精神の覚醒が必要となる。";
+        const canvas = document.getElementById('comet-canvas');
+        const ctx = canvas.getContext('2d');
 
-        function typeWriter(elementId, text, speed) {
-            let i = 0;
-            const element = document.getElementById(elementId);
-            function type() {
-                if (i < text.length) {
-                    element.innerHTML += text.charAt(i);
-                    i++;
-                    setTimeout(type, speed);
-                }
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const particles = [];
+
+        window.addEventListener('mousemove', function(e) { spawnParticles(e.clientX, e.clientY); });
+        window.addEventListener('touchmove', function(e) {
+            if (e.touches.length > 0) spawnParticles(e.touches.clientX, e.touches.clientY);
+        }, { passive: true });
+        window.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 0) spawnParticles(e.touches.clientX, e.touches.clientY, 6);
+        }, { passive: true });
+
+        function spawnParticles(x, y, count = 2) {
+            for (let i = 0; i < count; i++) { particles.push(new Particle(x, y)); }
+        }
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.speedX = (Math.random() - 0.5) * 3.5;
+                this.speedY = (Math.random() - 0.5) * 3.5;
+                this.size = Math.random() * 3 + 1;
+                const colors = ['#00ffcc', '#ff0055', '#ffffff', '#3399ff', '#ffcc00'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.alpha = 1;
+                this.decay = Math.random() * 0.025 + 0.015;
             }
-            type();
+            update() { this.x += this.speedX; this.y += this.speedY; this.alpha -= this.decay; }
+            draw() {
+                ctx.save(); ctx.globalAlpha = this.alpha; ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = this.color;
+                ctx.shadowBlur = 8; ctx.shadowColor = this.color; ctx.fill(); ctx.restore();
+            }
         }
 
-        // ページ読み込み完了時にタイピングを開始（文字送り速度: 50ミリ秒）
-        window.onload = function() {
-            typeWriter("type-vol1", textVol1, 50);
-            setTimeout(() => {
-                typeWriter("type-ufo", textUFO, 50);
-            }, 1000); // 2つ目のカードは1秒遅らせて起動
-        };
-
-        function triggerPurchase() {
-            alert('【通信中】これより暗号化決済ゲート（Stripe連携予定地）との同期を試みます。フェーズ3の拡張をお待ちください。');
+        const staticStars = [];
+        for (let i = 0; i < 40; i++) {
+            staticStars.push({
+                x: Math.random(), y: Math.random(), size: Math.random() * 1.8 + 0.4,
+                angle: Math.random() * Math.PI, speed: Math.random() * 0.02 + 0.01
+            });
         }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(4, 4, 8, 0.25)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            staticStars.forEach(star => {
+                star.angle += star.speed; ctx.save();
+                ctx.globalAlpha = 0.15 + Math.abs(Math.sin(star.angle)) * 0.85; ctx.beginPath();
+                ctx.arc(star.x * canvas.width, star.y * canvas.height, star.size, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.restore();
+            });
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update(); particles[i].draw();
+                if (particles[i].alpha <= 0) particles.splice(i, 1);
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
     </script>
 </body>
 </html>
