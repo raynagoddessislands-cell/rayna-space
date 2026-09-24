@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>宇宙哲学新要塞 - 決済連動実験セクター</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        body {
+            background-color: #040408;
+            color: #00ffcc;
+            font-family: 'Share Tech Mono', 'Courier New', 'Noto Sans JP', sans-serif;
+            margin: 0;
+            padding: 30px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            overflow-x: hidden;
+            position: relative;
+        }
+        html { height: -webkit-fill-available; }
+
+        /* 銀河空間キャンバス */
+        #comet-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* 実験コンソール（ショッキングピンクネオン仕様） */
+        .test-panel {
+            width: 100%;
+            max-width: 600px;
+            background: rgba(4, 4, 8, 0.94);
+            border: 2px solid #ff007f;
+            border-radius: 8px;
+            padding: 25px 20px;
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.4);
+            box-sizing: border-box;
+            backdrop-filter: blur(6px);
+            z-index: 100;
+            position: relative;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: clamp(1.1rem, 5vw, 1.6rem);
+            text-shadow: 0 0 15px #ff007f;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .subtitle {
+            color: #00ffcc;
+            text-align: center;
+            font-size: clamp(0.75rem, 3.5vw, 0.9rem);
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+
+        /* 3大決済ボタンエリア */
+        .payment-sector {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .btn-pay {
+            width: 100%;
+            padding: 15px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            text-align: center;
+            transition: all 0.2s;
+            letter-spacing: 2px;
+            border: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* 1. クレジットカードボタン（サイバーグリーン） */
+        .pay-card {
+            background: transparent;
+            color: #00ffcc;
+            border: 2px solid #00ffcc;
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+        }
+        .pay-card:hover { background: #00ffcc; color: #040408; box-shadow: 0 0 20px #00ffcc; }
+
+        /* 2. Amazon Payボタン（公式ゴールド風） */
+        .pay-amazon {
+            background: #fad675;
+            color: #111111;
+            box-shadow: 0 0 10px rgba(250, 214, 117, 0.3);
+        }
+        .pay-amazon:hover { background: #fcdfa2; box-shadow: 0 0 20px #fad675; }
+
+        /* 3. PayPalボタン（公式コズミックブルー風） */
+        .pay-paypal {
+            background: #003087;
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 48, 135, 0.4);
+        }
+        .pay-paypal:hover { background: #0045c4; box-shadow: 0 0 20px #003087; }
+
+        /* 【閲覧制限：要塞内電子図書館セクター】 */
+        .library-sector {
+            margin-top: 25px;
+            border-top: 2px dashed #ff007f;
+            padding-top: 25px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+        .status-locked { background: #ff0055; color: #ffffff; box-shadow: 0 0 10px #ff0055; }
+        .status-unlocked { background: #00ffcc; color: #040408; box-shadow: 0 0 15px #00ffcc; animation: pulseGlow 1s infinite alternate; }
+
+        /* 小説本文表示エリア */
+        .book-viewer {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #333;
+            padding: 20px;
+            min-height: 120px;
+            color: #8888aa;
+            font-size: 1rem;
+            line-height: 1.8;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        .viewer-active {
+            border-color: #00ffcc;
+            color: #ffffff;
+            box-shadow: inset 0 0 15px rgba(0, 255, 204, 0.1);
+        }
+
+        @keyframes pulseGlow { 0% { box-shadow: 0 0 5px #00ffcc; } 100% { box-shadow: 0 0 20px #00ffcc; } }
+    </style>
+</head>
+<body>
+
+    <canvas id="comet-canvas"></canvas>
+
+    <div class="test-panel">
+        <h2>【トリプル決済 ➔ 閲覧権連動実証実験】</h2>
+        <div class="subtitle">EXPERIMENTAL SECTOR / 本番要塞完全分離シミュレーター</div>
+
+        <!-- 決済トリガーエリア -->
+        <p style="font-size: 0.9rem; color: #8888aa; text-align: center; margin-bottom: 20px;">
+            ▼ いずれかの決済ボタン（実験模擬信号）をプッシュせよ
+        </p>
+        <div class="payment-sector">
+            <button class="btn-pay pay-card" onclick="simulatePayment('CREDIT CARD')">💳 CREDIT CARD 決済（模擬）</button>
+            <button class="btn-pay pay-amazon" onclick="simulatePayment('Amazon Pay')">💛 Amazon Pay 決済（模擬）</button>
+            <button class="btn-pay pay-paypal" onclick="simulatePayment('PayPal')">💙 PayPal 決済（模擬）</button>
+        </div>
+
+        <!-- 閲覧判定・電子図書館エリア -->
+        <div class="library-sector">
+            <div style="font-size: 0.85rem; color: #8888aa; margin-bottom: 10px;">▶ SECURITY ACCESSIBILITY STATUS:</div>
+            <div id="lock-status" class="status-badge status-locked">【施錠】アクセス権未検出：閲覧不可</div>
+            
+            <div id="viewer-box" class="book-viewer">
+                （ここに閉ざされた宇宙哲学分冊第1巻のデータが格納されています。上記のトリプル決済セクターを正常に通過し、閲覧権シールドを突破せよ。）
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 【1. 背景銀河＆五色彗星エフェクト】
+        const canvas = document.getElementById('comet-canvas');
+        const ctx = canvas.getContext('2d');
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas); resizeCanvas();
+        const particles = [];
+        window.addEventListener('mousemove', function(e) { spawnParticles(e.clientX, e.clientY); });
+        window.addEventListener('touchmove', function(e) { if (e.touches.length > 0) spawnParticles(e.touches.clientX, e.touches.clientY); }, { passive: true });
+        window.addEventListener('touchstart', function(e) { if (e.touches.length > 0) spawnParticles(e.touches.clientX, e.touches.clientY, 6); }, { passive: true });
+        function spawnParticles(x, y, count = 2) { for (let i = 0; i < count; i++) particles.push(new Particle(x, y)); }
+        class Particle {
+            constructor(x, y) {
+                this.x = x; this.y = y;
+                this.speedX = (Math.random() - 0.5) * 3.5; this.speedY = (Math.random() - 0.5) * 3.5; this.size = Math.random() * 3 + 1;
+                const colors = ['#00ffcc', '#ff0055', '#ffffff', '#3399ff', '#ffcc00']; this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.alpha = 1; this.decay = Math.random() * 0.025 + 0.015;
+            }
+            update() { this.x += this.speedX; this.y += this.speedY; this.alpha -= this.decay; }
+            draw() { ctx.save(); ctx.globalAlpha = this.alpha; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = this.color; ctx.shadowBlur = 8; ctx.shadowColor = this.color; ctx.fill(); ctx.restore(); }
+        }
+        const staticStars = [];
+        for (let i = 0; i < 40; i++) { staticStars.push({ x: Math.random(), y: Math.random(), size: Math.random() * 1.8 + 0.4, angle: Math.random() * Math.PI, speed: Math.random() * 0.02 + 0.01 }); }
+        function animate() {
+            ctx.fillStyle = 'rgba(4, 4, 8, 0.25)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            staticStars.forEach(star => { star.angle += star.speed; ctx.save(); ctx.globalAlpha = 0.15 + Math.abs(Math.sin(star.angle)) * 0.85; ctx.beginPath(); ctx.arc(star.x * canvas.width, star.y * canvas.height, star.size, 0, Math.PI * 2); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.restore(); });
+            for (let i = particles.length - 1; i >= 0; i--) { particles[i].update(); particles[i].draw(); if (particles[i].alpha <= 0) particles.splice(i, 1); }
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // ========================================================
+        // 【2. 連動実験・絶対自立稼働システム（溶接完了）】
+        // ========================================================
+        
+        // 読者が閲覧権の鍵を開けた際に現れる「真の神島ノベル（テストデータ）」
+        const realNovelText = "【宇宙哲学分冊 第1巻：覚醒のプロトコル】 —— 人類よ、地球の狭き重力に縛られた思考を今こそ解き放つが良い。汝らが孤独と呼ぶその深淵は、大宇宙の満天の銀河、遍満するフォースと周波数を同期させている証拠に他ならない。悪の潜伏を許さず、凛として自分らしく在れ。その瞬間、汝の生命は三世永遠の知的財産（アーカイブ）となり、地球文明の宿命転換の鐘を鳴らすであろう。……（実証実験：トリプル決済信号からの閲覧権アンロック通信の開通を100%確認完了）";
+
+        window.simulatePayment = function(methodName) {
+            // 読者へのアナウンス
+            alert('【通信中】' + methodName + 'の外部セキュアサーバーへ同期を試みます。購入手続き（￥2,000）を模擬実行します。');
+
+            // 1. 閲覧シールドの解除処理（HTML要素の書き換え）
+            const lockStatus = document.getElementById('lock-status');
+            const viewerBox = document.getElementById('viewer-box');
+
+            lockStatus.className = "status-badge status-unlocked";
+            lockStatus.innerHTML = "【解錠】" + methodName + "による閲覧権を検出：アクセス許可";
+
+            viewerBox.className = "book-viewer viewer-active";
+            viewerBox.innerHTML = ""; // 初期化
+
+            // 2. カタカタと刻まれる、100%バグの起きないタイピング出現エフェクト
+            let i = 0;
+            function typeNovel() {
+                if (i < realNovelText.length) {
