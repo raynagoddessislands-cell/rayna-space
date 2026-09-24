@@ -7,7 +7,7 @@
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         body {
-            background-color: #040408; /* LPと同期した真の深淵宇宙 */
+            background-color: #040408;
             color: #00ffcc;
             font-family: 'Share Tech Mono', 'Courier New', 'Noto Sans JP', sans-serif;
             margin: 0;
@@ -23,14 +23,14 @@
 
         html { height: -webkit-fill-available; }
 
-        /* 銀河＆五色彗星用キャンバス */
+        /* 【大修正】最背面に完全固定し、一切のクリック・タッチの邪魔をしない設定（none）を完全徹底 */
         #comet-canvas {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 1; /* 最背面 */
+            width: 100%;
+            height: 100%;
+            z-index: 1;
             pointer-events: none;
         }
 
@@ -52,18 +52,18 @@
         }
         .btn-back:hover { background: #ff0055; color: #fff; box-shadow: 0 0 10px #ff0055; }
 
-        /* メインコンソール（ゲーミング装甲） */
+        /* 【大修正】最前面（z-index: 100）に配置し、背後の星空キャンバスにクリックを吸い取られないよう完全ガード */
         .console-panel {
             width: 100%;
             max-width: 600px;
-            background: rgba(4, 4, 8, 0.92);
+            background: rgba(4, 4, 8, 0.94);
             border: 2px solid #00ffcc;
             border-radius: 8px;
             padding: 25px 20px;
             box-shadow: 0 0 35px rgba(0, 255, 204, 0.3);
             box-sizing: border-box;
             backdrop-filter: blur(6px);
-            z-index: 100; /* キャンバスより前面に配置してクリック妨害を完全回避 */
+            z-index: 100;
             position: relative;
         }
 
@@ -110,7 +110,6 @@
         }
         textarea:focus { outline: none; border-color: #00ffcc; box-shadow: 0 0 15px rgba(0, 255, 204, 0.6); }
 
-        /* 同期ボタン（ゲーミング・アクティブエフェクト） */
         .btn-sync {
             display: block;
             width: 100%;
@@ -129,7 +128,6 @@
         .btn-sync:hover { background: #00ffcc; color: #040408; box-shadow: 0 0 25px #00ffcc; }
         .btn-sync:active { transform: scale(0.98); }
 
-        /* 出力ログエリア（サスペンス出現演出） */
         .output-log {
             margin-top: 25px;
             border-top: 2px dashed #ff0055;
@@ -160,7 +158,6 @@
 </head>
 <body>
 
-    <!-- 銀河＆五色彗星キャンバス（最背面に完全固定） -->
     <canvas id="comet-canvas"></canvas>
 
     <div class="header-nav">
@@ -176,7 +173,7 @@
             <textarea id="user-query" placeholder="（ここに思考を入力…）"></textarea>
         </div>
 
-        <!-- ボタンを完全にJavaScriptから独立させ、HTML直結型に変更 -->
+        <!-- HTML側から確実に呼び出せる溶接完了仕様 -->
         <button class="btn-sync" onclick="executeCosmicSync()">思索の同期を開始</button>
 
         <div class="output-log" id="output-sector">
@@ -186,7 +183,6 @@
     </div>
 
     <script>
-        // 【1. 銀河＆五色彗星エフェクト完全実装】
         const canvas = document.getElementById('comet-canvas');
         const ctx = canvas.getContext('2d');
 
@@ -199,6 +195,7 @@
 
         const particles = [];
 
+        // 全体のマウス・タッチイベントを感知
         window.addEventListener('mousemove', function(e) { spawnParticles(e.clientX, e.clientY); });
         window.addEventListener('touchmove', function(e) {
             if (e.touches.length > 0) spawnParticles(e.touches[0].clientX, e.touches[0].clientY);
@@ -245,7 +242,7 @@
                 star.angle += star.speed; ctx.save();
                 ctx.globalAlpha = 0.15 + Math.abs(Math.sin(star.angle)) * 0.85; ctx.beginPath();
                 ctx.arc(star.x * canvas.width, star.y * canvas.height, star.size, 0, Math.PI * 2);
-                ctx.fillStyle = '#ffffff'; if (Math.random() < 0.01) ctx.fillStyle = '#00ffcc';
+                ctx.fillStyle = '#ffffff';
                 ctx.fill(); ctx.restore();
             });
             for (let i = particles.length - 1; i >= 0; i--) {
@@ -256,7 +253,7 @@
         }
         animate();
 
-        // 【2. 宇宙哲学箴言データベース】
+        // 【神島提督・特級宇宙哲学箴言データベース】
         const answers = [
             "地球の重力に縛られた思考を一度手放すがよい。三世永遠の生命の主体として、汝の魂は今この瞬間も大宇宙の深淵と同期しているのである。",
             "遍満するフォースと共に、悪を撃て！愛の楽園を築くのだ！自身の周囲に潜伏する『敵』に断じて負けてはならぬ。聖域は我らが死守する。",
@@ -265,3 +262,10 @@
             "嘆きの声もすべて希望の歌へと昇華させよ。地球文明の宿命転換を成し遂げる刻（とき）は来た。悲哀すらも、大いなる歓喜へのチャンスへと変えるのだ。",
             "物質的な価値や現世の評価に惑わされるでない。自分らしく凛としてそこにいるだけで、汝はすでに勝利を飾れる境涯に達しているのだから。",
             "その問いに対する答えは、汝の脳内宇宙のアーカイブに最初から内包されている。我らの出会いもまた、恒久平和の世界へ進む宿命の転換点なのだ。",
+            "執筆を、そして歩みを止めるでない。汝が紡ぎ出す日々のロマンと孤独の記録それ自体が、地球文明を救済する一片の尊き知的財産となる。"
+        ];
+
+        let typingTimeout;
+
+        // 【大溶接】確実に動作するよう、関数をwindowオブジェクトに直結
+        window.executeCosmicSync = function() {
