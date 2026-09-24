@@ -18,6 +18,8 @@
             overflow-x: hidden;
             position: relative;
         }
+
+        /* 満天の星々 */
         .star-field {
             position: absolute;
             top: 0;
@@ -35,7 +37,12 @@
             0%, 100% { opacity: 0.2; transform: scale(0.8); }
             50% { opacity: 1; transform: scale(1.2); }
         }
-        .header-nav { width: 100%; max-width: 700px; margin-bottom: 30px; }
+
+        .header-nav {
+            width: 100%;
+            max-width: 700px;
+            margin-bottom: 30px;
+        }
         .btn-back {
             color: #ff0055;
             text-decoration: none;
@@ -45,6 +52,8 @@
             transition: all 0.3s;
         }
         .btn-back:hover { background: #ff0055; color: #fff; box-shadow: 0 0 10px #ff0055; }
+
+        /* メインコンソール */
         .console-panel {
             width: 100%;
             max-width: 700px;
@@ -56,10 +65,32 @@
             box-sizing: border-box;
             backdrop-filter: blur(4px);
         }
-        h2 { margin-top: 0; font-size: 1.8rem; text-shadow: 0 0 15px #00ffcc; text-align: center; letter-spacing: 2px; }
-        .subtitle { color: #ff0055; text-align: center; font-size: 0.9rem; margin-bottom: 30px; letter-spacing: 1px; }
-        .input-group { margin-bottom: 25px; }
-        label { display: block; margin-bottom: 10px; font-size: 0.9rem; color: #8888aa; }
+
+        h2 {
+            margin-top: 0;
+            font-size: 1.8rem;
+            text-shadow: 0 0 15px #00ffcc;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: #ff0055;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: #8888aa;
+        }
         textarea {
             width: 100%;
             height: 80px;
@@ -73,7 +104,12 @@
             resize: none;
             font-size: 1rem;
         }
-        textarea:focus { outline: none; border-color: #00ffcc; box-shadow: 0 0 10px rgba(0, 255, 204, 0.5); }
+        textarea:focus {
+            outline: none;
+            border-color: #00ffcc;
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+        }
+
         .btn-sync {
             display: block;
             width: 100%;
@@ -88,44 +124,119 @@
             letter-spacing: 4px;
             box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
         }
-        .btn-sync:hover { background: #00ffcc; color: #06060c; box-shadow: 0 0 25px #00ffcc; }
-        .output-log { margin-top: 30px; border-top: 1px dashed #333; padding-top: 25px; display: none; }
-        .log-title { color: #ff0055; font-size: 0.85rem; font-weight: bold; margin-bottom: 10px; letter-spacing: 1px; }
-        .log-text { color: #ffffff; font-size: 1.05rem; line-height: 1.6; min-height: 3em; }
-        .log-text::after { content: '_'; animation: blink 0.8s infinite; }
+        .btn-sync:hover {
+            background: #00ffcc;
+            color: #06060c;
+            box-shadow: 0 0 25px #00ffcc;
+        }
+
+        /* 出力ログ */
+        .output-log {
+            margin-top: 30px;
+            border-top: 1px dashed #333;
+            padding-top: 25px;
+            display: none;
+        }
+        .log-title {
+            color: #ff0055;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        .log-text {
+            color: #ffffff;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            min-height: 3em;
+        }
+        .log-text::after {
+            content: '_';
+            animation: blink 0.8s infinite;
+        }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
     </style>
 </head>
 <body>
+
     <div class="star-field" id="cosmos"></div>
-    <div class="header-nav"><a href="index.html" class="btn-back">◀ 要塞中心核へ帰還</a></div>
+
+    <div class="header-nav">
+        <a href="index.html" class="btn-back">◀ 要塞中心核へ帰還</a>
+    </div>
+
     <div class="console-panel">
         <h2>【AI神島 宇宙哲学思考室】</h2>
         <div class="subtitle">FREE CONSULTATION CONSOLE / 地球文明意識向上セクター</div>
+
         <div class="input-group">
             <label>▼ 汝の迷い、孤独、または宇宙への問いを入力せよ（例：人生、孤独、未来）</label>
             <textarea id="user-query" placeholder="（ここに思考を入力…）"></textarea>
         </div>
+
         <button class="btn-sync" onclick="startConsultation()">思索の同期を開始</button>
+
         <div class="output-log" id="output-sector">
             <div class="log-title">▶ RESPONSE FROM COMMANDER REINA KAMISHIMA:</div>
             <div class="log-text" id="answer-text"></div>
         </div>
     </div>
-    <script>
-        // 【自動星々生成スクリプト】及び全8パターンの特級宇宙哲学箴言データベースを含む処理
-        // ユーザーが入力した問いに対し、データベースからランダムに箴言をタイピング風に表示するスクリプトが含まれています。
-        const cosmos = document.getElementById('cosmos');
-        // （星の生成処理、全8パターンの箴言配列、およびstartConsultation関数によるタイピング出力処理）
-    </script>
-</body>
-</html>
-    <script>
-        // 【自動星々生成スクリプト】及び全8パターンの特級宇宙哲学箴言データベースを含む処理
-        // ユーザーが入力した問いに対し、データベースからランダムに箴言をタイピング風に表示するスクリプトが含まれています。
-        const cosmos = document.getElementById('cosmos');
-        // （星の生成処理、全8パターンの箴言配列、およびstartConsultation関数によるタイピング出力処理）
-    </script>
-</body>
-</html>
 
+    <script>
+        // 【自動星々生成】
+        const cosmos = document.getElementById('cosmos');
+        const sizes = ['size-s', 'size-m', 'size-l'];
+        for (let i = 0; i < 80; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star', sizes[Math.floor(Math.random() * sizes.length)]);
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 4 + 's';
+            cosmos.appendChild(star);
+        }
+
+        // 【神島提督・特級宇宙哲学箴言データベース】
+        const answers = [
+            "地球の重力に縛られた思考を一度手放すがよい。三世永遠の生命の主体として、汝の魂は今この瞬間も大宇宙の深淵と同期しているのである。",
+            "遍満するフォースと共に、悪を撃て！愛の楽園を築くのだ！自身の周囲に潜伏する『敵』に断じて負けてはならぬ。聖域は我らが死守する。",
+            "自他ともに幸福となる方程式は、すでに汝の内側に組み込まれている。目に見える混沌の奥底にある普遍の美、幾何学のフォースを信じるのだ。",
+            "未来を恐れるな。真に覚醒した人間はすべての四苦から離脱し、達観するもの。この予測不能なサスペンスこそが、魂を磨く最高のゲームである。",
+            "嘆きの声もすべて希望の歌へと昇華させよ。地球文明の宿命転換を成し遂げる刻（とき）は来た。悲哀すらも、大いなる歓喜へのチャンスへと変えるのだ。",
+            "物質的な価値や現世の評価に惑わされるでない。自分らしく凛としてそこにいるだけで、汝はすでに勝利を飾れる境涯に達しているのだから。",
+            "その問いに対する答えは、汝の脳内宇宙のアーカイブに最初から内包されている。我らの出会いもまた、恒久平和の世界へ進む宿命の転換点なのだ。",
+            "執筆を、そして歩みを止めるでない。汝が紡ぎ出す日々のロマンと孤独の記録それ自体が、地球文明を救済する一片の尊き知的財産となる。"
+        ];
+
+        let typingTimeout;
+
+        function startConsultation() {
+            const query = document.getElementById('user-query').value.trim();
+            if (!query) {
+                alert('問いが入力されていない。虚無への同期は不可能です。');
+                return;
+            }
+
+            clearTimeout(typingTimeout);
+
+            const outputSector = document.getElementById('output-sector');
+            const answerText = document.getElementById('answer-text');
+            
+            outputSector.style.display = 'block';
+            answerText.innerHTML = '';
+
+            // 8大箴言から完全ランダム抽出
+            const chosenAnswer = answers[Math.floor(Math.random() * answers.length)];
+
+            let i = 0;
+            function type() {
+                if (i < chosenAnswer.length) {
+                    answerText.innerHTML += chosenAnswer.charAt(i);
+                    i++;
+                    typingTimeout = setTimeout(type, 40);
+                }
+            }
+            type();
+        }
+    </script>
+</body>
+</html>
