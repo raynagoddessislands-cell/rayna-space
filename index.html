@@ -46,14 +46,19 @@
             z-index: 1;
             text-align: center;
             box-sizing: border-box;
+            /* 中央揃えの防衛線を強化 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* 一列を絶対死守する青水色のタイトル */
+        /* 一列を絶対死守するタイトル */
         h1 {
             color: #00ffff;
             text-shadow: 0 0 12px #00ffff;
             font-size: 1.4rem;
             margin-top: 0;
+            width: 100%;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -66,21 +71,24 @@
             border: 1px solid #333;
             border-radius: 8px;
             padding: 15px;
-            height: 120px;
+            width: 100%; /* 横幅を100%にしてズレを防止 */
+            height: 140px; /* ログ追加に備えて高さを少し拡張 */
             overflow-y: hidden;
             text-align: left;
             font-family: 'Courier New', Courier, monospace;
             font-size: 0.85rem;
             color: #00ff66;
             text-shadow: 0 0 4px #00ff66;
-            line-height: 1.5;
+            line-height: 1.6;
             margin: 20px 0;
+            box-sizing: border-box;
         }
 
-        /* 聖域ミッション起動ボタン */
+        /* 右ズレを100%殲滅した、完全中央配置ボタン */
         .btn-enter-fortress {
-            display: inline-block;
-            width: 100%;
+            display: block;
+            width: 100%; /* 親要素の幅に完全に合わせる */
+            max-width: 490px;
             padding: 16px;
             background: #000;
             color: #ffffff;
@@ -91,7 +99,8 @@
             cursor: pointer;
             box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
             transition: all 0.3s ease;
-            text-decoration: none;
+            box-sizing: border-box;
+            text-align: center;
         }
 
         .btn-enter-fortress:hover, .btn-enter-fortress:active {
@@ -103,7 +112,7 @@
 </head>
 <body oncontextmenu="return false;">
 
-    <!-- 五色に煌めく超彗星エンジン -->
+    <!-- 五色に煌めく超彗星キャンバス -->
     <canvas id="universeCanvas"></canvas>
 
     <!-- 城門インターフェース -->
@@ -113,11 +122,10 @@
         <!-- 自動タイピングログ -->
         <div class="system-log-box" id="logBox"></div>
 
-        <!-- 外部インフラ（BOOTHやKindle等）への接続リンク（ミッション起動ゲート） -->
-        <!-- 閣下が現在お使いの、または今後展開する本物の配信URLを href="..." に設定してください -->
-        <a href="https://amazon.co.jp" target="_blank" class="btn-enter-fortress" id="gateButton" style="visibility: hidden;">
+        <!-- 外部リンクを排し、完全自立駆動化させたミッション起動パルスボタン -->
+        <button class="btn-enter-fortress" id="gateButton" onclick="triggerMission()" style="visibility: hidden;">
             🚀 宇宙金貨２枚：文芸聖域ミッションを起動
-        </a>
+        </button>
     </div>
 
     <script>
@@ -145,25 +153,48 @@
                     if (charIndex < currentText.length) {
                         p.innerHTML += currentText.charAt(charIndex);
                         charIndex++;
-                        setTimeout(typeChar, 25);
+                        setTimeout(typeChar, 20);
                     } else {
                         logBox.scrollTop = logBox.scrollHeight;
                         logIndex++;
-                        setTimeout(printLog, 400);
+                        setTimeout(printLog, 300);
                     }
                 }
                 typeChar();
             } else {
-                // すべてのログ出力完了後、ミッションボタンをパッと現出
                 gateButton.style.visibility = 'visible';
-                gateButton.style.animation = 'fadeIn 0.5s ease-in-out';
             }
         }
         
-        // 起動から1秒後にログ開始
-        setTimeout(printLog, 1000);
+        setTimeout(printLog, 800);
 
-        // ーーー スマホ・PC完全対応：五色の超彗星パーティクル ーーー
+        // 閣下の御要望：リンク無効化＆ボタン連動ゲーミング演出
+        function triggerMission() {
+            const p = document.createElement('div');
+            p.style.color = '#ff007f'; // ログにショッキングピンクの警告パルス
+            p.style.textShadow = '0 0 4px #ff007f';
+            logBox.appendChild(p);
+            
+            let missionText = "[MISSION] ゲート接続完了。明朝五時三十分、電磁空間の理が書き換わるのを待て――。";
+            let charIndex = 0;
+            
+            gateButton.disabled = true; // 連打防止
+            gateButton.style.opacity = "0.5";
+            gateButton.innerHTML = "🛰️ 刻限（05:30）を待機中...";
+
+            function typeMission() {
+                if (charIndex < missionText.length) {
+                    p.innerHTML += missionText.charAt(charIndex);
+                    charIndex++;
+                    setTimeout(typeMission, 25);
+                } else {
+                    logBox.scrollTop = logBox.scrollHeight;
+                }
+            }
+            typeMission();
+        }
+
+        // ーーー パーティクル・エンジン（スマホ・PC完全対応版） ーーー
         const canvas = document.getElementById('universeCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -205,7 +236,6 @@
             }
         }
 
-        // 満天の星々の常駐
         for (let i = 0; i < 70; i++) {
             particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height, true));
         }
