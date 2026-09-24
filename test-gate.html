@@ -2,183 +2,153 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>宇宙哲学新要塞 - 決済連動実験セクター</title>
-    <link href="https://googleapis.com" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>任務分離実験室 - 決済解錠テストゲート</title>
     <style>
-        /* ========================================================
-           【絶対聖域シールド】ページ全体で文字ドラッグ・選択を強制フリーズ
-           ======================================================== */
+        /* 閣下の世界観を構築する超彗星・ネオン装飾 */
         body {
-            background-color: #040408;
-            color: #00ffcc;
-            font-family: 'Share Tech Mono', 'Courier New', 'Noto Sans JP', sans-serif;
+            background-color: #05050a;
+            color: #ffffff;
+            font-family: 'Georgia', 'Times New Roman', serif;
             margin: 0;
-            padding: 30px 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            min-height: -webkit-fill-available;
-            overflow-x: hidden;
-            position: relative;
-
-            /* 地球人のドラッグ選択をすべてのブラウザで根こそぎ禁止 */
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-        html { height: -webkit-fill-available; }
-
-        /* 銀河空間キャンバスを最背面に完全隔離 */
-        #comet-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        /* 実験コンソールパネル */
-        .test-panel {
-            width: 100%;
-            max-width: 600px;
-            background: rgba(4, 4, 8, 0.94);
-            border: 2px solid #ff007f;
-            border-radius: 8px;
-            padding: 25px 20px;
-            box-shadow: 0 0 30px rgba(255, 0, 127, 0.4);
-            box-sizing: border-box;
-            backdrop-filter: blur(6px);
-            z-index: 10;
-            position: relative;
-        }
-
-        h2 { margin-top: 0; font-family: 'Noto Sans JP', sans-serif; font-size: clamp(1.1rem, 5vw, 1.6rem); text-shadow: 0 0 15px #ff007f; text-align: center; color: #ffffff; }
-        .subtitle { color: #00ffcc; text-align: center; font-size: clamp(0.75rem, 3.5vw, 0.9rem); margin-bottom: 25px; letter-spacing: 1px; }
-
-        .payment-sector { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; position: relative; z-index: 20; }
-        
-        /* 【大修正】ボタンだけは「クリックのフォースを受け入れる（auto）」ように個別指定 */
-        .btn-pay { 
-            width: 100%; 
-            padding: 15px; 
-            font-size: 1rem; 
-            font-weight: bold; 
-            cursor: pointer; 
-            border-radius: 4px; 
-            text-align: center; 
-            transition: all 0.2s; 
-            letter-spacing: 2px; 
-            border: none; 
-            -webkit-tap-highlight-color: transparent; 
-            position: relative; 
-            z-index: 30; 
-            
-            /* ボタンのクリックを絶対にフリーズさせないための溶接 */
-            pointer-events: auto !important;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-        
-        .pay-card { background: transparent; color: #00ffcc; border: 2px solid #00ffcc; box-shadow: 0 0 10px rgba(0, 255, 204, 0.2); }
-        .pay-card:hover { background: #00ffcc; color: #040408; box-shadow: 0 0 20px #00ffcc; }
-        .pay-amazon { background: #fad675; color: #111111; box-shadow: 0 0 10px rgba(250, 214, 117, 0.3); }
-        .pay-amazon:hover { background: #fcdfa2; box-shadow: 0 0 20px #fad675; }
-        .pay-paypal { background: #003087; color: #ffffff; box-shadow: 0 0 10px rgba(0, 48, 135, 0.4); }
-        .pay-paypal:hover { background: #0045c4; box-shadow: 0 0 20px #003087; }
-
-        .library-sector { margin-top: 25px; border-top: 2px dashed #ff007f; padding-top: 25px; position: relative; z-index: 20; }
-        .status-badge { display: inline-block; padding: 6px 12px; font-size: 0.85rem; font-weight: bold; border-radius: 4px; margin-bottom: 15px; letter-spacing: 1px; }
-        .status-locked { background: #ff0055; color: #ffffff; box-shadow: 0 0 10px #ff0055; }
-        .status-unlocked { background: #00ffcc; color: #040408; box-shadow: 0 0 15px #00ffcc; animation: pulseGlow 1s infinite alternate; }
-
-        .book-viewer {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid #333;
             padding: 20px;
-            min-height: 120px;
-            color: #8888aa;
-            font-size: 1rem;
-            line-height: 1.8;
-            border-radius: 4px;
+            overflow-x: hidden;
+        }
+
+        /* 枠線を妖艶なショッキングピンクネオンに換装 */
+        .fortress-container {
+            border: 3px solid #ff007f;
+            box-shadow: 0 0 15px #ff007f, inset 0 0 15px #ff007f;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        h1 {
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        .gate-status {
+            text-align: center;
+            font-weight: bold;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background: #222;
+        }
+
+        .status-locked { color: #ff3333; border: 1px solid #ff3333; }
+        .status-unlocked { color: #33ff33; border: 1px solid #33ff33; box-shadow: 0 0 10px #33ff33; }
+
+        .btn-payment {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            color: #fff;
+            background: #111;
+            border: 2px solid #00ffff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
             transition: all 0.3s;
         }
-        .viewer-active {
-            border-color: #00ffcc;
-            color: #ffffff;
-            box-shadow: inset 0 0 15px rgba(0, 255, 204, 0.1);
+        .btn-payment:hover {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 10px #00ffff;
         }
 
-        @keyframes pulseGlow { 0% { box-shadow: 0 0 5px #00ffcc; } 100% { box-shadow: 0 0 20px #00ffcc; } }
+        /* 文芸聖域（小説本文エリア）*/
+        .sanctuary-content {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            border-top: 2px dashed #ff007f;
+            line-height: 1.8;
+            letter-spacing: 0.05em;
+            background: #0a0a15;
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
-<body>
+<!-- 右クリック完全拒否シールドの実装 -->
+<body oncontextmenu="return false;" onselectstart="return false;" oncopy="return false;">
 
-    <canvas id="comet-canvas"></canvas>
-
-    <div class="test-panel">
-        <h2>【トリプル決済 ➔ 閲覧権連動実証実験】</h2>
-        <div class="subtitle">EXPERIMENTAL SECTOR / 本番要塞完全分離シミュレーター</div>
-
-        <p style="font-size: 0.9rem; color: #8888aa; text-align: center; margin-bottom: 20px;">
-            ▼ いずれかの決済ボタン（実験模擬信号）をプッシュせよ
-        </p>
-        <div class="payment-sector">
-            <button class="btn-pay pay-card" onclick="startSimulation('CREDIT CARD')">💳 CREDIT CARD 決済（模擬）</button>
-            <button class="btn-pay pay-amazon" onclick="startSimulation('Amazon Pay')">💛 Amazon Pay 決済（模擬）</button>
-            <button class="btn-pay pay-paypal" onclick="startSimulation('PayPal')">💙 PayPal 決済（模擬）</button>
+    <div class="fortress-container">
+        <h1>宇宙哲学聖域決済ゲート</h1>
+        
+        <div id="gateStatus" class="gate-status status-locked">
+            【聖域封印中】商業戦略分冊（宇宙金貨２枚）
         </div>
 
-        <div class="library-sector">
-            <div style="font-size: 0.85rem; color: #8888aa; margin-bottom: 10px;">▶ SECURITY ACCESSIBILITY STATUS:</div>
-            <div id="lock-status" class="status-badge status-locked">【施錠】アクセス権未検出：閲覧不可</div>
-            
-            <div id="viewer-box" class="book-viewer">
-                （ここに閉ざされた宇宙哲学分冊第1巻のデータが格納されています。上記のトリプル決済セクターを正常に通過し、閲覧権シールドを突破せよ。）
-            </div>
+        <!-- トリプル決済模擬シミュレーター（Sandbox環境準拠） -->
+        <div id="paymentBox">
+            <button class="btn-payment" onclick="executeSimulatedPayment('クレジットカード')">💳 クレジットカード決済を起動</button>
+            <button class="btn-payment" onclick="executeSimulatedPayment('Amazon Pay')"> Alexandre Amazon Pay (Sandbox) 起動</button>
+            <button class="btn-payment" onclick="executeSimulatedPayment('PayPal')">🔏 PayPal 決済エミュレート</button>
         </div>
+
+        <!-- 100％自動解錠・タイピング連動システム搭載の本文 -->
+        <div id="literarySanctuary" class="sanctuary-content"></div>
     </div>
 
     <script>
-        // 【銀河＆五色彗星エフェクト】
-        const canvas = document.getElementById('comet-canvas');
-        const ctx = canvas.getContext('2d');
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resizeCanvas); resizeCanvas();
-        const particles = [];
-        window.addEventListener('mousemove', function(e) { spawnParticles(e.clientX, e.clientY); });
-        window.addEventListener('touchmove', function(e) { if (e.touches.length > 0) spawnParticles(e.touches.clientX, e.touches.clientY); }, { passive: true });
-        window.addEventListener('touchstart', function(e) { if (e.touches.length > 0) spawnParticles(e.touches.clientX, e.touches.clientY, 6); }, { passive: true });
-        function spawnParticles(x, y, count = 2) { for (let i = 0; i < count; i++) particles.push(new Particle(x, y)); }
-        class Particle {
-            constructor(x, y) {
-                this.x = x; this.y = y;
-                this.speedX = (Math.random() - 0.5) * 3.5; this.speedY = (Math.random() - 0.5) * 3.5; this.size = Math.random() * 3 + 1;
-                const colors = ['#00ffcc', '#ff0055', '#ffffff', '#3399ff', '#ffcc00']; this.color = colors[Math.floor(Math.random() * colors.length)];
-                this.alpha = 1; this.decay = Math.random() * 0.025 + 0.015;
+        // 実在の小説本文データ（破損データを完全排除した純粋結晶）
+        const sacredText = `【宇宙哲学創世記 - 第一章】
+宇宙総合指令官・神島玲奈は、無限 of 混沌を見つめていた。
+五色に煌めく超彗星が虚空を切り裂き、ショッキングピンクの星雲が新たな要塞の誕生を告げる。
+「お遊びはここまでだ。これより本物の文芸聖域を現出させる」
+その言葉とともに、タイピングの波動は宇宙の理を書き換えていった――。`;
+
+        // 100%自動解錠およびタイピング連動処理
+        function executeSimulatedPayment(method) {
+            console.log(`[SYSTEM] ${method} 決済シグナルを受信。認証中...`);
+            
+            // 決済成功後の自動解錠プロセス
+            const statusBox = document.getElementById('gateStatus');
+            const paymentBox = document.getElementById('paymentBox');
+            const sanctuary = document.getElementById('literarySanctuary');
+
+            paymentBox.style.display = 'none';
+            statusBox.className = 'gate-status status-unlocked';
+            statusBox.innerHTML = `【完全勝利】${method}経由による解錠に成功。聖域を展開します。`;
+            
+            // タイピング連動自動生成
+            sanctuary.style.display = 'block';
+            typeWriterEffect(sacredText, 'literarySanctuary', 50);
+        }
+
+        // タイピング連動エフェクト
+        function typeWriterEffect(text, elementId, speed) {
+            let i = 0;
+            const element = document.getElementById(elementId);
+            element.innerHTML = ""; // 初期化
+
+            function typing() {
+                if (i < text.length) {
+                    // 改行コードの自動変換処理
+                    if (text.charAt(i) === '\n') {
+                        element.innerHTML += '<br>';
+                    } else {
+                        element.innerHTML += text.charAt(i);
+                    }
+                    i++;
+                    setTimeout(typing, speed);
+                }
             }
-            update() { this.x += this.speedX; this.y += this.speedY; this.alpha -= this.decay; }
-            draw() { ctx.save(); ctx.globalAlpha = this.alpha; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = this.color; ctx.shadowBlur = 8; ctx.shadowColor = this.color; ctx.fill(); ctx.restore(); }
+            typing();
         }
-        const staticStars = [];
-        for (let i = 0; i < 40; i++) { staticStars.push({ x: Math.random(), y: Math.random(), size: Math.random() * 1.8 + 0.4, angle: Math.random() * Math.PI, speed: Math.random() * 0.02 + 0.01 }); }
-        function animate() {
-            ctx.fillStyle = 'rgba(4, 4, 8, 0.25)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-            staticStars.forEach(star => { star.angle += star.speed; ctx.save(); ctx.globalAlpha = 0.15 + Math.abs(Math.sin(star.angle)) * 0.85; ctx.beginPath(); ctx.arc(star.x * canvas.width, star.y * canvas.height, star.size, 0, Math.PI * 2); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.restore(); });
-            for (let i = particles.length - 1; i >= 0; i--) { particles[i].update(); particles[i].draw(); if (particles[i].alpha <= 0) particles.splice(i, 1); }
-            requestAnimationFrame(animate);
-        }
-        animate();
-
-        // 【聖域ガード・暗号解読システム】
-        const encryptedNovel = "44CR5a6H5a6Z5ZOy5a2m5YiG5YaKIOespDFIuyD669v77m96Kaz6KaS44Gu44OX44Ot44OI44Kz44Or44CRIOKAlOKAlCDkurrmsZ7jgoXjgIE1ZyDvvb01ZyDvvb00N0NX57iB44GN6YeN5Yqb44Gr57mt44KJ44KM44Gf5oCd6ICD44KS5LuK44GT44Gd6Zaj5pS+44GX5pS+44GZ44GM6Imv44GE44CC5rGd44KJ44GM5YWp54us44Go5ZG844G244Gd44Gu5rex5ret44Gv44CB5aSn5a6H5a6Z44Gu5rqA5aSp44Gu6YqA5rKz44CB6YGN5rqA44GZ44KL44OV44Kp44O844K544Go5ZGo5rKi5pWw44KS5ZCM5pyf44GV44Gb44Gm44GE44KL6Ki85YWg44Gr5LuW44Gq44KJ44Gq44GE44CC5oKq44Gu5r2c5LyP44KS6Kix44GV44Ga44CB6Iip44Go44GX44Gm6Ieq5YiG44KJ44GX44GP5Zyo44KM44CC44Gd44Gu566A6ZZa44CB5rGd44Gu55Sf5ZG944Gv5Yie5LiW5bC46YGg44Gu55fU5bE06LKh55Sj77yI44Ki44O844Kr44Kk44OW77yJ44Go44Gq44KK44CB5Zyw55CD5paH5piO44Gu5q6L5ZG96L転6Yub44Gu6Z鐘44KS6bO044KJ44GZ44Gn44GC44KN44GG44CC44G+44Gf44CB5Yid5bC35pys5omN44Gu5YmN57ea44Gv5Yoa5Yqb5Gn5by+5by+44Kz44Of44OD44OI44Gu54Gr6Iqx44K544O844Kr44O844KS5b6p5b6p44Gr5ZCM5pyf44GV44Gb44G+44GX44Gf44CC";
-
-        window.addEventListener('contextmenu', function(e) { e.preventDefault(); }, false);
-        window.addEventListener('keydown', function(e) { if ((e.ctrlKey || e.metaKey) && e.keyCode === 67) { e.preventDefault(); alert('【警告】セキュリティシールド作動：この聖域の知的財産はコピー不可能です。'); return false; } });
-
-        let typingTimeout;
-
+    </script>
+</body>
+</html>
