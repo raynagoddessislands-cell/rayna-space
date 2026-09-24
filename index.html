@@ -22,9 +22,7 @@
             position: relative;
         }
 
-        /* ==========================================
-           【新兵装】満天の星々：煌めきエフェクト
-           ========================================== */
+        /* 満天の星々：煌めきエフェクト */
         .star-field {
             position: absolute;
             top: 0;
@@ -35,7 +33,7 @@
             pointer-events: none;
         }
 
-        /* 星の共通仕様（純粋なCSSによる光の粒子） */
+        /* 星の共通仕様 */
         .star {
             position: absolute;
             background-color: #ffffff;
@@ -54,9 +52,7 @@
             50% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* ==========================================
-           要塞の統制コンソール（メインUI）
-           ========================================== */
+        /* 要塞の統制コンソール（メインUI） */
         .container {
             text-align: center;
             border: 2px solid #ff0055;
@@ -67,10 +63,8 @@
             max-width: 600px;
             width: 90%;
             backdrop-filter: blur(4px); /* 背後の星をわずかににじませる近未来シールド */
+            box-sizing: border-box;
         }
-<!-- index.htmlのコンソール内のボタン部分を以下に換装 -->
-<a href="works.html" class="btn-works">WORKS</a>
-<a href="consultation.html" class="btn-works" style="border-color: #ff0055; color: #ff0055; margin-top: 15px; box-shadow: 0 0 15px rgba(255, 0, 85, 0.3);">AI CONSULTATION</a>
 
         h1 {
             color: #ffffff;
@@ -86,12 +80,10 @@
             margin-bottom: 30px;
         }
 
-        /* 運命のWorksボタン */
+        /* 共通ボタン基本仕様 */
         .btn-works {
             display: inline-block;
             background: transparent;
-            color: #00ffcc;
-            border: 2px solid #00ffcc;
             padding: 15px 40px;
             font-size: 1.2rem;
             font-weight: bold;
@@ -101,15 +93,36 @@
             position: relative;
             transition: all 0.3s ease;
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+            box-sizing: border-box;
+            width: 100%;
+            max-width: 350px;
         }
 
-        /* ボタンに触れた時の高尚なゲーミング反応 */
-        .btn-works:hover {
+        /* グリーンボタン仕様（WORKS） */
+        .btn-green {
+            color: #00ffcc;
+            border: 2px solid #00ffcc;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+            margin-bottom: 15px;
+        }
+        .btn-green:hover {
             background: #00ffcc;
-            color: #0a0a16;
+            color: #06060c;
             box-shadow: 0 0 30px #00ffcc;
-            transform: scale(1.05);
+            transform: scale(1.03);
+        }
+
+        /* ピンクボタン仕様（AI CONSULTATION） */
+        .btn-pink {
+            color: #ff0055;
+            border: 2px solid #ff0055;
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.3);
+        }
+        .btn-pink:hover {
+            background: #ff0055;
+            color: #06060c;
+            box-shadow: 0 0 30px #ff0055;
+            transform: scale(1.03);
         }
 
         .footer {
@@ -122,7 +135,7 @@
 </head>
 <body>
 
-    <!-- 【新兵装】満天の星々を展開するセクター -->
+    <!-- 満天の星々を展開するセクター -->
     <div class="star-field" id="cosmos"></div>
 
     <div class="container">
@@ -132,8 +145,10 @@
         <p>「読者をサスペンスとロマンへ没頭させる高尚なゲーミング遊び場」</p>
         <p style="color: #8888aa; font-size: 0.9rem; margin-bottom: 40px;">※現在、副官の手により要塞拡張工事中</p>
 
-        <!-- WORKSへの接続ワープゲート -->
-        <a href="works.html" class="btn-works">WORKS</a>
+        <!-- 【結合完了】2つの重要セクターへのワープゲートボタン -->
+        <a href="works.html" class="btn-works btn-green">WORKS</a>
+        <br>
+        <a href="consultation.html" class="btn-works btn-pink">AI CONSULTATION</a>
     </div>
 
     <div class="footer">
@@ -142,25 +157,17 @@
 
     <script>
         // 【自動星々生成スクリプト】
-        // 要塞の背後に100個の異なる星をランダム配置し、煌めきを非同期に分散させる
         const cosmos = document.getElementById('cosmos');
         const starCount = 100;
         const sizes = ['size-s', 'size-m', 'size-l'];
 
         for (let i = 0; i < starCount; i++) {
             const star = document.createElement('div');
-            
-            // サイズをランダムに決定
             const randomSize = sizes[Math.floor(Math.random() * sizes.length)];
             star.classList.add('star', randomSize);
-            
-            // 配置位置（宇宙空間の座標）をランダムに決定
             star.style.top = Math.random() * 100 + '%';
             star.style.left = Math.random() * 100 + '%';
-            
-            // 煌めきのタイミングをランダムにずらし、自然なまたたきにする
             star.style.animationDelay = Math.random() * 4 + 's';
-            
             cosmos.appendChild(star);
         }
     </script>
