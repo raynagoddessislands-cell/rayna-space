@@ -24,7 +24,6 @@
             font-family: 'Times New Roman', 'Noto Serif JP', serif;
             color: #f5f6f8;
         }
-        /* 超彗星エンジンが確実に背面で駆動する絶対レイヤー */
         #comet-engine {
             position: absolute;
             top: 0;
@@ -46,6 +45,11 @@
             padding: 2rem;
             text-align: center;
             background: transparent;
+            transition: opacity 1.2s ease;
+        }
+        .fade-out {
+            opacity: 0;
+            pointer-events: none;
         }
         .decree-box {
             max-width: 600px;
@@ -81,7 +85,6 @@
             font-size: 0.9rem;
             letter-spacing: 0.3em;
             cursor: pointer;
-            overflow: hidden;
             transition: all 0.3s ease;
             opacity: 0;
             animation: fadeIn 2s ease forwards;
@@ -108,7 +111,7 @@
 
     <canvas id="comet-engine"></canvas>
 
-    <div class="sanctuary-container">
+    <div class="sanctuary-container" id="main-ui">
         <div class="decree-box">
             <p class="decree-title">Cosmic Philosophy Decree</p>
             <p class="decree-text">
@@ -117,27 +120,23 @@
                 深遠なる美の神殿へ歩みを進めよ。
             </p>
         </div>
-
-        <button class="control-trigger" id="lock-on-button" onclick="triggerBurst(event)">神殿の深淵へ</button>
+        <button class="control-trigger" id="lock-on-button" onclick="triggerBurstAndNavigate(event)">神殿の深淵へ</button>
     </div>
 
     <script>
         const canvas = document.getElementById('comet-engine');
         const ctx = canvas.getContext('2d');
-
         let particles = [];
         let isBursting = false;
 
-        // 閣下の美学を体現する、優美なる「五色の超彗星」
         const cometColors = [
-            'rgba(147, 197, 253, 0.55)', // 彗星青 (Cosmic Blue)
-            'rgba(244, 197, 249, 0.55)', // 星雲紫 (Nebula Violet)
-            'rgba(253, 244, 175, 0.45)', // 星塵金 (Stardust Gold)
-            'rgba(167, 243, 208, 0.45)', // 深宇宙緑 (Deep Space Emerald)
-            'rgba(255, 255, 255, 0.75)'  // 純白光 (Pure White)
+            'rgba(147, 197, 253, 0.55)', // 彗星青
+            'rgba(244, 197, 249, 0.55)', // 星雲紫
+            'rgba(253, 244, 175, 0.45)', // 星塵金
+            'rgba(167, 243, 208, 0.45)', // 深宇宙緑
+            'rgba(255, 255, 255, 0.75)'  // 純白光
         ];
 
-        // 画面サイズ取得のバグを完全に修正する絶対同期ロジック
         function initCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -151,15 +150,12 @@
                 this.y = y;
                 this.type = type;
                 this.color = cometColors[Math.floor(Math.random() * cometColors.length)];
-                
                 if (this.type === 'burst') {
-                    // 内側から外側へ激しく吹き飛ぶ物理軌道
                     this.vx = Math.cos(angle) * speed;
                     this.vy = Math.sin(angle) * speed;
                     this.size = Math.random() * 3.5 + 1.5;
                     this.decay = Math.random() * 0.012 + 0.006;
                 } else {
-                    // 風雅に、静かに下から上へと昇る残光
                     this.vx = (Math.random() - 0.5) * (type === 'touch' ? 1.8 : 0.4);
                     this.vy = (Math.random() - 0.7) * (type === 'touch' ? 1.8 : 0.5) - 0.2;
                     this.size = Math.random() * (type === 'touch' ? 2.8 : 1.6) + 0.5;
@@ -170,7 +166,6 @@
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
-                
                 if (this.type === 'burst') {
                     this.vx *= 0.97;
                     this.vy *= 0.97;
@@ -190,14 +185,12 @@
             }
         }
 
-        // 定常的な星屑の湧き出し（黒画面化を絶対に防ぐ自動供給）
         function injectNaturalSparks() {
             if (particles.length < 45 && Math.random() < 0.07) {
                 particles.push(new Particle(Math.random() * canvas.width, canvas.height * 0.85, 'normal'));
             }
         }
 
-        // スマホ環境のタッチ連動（星屑の追従）
         window.addEventListener('touchmove', (e) => {
             if (e.touches.length > 0) {
                 const t = e.touches[0];
@@ -211,13 +204,10 @@
             }
         });
 
-        // 完全に復旧した無限描画ループ（フェニックスのシルエットを結像する半透明レイヤー仕様）
         function renderLoop() {
             ctx.fillStyle = 'rgba(2, 3, 6, 0.14)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-
             injectNaturalSparks();
-            
             for (let i = particles.length - 1; i >= 0; i--) {
                 particles[i].update();
                 if (particles[i].alpha <= 0) {
@@ -228,15 +218,18 @@
             }
             requestAnimationFrame(renderLoop);
         }
-        // ループの確実な即時起動
         renderLoop();
 
-        // 御下命：「内側から外側へ激しく吹き飛ぶ星塵の嵐」
-        function triggerBurst(event) {
+        function triggerBurstAndNavigate(event) {
+            if (isBursting) return;
+            isBursting = true;
+
             const button = document.getElementById('lock-on-button');
             const rect = button.getBoundingClientRect();
             const burstX = rect.left + rect.width / 2;
             const burstY = rect.top + rect.height / 2;
+
+            document.getElementById('main-ui').classList.add('fade-out');
 
             const particleCount = 300;
             for (let i = 0; i < particleCount; i++) {
@@ -245,11 +238,9 @@
                 particles.push(new Particle(burstX, burstY, 'burst', angle, speed));
             }
 
-            // 余計なフェーズ遷移をスクラップし、バースト後は静かに元の美しき神殿へと収束
-            button.style.transform = 'scale(0.95)';
             setTimeout(() => {
-                button.style.transform = 'scale(1)';
-            }, 150);
+                window.location.href = 'abyss.html';
+            }, 1400);
         }
     </script>
 </body>
