@@ -2,278 +2,222 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>宇宙哲学総合指令部 - 新要塞文芸館</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>宇宙哲学文芸神殿 - Cosmic Philosophy Sanctuary</title>
     <style>
-        body, html {
+        /* 俗世のノイズを完全に排除する峻厳なる暗黒空間 */
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        body, html {
             width: 100%;
             height: 100%;
-            background-color: #030308;
-            color: #ffffff;
-            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', sans-serif;
             overflow: hidden;
-            user-select: none;
-            -webkit-touch-callout: none;
+            background: radial-gradient(circle at center, #060913 0%, #020306 100%);
+            font-family: 'Times New Roman', 'Noto Serif JP', serif;
+            color: #f5f6f8;
         }
-
-        /* 超彗星エンジン用最背面キャンバス */
-        #universeCanvas {
-            position: fixed;
+        /* 五色の超彗星エンジンを描画する絶対キャンバス */
+        #comet-engine {
+            position: absolute;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
             pointer-events: none;
         }
-
-        /* 妖艶なショッキングピンクネオンの要塞城門 */
-        .gate-wrapper {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            max-width: 550px;
-            border: 3px solid #ff007f;
-            box-shadow: 0 0 20px #ff007f, inset 0 0 20px #ff007f;
-            border-radius: 16px;
-            padding: 30px;
-            background: rgba(5, 5, 12, 0.9);
-            backdrop-filter: blur(8px);
-            z-index: 1;
-            text-align: center;
-            box-sizing: border-box;
-            /* 中央揃えの防衛線を強化 */
+        /* 神殿の統御空間 */
+        .sanctuary-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
-        }
-
-        /* 一列を絶対死守するタイトル */
-        h1 {
-            color: #00ffff;
-            text-shadow: 0 0 12px #00ffff;
-            font-size: 1.4rem;
-            margin-top: 0;
-            width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            letter-spacing: 0.05em;
-        }
-
-        /* ゲーミングシステムログエリア */
-        .system-log-box {
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 15px;
-            width: 100%; /* 横幅を100%にしてズレを防止 */
-            height: 140px; /* ログ追加に備えて高さを少し拡張 */
-            overflow-y: hidden;
-            text-align: left;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.85rem;
-            color: #00ff66;
-            text-shadow: 0 0 4px #00ff66;
-            line-height: 1.6;
-            margin: 20px 0;
-            box-sizing: border-box;
-        }
-
-        /* 右ズレを100%殲滅した、完全中央配置ボタン */
-        .btn-enter-fortress {
-            display: block;
-            width: 100%; /* 親要素の幅に完全に合わせる */
-            max-width: 490px;
-            padding: 16px;
-            background: #000;
-            color: #ffffff;
-            border: 2px solid #00ffff;
-            border-radius: 8px;
-            font-size: 1.05rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
-            transition: all 0.3s ease;
-            box-sizing: border-box;
+            padding: 2rem;
             text-align: center;
         }
-
-        .btn-enter-fortress:hover, .btn-enter-fortress:active {
-            background: #00ffff;
-            color: #000;
-            box-shadow: 0 0 20px #00ffff;
+        /* じわっと滲むように浮かび上がる、閣下の至高なる宣旨エリア */
+        .decree-box {
+            max-width: 600px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: soakIn 3.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation-delay: 0.8s;
+        }
+        .decree-title {
+            font-size: 0.85rem;
+            letter-spacing: 0.4em;
+            color: #a3b8cc;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+        .decree-text {
+            font-size: 1.4rem;
+            line-height: 2.2;
+            letter-spacing: 0.25em;
+            font-weight: 300;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255,255,255,0.1);
+        }
+        /* 水彩の余白を感じさせる、静謐なる中央統御ボタン */
+        .control-trigger {
+            margin-top: 4rem;
+            padding: 1rem 2.5rem;
+            background: transparent;
+            border: 1px solid rgba(163, 184, 204, 0.3);
+            color: #a3b8cc;
+            font-family: inherit;
+            font-size: 0.9rem;
+            letter-spacing: 0.3em;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.5s ease;
+            opacity: 0;
+            animation: fadeIn 2s ease forwards;
+            animation-delay: 2.5s;
+        }
+        .control-trigger:active {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.6);
+            color: #ffffff;
+            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+        }
+        /* 幻想的浸透アニメーション（水彩の滲みを表現） */
+        @keyframes soakIn {
+            0% { opacity: 0; transform: translateY(15px); filter: blur(5px); }
+            100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
         }
     </style>
 </head>
-<body oncontextmenu="return false;">
+<body>
 
-    <!-- 五色に煌めく超彗星キャンバス -->
-    <canvas id="universeCanvas"></canvas>
+    <canvas id="comet-engine"></canvas>
 
-    <!-- 城門インターフェース -->
-    <div class="gate-wrapper">
-        <h1 id="neonTitle">🌌 宇宙哲学新要塞・文芸館 🌌</h1>
-        
-        <!-- 自動タイピングログ -->
-        <div class="system-log-box" id="logBox"></div>
+    <div class="sanctuary-container">
+        <div class="decree-box">
+            <p class="decree-title">Cosmic Philosophy Decree</p>
+            <p class="decree-text">
+                未明の静寂に刻まれる真理。<br>
+                俗世の価値を排し、<br>
+                深遠なる美の神殿へ歩みを進めよ。
+            </p>
+        </div>
 
-        <!-- 外部リンクを排し、完全自立駆動化させたミッション起動パルスボタン -->
-        <button class="btn-enter-fortress" id="gateButton" onclick="triggerMission()" style="visibility: hidden;">
-            🚀 宇宙金貨２枚：文芸聖域ミッションを起動
-        </button>
+        <!-- 外部委託・文芸館へと繋がる中央統御ボタン -->
+        <button class="control-trigger" onclick="awakenSanctuary()">神殿の深淵へ</button>
     </div>
 
     <script>
-        // ーーー ゲーミングシステムログ・タイピングエンジン ーーー
-        const logs = [
-            "[SYSTEM] 新要塞防衛シールド 出力100%展開...",
-            "[AUTHENTICATION] 最高責任者・神島玲奈の承認パルスを検知...",
-            "[DATA] 破損データの完全排除シーケンス 完了...",
-            "[INFO] 秋風の誘いにより、精神的属性の同調を確認...",
-            "[SUCCESS] 読者予備軍のアクセスゲートを開放しました。"
+        const canvas = document.getElementById('comet-engine');
+        const ctx = canvas.getContext('2d');
+
+        let particles = [];
+        // 富裕層の感性に訴えかける、優美なる「五色の超彗星」カラーコード
+        const cometColors = [
+            'rgba(147, 197, 253, 0.4)', // 彗星青 (Cosmic Blue)
+            'rgba(244, 197, 249, 0.4)', // 星雲紫 (Nebula Violet)
+            'rgba(253, 244, 175, 0.3)', // 星塵金 (Stardust Gold)
+            'rgba(167, 243, 208, 0.3)', // 深宇宙緑 (Deep Space Emerald)
+            'rgba(255, 255, 255, 0.5)'  // 純白光 (Pure White)
         ];
 
-        let logIndex = 0;
-        const logBox = document.getElementById('logBox');
-        const gateButton = document.getElementById('gateButton');
-
-        function printLog() {
-            if (logIndex < logs.length) {
-                const p = document.createElement('div');
-                logBox.appendChild(p);
-                let charIndex = 0;
-                let currentText = logs[logIndex];
-                
-                function typeChar() {
-                    if (charIndex < currentText.length) {
-                        p.innerHTML += currentText.charAt(charIndex);
-                        charIndex++;
-                        setTimeout(typeChar, 20);
-                    } else {
-                        logBox.scrollTop = logBox.scrollHeight;
-                        logIndex++;
-                        setTimeout(printLog, 300);
-                    }
-                }
-                typeChar();
-            } else {
-                gateButton.style.visibility = 'visible';
-            }
-        }
-        
-        setTimeout(printLog, 800);
-
-        // 閣下の御要望：リンク無効化＆ボタン連動ゲーミング演出
-        function triggerMission() {
-            const p = document.createElement('div');
-            p.style.color = '#ff007f'; // ログにショッキングピンクの警告パルス
-            p.style.textShadow = '0 0 4px #ff007f';
-            logBox.appendChild(p);
-            
-            let missionText = "[MISSION] ゲート接続完了。明朝五時三十分、電磁空間の理が書き換わるのを待て――。";
-            let charIndex = 0;
-            
-            gateButton.disabled = true; // 連打防止
-            gateButton.style.opacity = "0.5";
-            gateButton.innerHTML = "🛰️ 刻限（05:30）を待機中...";
-
-            function typeMission() {
-                if (charIndex < missionText.length) {
-                    p.innerHTML += missionText.charAt(charIndex);
-                    charIndex++;
-                    setTimeout(typeMission, 25);
-                } else {
-                    logBox.scrollTop = logBox.scrollHeight;
-                }
-            }
-            typeMission();
-        }
-
-        // ーーー パーティクル・エンジン（スマホ・PC完全対応版） ーーー
-        const canvas = document.getElementById('universeCanvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        const cosmicColors = ['#ff007f', '#00ffff', '#ffea00', '#00ff66', '#bd00ff'];
-
-        function resizeCanvas() {
+        function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        window.addEventListener('resize', resize);
+        resize();
 
+        // 粒子（パーティクル）の幻想的構造体
         class Particle {
-            constructor(x, y, isStar = false) {
+            constructor(x, y, isTouch = false) {
                 this.x = x;
                 this.y = y;
-                this.isStar = isStar;
-                this.size = isStar ? Math.random() * 1.5 : Math.random() * 3 + 1;
-                this.color = isStar ? '#ffffff' : cosmicColors[Math.floor(Math.random() * cosmicColors.length)];
-                this.speedX = isStar ? 0 : (Math.random() - 0.5) * 2;
-                this.speedY = isStar ? Math.random() * 0.1 + 0.05 : (Math.random() - 0.5) * 2;
+                this.color = cometColors[Math.floor(Math.random() * cometColors.length)];
+                // 激しさを排し、優美に揺らめく低速設計
+                this.vx = (Math.random() - 0.5) * (isTouch ? 1.5 : 0.4);
+                this.vy = (Math.random() - 0.7) * (isTouch ? 1.5 : 0.5) - 0.2; 
+                this.size = Math.random() * (isTouch ? 2.5 : 1.8) + 0.5;
                 this.alpha = 1;
-                this.decay = isStar ? 0 : Math.random() * 0.02 + 0.01;
+                this.decay = Math.random() * 0.005 + 0.003;
             }
             update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (!this.isStar) this.alpha -= this.decay;
-                else if (this.y > canvas.height) this.y = 0;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= this.decay;
             }
             draw() {
                 ctx.save();
                 ctx.globalAlpha = this.alpha;
-                ctx.fillStyle = this.color;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                // 仄かな光の広がり（グロウ効果）を付与
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
                 ctx.fill();
                 ctx.restore();
             }
         }
 
-        for (let i = 0; i < 70; i++) {
-            particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height, true));
-        }
-
-        function spawnParticles(x, y) {
-            for (let i = 0; i < 2; i++) {
-                particles.push(new Particle(x, y, false));
+        // 背景で静かに湧き出す残光の自動生成
+        function injectNaturalSparks() {
+            if (particles.length < 40 && Math.random() < 0.05) {
+                particles.push(new Particle(Math.random() * canvas.width, canvas.height * 0.8));
             }
         }
 
-        function autoTitlePulse() {
-            const titleEl = document.getElementById('neonTitle');
-            if(titleEl) {
-                const rect = titleEl.getBoundingClientRect();
-                const randomX = rect.left + Math.random() * rect.width;
-                const randomY = rect.top + Math.random() * rect.height;
-                spawnParticles(randomX, randomY);
-            }
-        }
-
+        // スマホのタッチ連動：指先から五色の星屑が溢れ出る
         window.addEventListener('touchmove', (e) => {
-            if(e.touches.length > 0) spawnParticles(e.touches.clientX, e.touches.clientY);
-        });
+            const touch = e.touches[0];
+            for(let i=0; i<2; i++) {
+                particles.push(new Particle(touch.clientX, touch.clientY, true));
+            }
+        }, { passive: true });
+
         window.addEventListener('mousemove', (e) => {
-            spawnParticles(e.clientX, e.clientY);
+            if(Math.random() < 0.3) {
+                particles.push(new Particle(e.clientX, e.clientY, true));
+            }
         });
 
+        // 統御ループ（描画の執行）
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            autoTitlePulse();
-            particles = particles.filter(p => p.isStar || p.alpha > 0);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
+            injectNaturalSparks();
+            
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                if (particles[i].alpha <= 0) {
+                    particles.splice(i, 1);
+                } else {
+                    particles[i].draw();
+                }
+            }
             requestAnimationFrame(animate);
         }
         animate();
+
+        // 中央統御ボタン作動時の儀式（第2ステージ：文芸館の解放を模索）
+        function awakenSanctuary() {
+            // ここに、外部委託エリア「水彩個展エリア」への幻想的な遷移を組み込みます
+            alert('宇宙哲学文芸神殿・第2ステージ「文芸館」への門が解放されました。');
+        }
     </script>
 </body>
 </html>
