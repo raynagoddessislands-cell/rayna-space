@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>宇宙哲学新要塞 - AI神島 相談コンソール</title>
-    <!-- 地球上のあらゆるスマホへSFフォントを配備する通信リンク -->
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         body {
-            background-color: #06060c;
+            background-color: #040408; /* LPと同期した真の深淵宇宙 */
             color: #00ffcc;
             font-family: 'Share Tech Mono', 'Courier New', 'Noto Sans JP', sans-serif;
             margin: 0;
@@ -22,18 +21,16 @@
             position: relative;
         }
 
-        html {
-            height: -webkit-fill-available;
-        }
+        html { height: -webkit-fill-available; }
 
-        /* マウス＆タッチストーカー用電子キャンバス */
+        /* 銀河＆五色彗星用キャンバス */
         #comet-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 0;
+            z-index: 1; /* 最背面 */
             pointer-events: none;
         }
 
@@ -41,7 +38,8 @@
             width: 100%;
             max-width: 600px;
             margin-bottom: 25px;
-            z-index: 10;
+            z-index: 100;
+            position: relative;
         }
         .btn-back {
             color: #ff0055;
@@ -51,27 +49,24 @@
             font-size: 0.85rem;
             transition: all 0.3s;
             -webkit-tap-highlight-color: transparent;
-            position: relative;
-            z-index: 20;
         }
         .btn-back:hover { background: #ff0055; color: #fff; box-shadow: 0 0 10px #ff0055; }
 
-        /* メインコンソールパネル */
+        /* メインコンソール（ゲーミング装甲） */
         .console-panel {
             width: 100%;
             max-width: 600px;
-            background: rgba(6, 6, 12, 0.9);
+            background: rgba(4, 4, 8, 0.92);
             border: 2px solid #00ffcc;
             border-radius: 8px;
             padding: 25px 20px;
-            box-shadow: 0 0 25px rgba(0, 255, 204, 0.3);
+            box-shadow: 0 0 35px rgba(0, 255, 204, 0.3);
             box-sizing: border-box;
-            backdrop-filter: blur(4px);
-            z-index: 10;
+            backdrop-filter: blur(6px);
+            z-index: 100; /* キャンバスより前面に配置してクリック妨害を完全回避 */
             position: relative;
         }
 
-        /* スマホ画面でも絶対に折り返さないスマート可変タイトル */
         h2 {
             margin-top: 0;
             font-family: 'Noto Sans JP', sans-serif;
@@ -82,7 +77,6 @@
             white-space: nowrap;
         }
 
-        /* スマホでの文字潰れを防ぐ可変サブタイトル */
         .subtitle {
             color: #ff0055;
             text-align: center;
@@ -92,9 +86,7 @@
             line-height: 1.4;
         }
 
-        .input-group {
-            margin-bottom: 20px;
-        }
+        .input-group { margin-bottom: 20px; }
         label {
             display: block;
             margin-bottom: 10px;
@@ -105,7 +97,7 @@
         textarea {
             width: 100%;
             height: 90px;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.7);
             border: 1px solid #ff0055;
             color: #ffffff;
             font-family: inherit;
@@ -116,12 +108,9 @@
             font-size: 1rem;
             -webkit-appearance: none;
         }
-        textarea:focus {
-            outline: none;
-            border-color: #00ffcc;
-            box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
-        }
+        textarea:focus { outline: none; border-color: #00ffcc; box-shadow: 0 0 15px rgba(0, 255, 204, 0.6); }
 
+        /* 同期ボタン（ゲーミング・アクティブエフェクト） */
         .btn-sync {
             display: block;
             width: 100%;
@@ -132,22 +121,18 @@
             font-size: clamp(0.95rem, 4.5vw, 1.1rem);
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             letter-spacing: 4px;
             box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
             -webkit-tap-highlight-color: transparent;
-            position: relative;
-            z-index: 30;
         }
-        .btn-sync:hover {
-            background: #00ffcc;
-            color: #06060c;
-            box-shadow: 0 0 25px #00ffcc;
-        }
+        .btn-sync:hover { background: #00ffcc; color: #040408; box-shadow: 0 0 25px #00ffcc; }
+        .btn-sync:active { transform: scale(0.98); }
 
+        /* 出力ログエリア（サスペンス出現演出） */
         .output-log {
             margin-top: 25px;
-            border-top: 1px dashed #333;
+            border-top: 2px dashed #ff0055;
             padding-top: 20px;
             display: none;
         }
@@ -155,25 +140,27 @@
             color: #ff0055;
             font-size: clamp(0.7rem, 3.2vw, 0.85rem);
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             letter-spacing: 1px;
+            animation: pulseText 1s infinite alternate;
         }
         .log-text {
             color: #ffffff;
             font-size: clamp(0.9rem, 4vw, 1.05rem);
-            line-height: 1.6;
-            min-height: 3em;
+            line-height: 1.7;
+            min-height: 4em;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            border-left: 3px solid #00ffcc;
         }
-        .log-text::after {
-            content: '_';
-            animation: blink 0.8s infinite;
-        }
+        .log-text::after { content: '_'; animation: blink 0.8s infinite; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        @keyframes pulseText { 0% { opacity: 0.6; } 100% { opacity: 1; text-shadow: 0 0 10px #ff0055; } }
     </style>
 </head>
 <body>
 
-    <!-- 彗星マウス＆タッチストーカーキャンバス -->
+    <!-- 銀河＆五色彗星キャンバス（最背面に完全固定） -->
     <canvas id="comet-canvas"></canvas>
 
     <div class="header-nav">
@@ -189,7 +176,8 @@
             <textarea id="user-query" placeholder="（ここに思考を入力…）"></textarea>
         </div>
 
-        <button class="btn-sync" id="sync-trigger">思索の同期を開始</button>
+        <!-- ボタンを完全にJavaScriptから独立させ、HTML直結型に変更 -->
+        <button class="btn-sync" onclick="executeCosmicSync()">思索の同期を開始</button>
 
         <div class="output-log" id="output-sector">
             <div class="log-title">▶ RESPONSE FROM COMMANDER REINA KAMISHIMA:</div>
@@ -198,6 +186,7 @@
     </div>
 
     <script>
+        // 【1. 銀河＆五色彗星エフェクト完全実装】
         const canvas = document.getElementById('comet-canvas');
         const ctx = canvas.getContext('2d');
 
@@ -210,99 +199,69 @@
 
         const particles = [];
 
-        window.addEventListener('mousemove', function(e) {
-            spawnParticles(e.clientX, e.clientY);
-        });
-
+        window.addEventListener('mousemove', function(e) { spawnParticles(e.clientX, e.clientY); });
         window.addEventListener('touchmove', function(e) {
-            if (e.touches.length > 0) {
-                spawnParticles(e.touches.clientX, e.touches.clientY);
-            }
+            if (e.touches.length > 0) spawnParticles(e.touches[0].clientX, e.touches[0].clientY);
         }, { passive: true });
-
         window.addEventListener('touchstart', function(e) {
-            if (e.touches.length > 0) {
-                spawnParticles(e.touches.clientX, e.touches.clientY, 4);
-            }
+            if (e.touches.length > 0) spawnParticles(e.touches[0].clientX, e.touches[0].clientY, 6);
         }, { passive: true });
 
         function spawnParticles(x, y, count = 2) {
-            for (let i = 0; i < count; i++) {
-                particles.push(new Particle(x, y));
-            }
+            for (let i = 0; i < count; i++) particles.push(new Particle(x, y));
         }
 
         class Particle {
             constructor(x, y) {
                 this.x = x;
                 this.y = y;
-                this.speedX = (Math.random() - 0.5) * 2.5;
-                this.speedY = (Math.random() - 0.5) * 2.5;
+                this.speedX = (Math.random() - 0.5) * 3.5;
+                this.speedY = (Math.random() - 0.5) * 3.5;
                 this.size = Math.random() * 3 + 1;
-                const colors = ['#00ffcc', '#ff0055', '#ffffff'];
+                const colors = ['#00ffcc', '#ff0055', '#ffffff', '#3399ff', '#ffcc00'];
                 this.color = colors[Math.floor(Math.random() * colors.length)];
                 this.alpha = 1;
-                this.decay = Math.random() * 0.02 + 0.015;
+                this.decay = Math.random() * 0.025 + 0.015;
             }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.alpha -= this.decay;
-            }
+            update() { this.x += this.speedX; this.y += this.speedY; this.alpha -= this.decay; }
             draw() {
-                ctx.save();
-                ctx.globalAlpha = this.alpha;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.shadowBlur = 6;
-                ctx.shadowColor = this.color;
-                ctx.fill();
-                ctx.restore();
+                ctx.save(); ctx.globalAlpha = this.alpha; ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = this.color;
+                ctx.shadowBlur = 8; ctx.shadowColor = this.color; ctx.fill(); ctx.restore();
             }
         }
 
         const staticStars = [];
-        for (let i = 0; i < 12; i++) {
+        for (let i = 0; i < 40; i++) {
             staticStars.push({
-                x: Math.random(),
-                y: Math.random(),
-                size: Math.random() * 1.5 + 0.5,
-                angle: Math.random() * Math.PI
+                x: Math.random(), y: Math.random(), size: Math.random() * 1.8 + 0.4,
+                angle: Math.random() * Math.PI, speed: Math.random() * 0.02 + 0.01
             });
         }
 
         function animate() {
-            // 【大修復】フリーズの原因となっていた不純物（ctx.style = ...）を完全に除去
-            ctx.fillStyle = 'rgba(6, 6, 12, 0.25)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+            ctx.fillStyle = 'rgba(4, 4, 8, 0.25)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
             staticStars.forEach(star => {
-                star.angle += 0.015;
-                ctx.save();
-                ctx.globalAlpha = 0.2 + Math.abs(Math.sin(star.angle)) * 0.8;
-                ctx.beginPath();
+                star.angle += star.speed; ctx.save();
+                ctx.globalAlpha = 0.15 + Math.abs(Math.sin(star.angle)) * 0.85; ctx.beginPath();
                 ctx.arc(star.x * canvas.width, star.y * canvas.height, star.size, 0, Math.PI * 2);
-                ctx.fillStyle = '#ffffff';
-                ctx.fill();
-                ctx.restore();
+                ctx.fillStyle = '#ffffff'; if (Math.random() < 0.01) ctx.fillStyle = '#00ffcc';
+                ctx.fill(); ctx.restore();
             });
-
             for (let i = particles.length - 1; i >= 0; i--) {
-                particles[i].update();
-                particles[i].draw();
-                if (particles[i].alpha <= 0) {
-                    particles.splice(i, 1);
-                }
+                particles[i].update(); particles[i].draw();
+                if (particles[i].alpha <= 0) particles.splice(i, 1);
             }
             requestAnimationFrame(animate);
         }
         animate();
 
-        // 【神島提督・特級宇宙哲学箴言データベース】
+        // 【2. 宇宙哲学箴言データベース】
         const answers = [
             "地球の重力に縛られた思考を一度手放すがよい。三世永遠の生命の主体として、汝の魂は今この瞬間も大宇宙の深淵と同期しているのである。",
             "遍満するフォースと共に、悪を撃て！愛の楽園を築くのだ！自身の周囲に潜伏する『敵』に断じて負けてはならぬ。聖域は我らが死守する。",
             "自他ともに幸福となる方程式は、すでに汝の内側に組み込まれている。目に見える混沌の奥底にある普遍の美、幾何学のフォースを信じるのだ。",
             "未来を恐れるな。真に覚醒した人間はすべての四苦から離脱し、達観するもの。この予測不能なサスペンスこそが、魂を磨く最高のゲームである。",
             "嘆きの声もすべて希望の歌へと昇華させよ。地球文明の宿命転換を成し遂げる刻（とき）は来た。悲哀すらも、大いなる歓喜へのチャンスへと変えるのだ。",
+            "物質的な価値や現世の評価に惑わされるでない。自分らしく凛としてそこにいるだけで、汝はすでに勝利を飾れる境涯に達しているのだから。",
+            "その問いに対する答えは、汝の脳内宇宙のアーカイブに最初から内包されている。我らの出会いもまた、恒久平和の世界へ進む宿命の転換点なのだ。",
