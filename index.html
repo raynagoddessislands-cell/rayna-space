@@ -8,7 +8,7 @@
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         body {
-            background-color: #040408; /* さらに深い、真の宇宙の深淵 */
+            background-color: #040408; /* 深淵なる漆黒宇宙 */
             color: #00ffcc;
             font-family: 'Share Tech Mono', 'Courier New', 'Noto Sans JP', sans-serif;
             margin: 0;
@@ -24,11 +24,9 @@
             position: relative;
         }
 
-        html {
-            height: -webkit-fill-available;
-        }
+        html { height: -webkit-fill-available; }
 
-        /* マウス＆タッチストーカー用電子キャンバス（銀河空間） */
+        /* 銀河空間キャンバス */
         #comet-canvas {
             position: fixed;
             top: 0;
@@ -39,13 +37,13 @@
             pointer-events: none;
         }
 
-        /* 要塞の統制コンソール（メインUI） */
+        /* 要塞の統制コンソール（【大改修】ショッキングピンクネオン仕様） */
         .container {
             text-align: center;
-            border: 2px solid #ff0055;
-            padding: 30px 20px;
+            border: 2px solid #ff007f; /* 鮮烈なショッキングピンクに変更 */
+            padding: 50px 20px;
             background: rgba(4, 4, 8, 0.88);
-            box-shadow: 0 0 35px rgba(255, 0, 85, 0.4);
+            box-shadow: 0 0 40px rgba(255, 0, 127, 0.6), inset 0 0 20px rgba(255, 0, 127, 0.2); /* 内外に強力なピンクネオンの残光 */
             border-radius: 10px;
             max-width: 500px;
             width: 88%;
@@ -55,22 +53,23 @@
             position: relative;
         }
 
-        /* スマホ画面でも絶対に1行で美しく収まる可変タイトル */
         h1 {
             color: #ffffff;
             font-family: 'Noto Sans JP', sans-serif;
             font-size: clamp(1.2rem, 5.5vw, 2rem);
             margin: 0 0 10px 0;
-            text-shadow: 0 0 20px #ff0055;
+            text-shadow: 0 0 20px #ff007f; /* タイトルの光彩もショッキングピンクへ */
             white-space: nowrap;
             letter-spacing: 1px;
         }
 
+        /* 【大改修】サブタイトルのネオンピンク化 */
         .title-sub {
-            color: #ff0055;
+            color: #ff007f;
             font-size: clamp(0.8rem, 4vw, 1.1rem);
             letter-spacing: 2px;
-            margin-bottom: 25px;
+            margin-bottom: 40px;
+            text-shadow: 0 0 10px #ff007f;
         }
 
         p {
@@ -79,49 +78,36 @@
             margin: 10px 0;
         }
 
-        /* 共通ボタン基本仕様 */
+        /* 運命のWORKSボタン */
         .btn-works {
             display: inline-block;
             background: transparent;
-            padding: 12px 0;
-            font-size: clamp(0.9rem, 4vw, 1.1rem);
+            padding: 18px 0;
+            font-size: clamp(1.1rem, 5vw, 1.4rem);
             font-weight: bold;
             text-decoration: none;
             text-transform: uppercase;
-            letter-spacing: 4px;
+            letter-spacing: 6px;
             transition: all 0.3s ease;
             cursor: pointer;
             box-sizing: border-box;
             width: 100%;
             max-width: 320px;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .btn-green {
             color: #00ffcc;
             border: 2px solid #00ffcc;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
-            margin-bottom: 15px;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+            margin-top: 20px;
+            -webkit-tap-highlight-color: transparent;
         }
-        .btn-green:hover, .btn-green:active {
+        .btn-works:hover, .btn-works:active {
             background: #00ffcc;
             color: #040408;
-            box-shadow: 0 0 30px #00ffcc;
-        }
-
-        .btn-pink {
-            color: #ff0055;
-            border: 2px solid #ff0055;
-            box-shadow: 0 0 15px rgba(255, 0, 85, 0.3);
-        }
-        .btn-pink:hover, .btn-pink:active {
-            background: #ff0055;
-            color: #040408;
-            box-shadow: 0 0 30px #ff0055;
+            box-shadow: 0 0 40px #00ffcc;
+            transform: scale(1.05);
         }
 
         .footer {
-            margin-top: 30px;
+            margin-top: 50px;
             font-size: 0.75rem;
             color: #8888aa;
             z-index: 10;
@@ -139,11 +125,10 @@
         <div class="title-sub">MISSION: 地球文明救済</div>
         
         <p>「読者をサスペンスとロマンへ没頭させる<br>高尚なゲーミング遊び場」</p>
-        <p style="color: #8888aa; font-size: 0.8rem; margin-bottom: 30px;">※現在、副官の手により要塞拡張工事中</p>
+        <p style="color: #8888aa; font-size: 0.8rem; margin-bottom: 20px;">※現在、副官の手により作品領域を拡張工事中</p>
 
-        <a href="works.html" class="btn-works btn-green">WORKS</a>
-        <br>
-        <a href="consultation.html" class="btn-works btn-pink">AI CONSULTATION</a>
+        <!-- 単一にして至高のワープゲート -->
+        <a href="works.html" class="btn-works">ENTER WORKS</a>
     </div>
 
     <div class="footer">
@@ -163,101 +148,60 @@
 
         const particles = [];
 
-        window.addEventListener('mousemove', function(e) {
-            spawnParticles(e.clientX, e.clientY);
-        });
-
+        window.addEventListener('mousemove', function(e) { spawnParticles(e.clientX, e.clientY); });
         window.addEventListener('touchmove', function(e) {
-            if (e.touches.length > 0) {
-                spawnParticles(e.touches.clientX, e.touches.clientY);
-            }
+            if (e.touches.length > 0) spawnParticles(e.touches.clientX, e.touches.clientY);
         }, { passive: true });
-
         window.addEventListener('touchstart', function(e) {
-            if (e.touches.length > 0) {
-                spawnParticles(e.touches.clientX, e.touches.clientY, 6); // タップ時は多めに星を散らす
-            }
+            if (e.touches.length > 0) spawnParticles(e.touches.clientX, e.touches.clientY, 6);
         }, { passive: true });
 
         function spawnParticles(x, y, count = 2) {
-            for (let i = 0; i < count; i++) {
-                particles.push(new Particle(x, y));
-            }
+            for (let i = 0; i < count; i++) { particles.push(new Particle(x, y)); }
         }
 
-        // 星の子供（五色色彩火花）クラス
+        // 星の子供（五色色彩火花）：エフェクト威力は100%完全維持！
         class Particle {
             constructor(x, y) {
                 this.x = x;
                 this.y = y;
-                // 【超強化】飛び散る勢いを高め、火花らしさを極限へ
                 this.speedX = (Math.random() - 0.5) * 3.5;
                 this.speedY = (Math.random() - 0.5) * 3.5;
                 this.size = Math.random() * 3 + 1;
-                // 【超強化】色彩豊かに煌めく5つのカラーマトリクス
                 const colors = ['#00ffcc', '#ff0055', '#ffffff', '#3399ff', '#ffcc00'];
                 this.color = colors[Math.floor(Math.random() * colors.length)];
                 this.alpha = 1;
                 this.decay = Math.random() * 0.025 + 0.015;
             }
-
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.alpha -= this.decay;
-            }
-
+            update() { this.x += this.speedX; this.y += this.speedY; this.alpha -= this.decay; }
             draw() {
-                ctx.save();
-                ctx.globalAlpha = this.alpha;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.shadowBlur = 8;
-                ctx.shadowColor = this.color;
-                ctx.fill();
-                ctx.restore();
+                ctx.save(); ctx.globalAlpha = this.alpha; ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = this.color;
+                ctx.shadowBlur = 8; ctx.shadowColor = this.color; ctx.fill(); ctx.restore();
             }
         }
 
-        // 【超強化】常駐の煌めく星々を「40個」の満天・銀河仕様へ大増幅
+        // 満天の銀河（40個の星々）
         const staticStars = [];
-        const starCount = 40;
-        for (let i = 0; i < starCount; i++) {
+        for (let i = 0; i < 40; i++) {
             staticStars.push({
-                x: Math.random(),
-                y: Math.random(),
-                size: Math.random() * 1.8 + 0.4,
-                angle: Math.random() * Math.PI,
-                speed: Math.random() * 0.02 + 0.01 // またたく速度をランダム化
+                x: Math.random(), y: Math.random(), size: Math.random() * 1.8 + 0.4,
+                angle: Math.random() * Math.PI, speed: Math.random() * 0.02 + 0.01
             });
         }
 
         function animate() {
-            ctx.fillStyle = 'rgba(4, 4, 8, 0.25)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+            ctx.fillStyle = 'rgba(4, 4, 8, 0.25)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
             staticStars.forEach(star => {
-                star.angle += star.speed;
-                ctx.save();
-                ctx.globalAlpha = 0.15 + Math.abs(Math.sin(star.angle)) * 0.85;
-                ctx.beginPath();
+                star.angle += star.speed; ctx.save();
+                ctx.globalAlpha = 0.15 + Math.abs(Math.sin(star.angle)) * 0.85; ctx.beginPath();
                 ctx.arc(star.x * canvas.width, star.y * canvas.height, star.size, 0, Math.PI * 2);
-                ctx.fillStyle = '#ffffff';
-                // 10個に1個の割合で青白い一等星を混ぜて美しく
-                if (Math.random() < 0.01) ctx.fillStyle = '#00ffcc'; 
-                ctx.fill();
-                ctx.restore();
+                ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.restore();
             });
-
             for (let i = particles.length - 1; i >= 0; i--) {
-                particles[i].update();
-                particles[i].draw();
-                if (particles[i].alpha <= 0) {
-                    particles.splice(i, 1);
-                }
+                particles[i].update(); particles[i].draw();
+                if (particles[i].alpha <= 0) particles.splice(i, 1);
             }
-
             requestAnimationFrame(animate);
         }
         animate();
