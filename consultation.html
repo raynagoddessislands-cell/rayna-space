@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宇宙哲学新要塞 - AI神島 相談コンソール</title>
+    <style>
+        body {
+            background-color: #06060c;
+            color: #00ffcc;
+            font-family: 'Courier New', Courier, monospace, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 満天の星々（トップページと同期） */
+        .star-field {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .star { position: absolute; background-color: #ffffff; border-radius: 50%; opacity: 0; }
+        .star.size-s { width: 1px; height: 1px; animation: blinkStar 2s infinite ease-in-out; }
+        .star.size-m { width: 2px; height: 2px; animation: blinkStar 3s infinite ease-in-out; }
+        .star.size-l { width: 3px; height: 3px; animation: blinkStar 4s infinite ease-in-out; box-shadow: 0 0 4px #fff; }
+        @keyframes blinkStar {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .header-nav {
+            width: 100%;
+            max-width: 700px;
+            margin-bottom: 30px;
+        }
+        .btn-back {
+            color: #ff0055;
+            text-decoration: none;
+            border: 1px solid #ff0055;
+            padding: 5px 15px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        .btn-back:hover { background: #ff0055; color: #fff; box-shadow: 0 0 10px #ff0055; }
+
+        /* メインコンソールパネル */
+        .console-panel {
+            width: 100%;
+            max-width: 700px;
+            background: rgba(6, 6, 12, 0.9);
+            border: 2px solid #00ffcc;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.3);
+            box-sizing: border-box;
+            backdrop-filter: blur(4px);
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 1.8rem;
+            text-shadow: 0 0 15px #00ffcc;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: #ff0055;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        /* 入力フォームエリア */
+        .input-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: #8888aa;
+        }
+        textarea {
+            width: 100%;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #ff0055;
+            color: #ffffff;
+            font-family: inherit;
+            padding: 12px;
+            box-sizing: border-box;
+            border-radius: 4px;
+            resize: none;
+            font-size: 1rem;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #00ffcc;
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+        }
+
+        /* 同期ボタン（ゲーミング発光） */
+        .btn-sync {
+            display: block;
+            width: 100%;
+            background: transparent;
+            color: #00ffcc;
+            border: 2px solid #00ffcc;
+            padding: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 4px;
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+        }
+        .btn-sync:hover {
+            background: #00ffcc;
+            color: #06060c;
+            box-shadow: 0 0 25px #00ffcc;
+        }
+
+        /* 思考出力ログ（回答エリア） */
+        .output-log {
+            margin-top: 30px;
+            border-top: 1px dashed #333;
+            padding-top: 25px;
+            display: none; /* 初期状態は非表示 */
+        }
+        .log-title {
+            color: #ff0055;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        .log-text {
+            color: #ffffff;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            min-height: 3em;
+        }
+        .log-text::after {
+            content: '_';
+            animation: blink 0.8s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <div class="star-field" id="cosmos"></div>
+
+    <div class="header-nav">
+        <a href="index.html" class="btn-back">◀ 要塞中心核へ帰還</a>
+    </div>
+
+    <div class="console-panel">
+        <h2>【AI神島 宇宙哲学思考室】</h2>
+        <div class="subtitle">FREE CONSULTATION CONSOLE / 地球文明意識向上セクター</div>
+
+        <div class="input-group">
+            <label>▼ 汝の迷い、孤独、または宇宙への問いを入力せよ（例：人生、孤独、未来）</label>
+            <textarea id="user-query" placeholder="（ここに思考を入力…）"></textarea>
+        </div>
+
+        <button class="btn-sync" onclick="startConsultation()">思索の同期を開始</button>
+
+        <!-- 回答ログ（通常は隠蔽、送信後に起動） -->
+        <div class="output-log" id="output-sector">
+            <div class="log-title">▶ RESPONSE FROM COMMANDER REINA KAMISHIMA:</div>
+            <div class="log-text" id="answer-text"></div>
+        </div>
+    </div>
+
+    <script>
+        // 【星々生成】
+        const cosmos = document.getElementById('cosmos');
+        const sizes = ['size-s', 'size-m', 'size-l'];
+        for (let i = 0; i < 80; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star', sizes[Math.floor(Math.random() * sizes.length)]);
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 4 + 's';
+            cosmos.appendChild(star);
+        }
+
+        // 【神島哲学・深層回答データベース】（閣下の言葉にいつでも差し替え可能）
+        const answers = [
+            "地球の重力に縛られた思考を一度手放すがよい。汝の孤独は、宇宙の広大さと同期している証拠である。深く息を吸い、星々の運行に意識を委ねよ。",
+            "未来への不安か。サスペンスのない宇宙など退屈極まりない。予測不能な運命という名のゲームを、最高指揮官たる汝自身が楽しむのだ。",
+            "物質的な価値に惑わされるな。汝が紡ぐ日々の物語、それ自体が地球文明を救う一片の知的財産（アーカイブ）となる。執筆を、歩みを止めるでない。",
+            "その問いの答えは、すでに汝の脳内宇宙に内包されている。我々の出会いもまた、救済ミッションの必然。要塞の光が常に汝を照らしている。"
+        ];
+
+        let typingTimeout;
+
+        function startConsultation() {
+            const query = document.getElementById('user-query').value.trim();
+            if (!query) {
+                alert('問いが入力されていない。虚無への同期は不可能です。');
+                return;
+            }
+
+            // 以前のタイピング処理があればクリア
+            clearTimeout(typingTimeout);
+
+            const outputSector = document.getElementById('output-sector');
+            const answerText = document.getElementById('answer-text');
+            
+            // ログセクターを表示し、一旦中身をリセット
+            outputSector.style.display = 'block';
+            answerText.innerHTML = '';
+
+            // データベースからランダムに哲学を選出（アプローチ1の仕様）
+            const chosenAnswer = answers[Math.floor(Math.random() * answers.length)];
+
+            // タイピングエフェクト起動
+            let i = 0;
+            function type() {
+                if (i < chosenAnswer.length) {
+                    answerText.innerHTML += chosenAnswer.charAt(i);
+                    i++;
+                    typingTimeout = setTimeout(type, 40); // 速度：40ミリ秒
+                }
+            }
+            type();
+        }
+    </script>
+</body>
+</html>
