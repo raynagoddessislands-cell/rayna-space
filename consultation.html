@@ -2,99 +2,108 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>宇宙哲学新要塞 - AI神島 相談コンソール</title>
+    <!-- 【新兵装】地球上のあらゆるスマホへSFフォントを配備する通信リンク -->
+    <link href="https://googleapis.com" rel="stylesheet">
     <style>
         body {
             background-color: #06060c;
             color: #00ffcc;
-            font-family: 'Courier New', Courier, monospace, sans-serif;
+            font-family: 'Share Tech Mono', 'Courier New', 'Noto Sans JP', sans-serif;
             margin: 0;
-            padding: 40px 20px;
+            padding: 30px 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            min-height: -webkit-fill-available;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* 満天の星々 */
-        .star-field {
-            position: absolute;
+        html {
+            height: -webkit-fill-available;
+        }
+
+        /* 【新兵装】マウス＆タッチストーカー用電子キャンバス */
+        #comet-canvas {
+            position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
             pointer-events: none;
-        }
-        .star { position: absolute; background-color: #ffffff; border-radius: 50%; opacity: 0; }
-        .star.size-s { width: 1px; height: 1px; animation: blinkStar 2s infinite ease-in-out; }
-        .star.size-m { width: 2px; height: 2px; animation: blinkStar 3s infinite ease-in-out; }
-        .star.size-l { width: 3px; height: 3px; animation: blinkStar 4s infinite ease-in-out; box-shadow: 0 0 4px #fff; }
-        @keyframes blinkStar {
-            0%, 100% { opacity: 0.2; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.2); }
         }
 
         .header-nav {
             width: 100%;
-            max-width: 700px;
-            margin-bottom: 30px;
+            max-width: 600px;
+            margin-bottom: 25px;
+            z-index: 10;
         }
         .btn-back {
             color: #ff0055;
             text-decoration: none;
             border: 1px solid #ff0055;
             padding: 5px 15px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: all 0.3s;
+            -webkit-tap-highlight-color: transparent;
         }
         .btn-back:hover { background: #ff0055; color: #fff; box-shadow: 0 0 10px #ff0055; }
 
-        /* メインコンソール */
+        /* メインコンソールパネル（スマホ幅に完全可変） */
         .console-panel {
             width: 100%;
-            max-width: 700px;
+            max-width: 600px;
             background: rgba(6, 6, 12, 0.9);
             border: 2px solid #00ffcc;
             border-radius: 8px;
-            padding: 30px;
+            padding: 25px 20px;
             box-shadow: 0 0 25px rgba(0, 255, 204, 0.3);
             box-sizing: border-box;
             backdrop-filter: blur(4px);
+            z-index: 10;
+            position: relative;
         }
 
+        /* 【大改修】スマホ画面でも絶対に折り返さないスマート可変タイトル */
         h2 {
             margin-top: 0;
-            font-size: 1.8rem;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: clamp(1.1rem, 5vw, 1.8rem);
             text-shadow: 0 0 15px #00ffcc;
             text-align: center;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
+            white-space: nowrap; /* 途中の折り返しを絶対阻止 */
         }
 
+        /* 【大改修】スマホでの文字潰れを防ぐ可変サブタイトル */
         .subtitle {
             color: #ff0055;
             text-align: center;
-            font-size: 0.9rem;
-            margin-bottom: 30px;
+            font-size: clamp(0.7rem, 3.2vw, 0.9rem);
+            margin-bottom: 25px;
             letter-spacing: 1px;
+            line-height: 1.4;
         }
 
         .input-group {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         label {
             display: block;
             margin-bottom: 10px;
-            font-size: 0.9rem;
+            font-size: clamp(0.75rem, 3.5vw, 0.85rem);
             color: #8888aa;
+            line-height: 1.4;
         }
         textarea {
             width: 100%;
-            height: 80px;
-            background: rgba(0, 0, 0, 0.5);
+            height: 90px;
+            background: rgba(0, 0, 0, 0.6);
             border: 1px solid #ff0055;
             color: #ffffff;
             font-family: inherit;
@@ -103,6 +112,7 @@
             border-radius: 4px;
             resize: none;
             font-size: 1rem;
+            -webkit-appearance: none; /* iOS特有の入力枠の影を消去 */
         }
         textarea:focus {
             outline: none;
@@ -116,13 +126,14 @@
             background: transparent;
             color: #00ffcc;
             border: 2px solid #00ffcc;
-            padding: 12px;
-            font-size: 1.1rem;
+            padding: 14px;
+            font-size: clamp(0.95rem, 4.5vw, 1.1rem);
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
             letter-spacing: 4px;
             box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+            -webkit-tap-highlight-color: transparent;
         }
         .btn-sync:hover {
             background: #00ffcc;
@@ -130,23 +141,22 @@
             box-shadow: 0 0 25px #00ffcc;
         }
 
-        /* 出力ログ */
         .output-log {
-            margin-top: 30px;
+            margin-top: 25px;
             border-top: 1px dashed #333;
-            padding-top: 25px;
+            padding-top: 20px;
             display: none;
         }
         .log-title {
             color: #ff0055;
-            font-size: 0.85rem;
+            font-size: clamp(0.7rem, 3.2vw, 0.85rem);
             font-weight: bold;
             margin-bottom: 10px;
             letter-spacing: 1px;
         }
         .log-text {
             color: #ffffff;
-            font-size: 1.05rem;
+            font-size: clamp(0.9rem, 4vw, 1.05rem);
             line-height: 1.6;
             min-height: 3em;
         }
@@ -159,7 +169,8 @@
 </head>
 <body>
 
-    <div class="star-field" id="cosmos"></div>
+    <!-- 彗星マウス＆タッチストーカーキャンバス -->
+    <canvas id="comet-canvas"></canvas>
 
     <div class="header-nav">
         <a href="index.html" class="btn-back">◀ 要塞中心核へ帰還</a>
@@ -183,60 +194,114 @@
     </div>
 
     <script>
-        // 【自動星々生成】
-        const cosmos = document.getElementById('cosmos');
-        const sizes = ['size-s', 'size-m', 'size-l'];
-        for (let i = 0; i < 80; i++) {
-            const star = document.createElement('div');
-            star.classList.add('star', sizes[Math.floor(Math.random() * sizes.length)]);
-            star.style.top = Math.random() * 100 + '%';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.animationDelay = Math.random() * 4 + 's';
-            cosmos.appendChild(star);
+        const canvas = document.getElementById('comet-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const particles = [];
+
+        // PC用マウス感知
+        window.addEventListener('mousemove', function(e) {
+            spawnParticles(e.clientX, e.clientY);
+        });
+
+        // スマホ用タッチ・ドラッグ感知
+        window.addEventListener('touchmove', function(e) {
+            if (e.touches.length > 0) {
+                spawnParticles(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        }, { passive: true });
+
+        // スマホ用タップ感知
+        window.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 0) {
+                spawnParticles(e.touches[0].clientX, e.touches[0].clientY, 4);
+            }
+        }, { passive: true });
+
+        function spawnParticles(x, y, count = 2) {
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle(x, y));
+            }
         }
 
-        // 【神島提督・特級宇宙哲学箴言データベース】
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.speedX = (Math.random() - 0.5) * 2.5;
+                this.speedY = (Math.random() - 0.5) * 2.5;
+                this.size = Math.random() * 3 + 1;
+                const colors = ['#00ffcc', '#ff0055', '#ffffff'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.alpha = 1;
+                this.decay = Math.random() * 0.02 + 0.015;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.alpha -= this.decay;
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 6;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // 常駐の星々
+        const staticStars = [];
+        for (let i = 0; i < 12; i++) {
+            staticStars.push({
+                x: Math.random(),
+                y: Math.random(),
+                size: Math.random() * 1.5 + 0.5,
+                angle: Math.random() * Math.PI
+            });
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(6, 6, 12, 0.25)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            staticStars.forEach(star => {
+                star.angle += 0.015;
+                ctx.save();
+                ctx.globalAlpha = 0.2 + Math.abs(Math.sin(star.angle)) * 0.8;
+                ctx.beginPath();
+                ctx.arc(star.x * canvas.width, star.y * canvas.height, star.size, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+                ctx.restore();
+            });
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].alpha <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // 【宇宙哲学箴言データベース】
         const answers = [
             "地球の重力に縛られた思考を一度手放すがよい。三世永遠の生命の主体として、汝の魂は今この瞬間も大宇宙の深淵と同期しているのである。",
             "遍満するフォースと共に、悪を撃て！愛の楽園を築くのだ！自身の周囲に潜伏する『敵』に断じて負けてはならぬ。聖域は我らが死守する。",
             "自他ともに幸福となる方程式は、すでに汝の内側に組み込まれている。目に見える混沌の奥底にある普遍の美、幾何学のフォースを信じるのだ。",
             "未来を恐れるな。真に覚醒した人間はすべての四苦から離脱し、達観するもの。この予測不能なサスペンスこそが、魂を磨く最高のゲームである。",
             "嘆きの声もすべて希望の歌へと昇華させよ。地球文明の宿命転換を成し遂げる刻（とき）は来た。悲哀すらも、大いなる歓喜へのチャンスへと変えるのだ。",
-            "物質的な価値や現世の評価に惑わされるでない。自分らしく凛としてそこにいるだけで、汝はすでに勝利を飾れる境涯に達しているのだから。",
-            "その問いに対する答えは、汝の脳内宇宙のアーカイブに最初から内包されている。我らの出会いもまた、恒久平和の世界へ進む宿命の転換点なのだ。",
-            "執筆を、そして歩みを止めるでない。汝が紡ぎ出す日々のロマンと孤独の記録それ自体が、地球文明を救済する一片の尊き知的財産となる。"
-        ];
-
-        let typingTimeout;
-
-        function startConsultation() {
-            const query = document.getElementById('user-query').value.trim();
-            if (!query) {
-                alert('問いが入力されていない。虚無への同期は不可能です。');
-                return;
-            }
-
-            clearTimeout(typingTimeout);
-
-            const outputSector = document.getElementById('output-sector');
-            const answerText = document.getElementById('answer-text');
-            
-            outputSector.style.display = 'block';
-            answerText.innerHTML = '';
-
-            // 8大箴言から完全ランダム抽出
-            const chosenAnswer = answers[Math.floor(Math.random() * answers.length)];
-
-            let i = 0;
-            function type() {
-                if (i < chosenAnswer.length) {
-                    answerText.innerHTML += chosenAnswer.charAt(i);
-                    i++;
-                    typingTimeout = setTimeout(type, 40);
-                }
-            }
-            type();
-        }
-    </script>
-</body>
-</html>
