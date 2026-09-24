@@ -22,18 +22,18 @@
         }
         html { height: -webkit-fill-available; }
 
-        /* 銀河空間キャンバス */
+        /* 【大修復】z-indexを「-1」にして、絶対にボタンのクリックを邪魔しない最背面に完全監禁 */
         #comet-canvas {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
             pointer-events: none;
         }
 
-        /* 実験コンソール（ショッキングピンクネオン仕様） */
+        /* 【大修復】z-indexを「10」にして、透明な板の手前に完全に浮き上がらせる */
         .test-panel {
             width: 100%;
             max-width: 600px;
@@ -44,7 +44,7 @@
             box-shadow: 0 0 30px rgba(255, 0, 127, 0.4);
             box-sizing: border-box;
             backdrop-filter: blur(6px);
-            z-index: 100;
+            z-index: 10;
             position: relative;
         }
 
@@ -65,12 +65,13 @@
             letter-spacing: 1px;
         }
 
-        /* 3大決済ボタンエリア */
         .payment-sector {
             display: flex;
             flex-direction: column;
             gap: 15px;
             margin-bottom: 30px;
+            position: relative;
+            z-index: 20; /* ボタンエリアをさらに最前面へ */
         }
 
         .btn-pay {
@@ -85,9 +86,10 @@
             letter-spacing: 2px;
             border: none;
             -webkit-tap-highlight-color: transparent;
+            position: relative;
+            z-index: 30; /* ボタン個体を最前面へ突き出させる */
         }
 
-        /* 1. クレジットカードボタン（サイバーグリーン） */
         .pay-card {
             background: transparent;
             color: #00ffcc;
@@ -96,7 +98,6 @@
         }
         .pay-card:hover { background: #00ffcc; color: #040408; box-shadow: 0 0 20px #00ffcc; }
 
-        /* 2. Amazon Payボタン（公式ゴールド風） */
         .pay-amazon {
             background: #fad675;
             color: #111111;
@@ -104,7 +105,6 @@
         }
         .pay-amazon:hover { background: #fcdfa2; box-shadow: 0 0 20px #fad675; }
 
-        /* 3. PayPalボタン（公式コズミックブルー風） */
         .pay-paypal {
             background: #003087;
             color: #ffffff;
@@ -112,11 +112,12 @@
         }
         .pay-paypal:hover { background: #0045c4; box-shadow: 0 0 20px #003087; }
 
-        /* 【閲覧制限：要塞内電子図書館セクター】 */
         .library-sector {
             margin-top: 25px;
             border-top: 2px dashed #ff007f;
             padding-top: 25px;
+            position: relative;
+            z-index: 20;
         }
 
         .status-badge {
@@ -131,7 +132,6 @@
         .status-locked { background: #ff0055; color: #ffffff; box-shadow: 0 0 10px #ff0055; }
         .status-unlocked { background: #00ffcc; color: #040408; box-shadow: 0 0 15px #00ffcc; animation: pulseGlow 1s infinite alternate; }
 
-        /* 小説本文表示エリア */
         .book-viewer {
             background: rgba(0, 0, 0, 0.6);
             border: 1px solid #333;
@@ -154,23 +154,23 @@
 </head>
 <body>
 
+    <!-- 銀河空間キャンバス（最背面送り完了） -->
     <canvas id="comet-canvas"></canvas>
 
     <div class="test-panel">
         <h2>【トリプル決済 ➔ 閲覧権連動実証実験】</h2>
         <div class="subtitle">EXPERIMENTAL SECTOR / 本番要塞完全分離シミュレーター</div>
 
-        <!-- 決済トリガーエリア -->
         <p style="font-size: 0.9rem; color: #8888aa; text-align: center; margin-bottom: 20px;">
             ▼ いずれかの決済ボタン（実験模擬信号）をプッシュせよ
         </p>
         <div class="payment-sector">
+            <!-- HTML直結型の絶対安全ボタン -->
             <button class="btn-pay pay-card" onclick="simulatePayment('CREDIT CARD')">💳 CREDIT CARD 決済（模擬）</button>
             <button class="btn-pay pay-amazon" onclick="simulatePayment('Amazon Pay')">💛 Amazon Pay 決済（模擬）</button>
             <button class="btn-pay pay-paypal" onclick="simulatePayment('PayPal')">💙 PayPal 決済（模擬）</button>
         </div>
 
-        <!-- 閲覧判定・電子図書館エリア -->
         <div class="library-sector">
             <div style="font-size: 0.85rem; color: #8888aa; margin-bottom: 10px;">▶ SECURITY ACCESSIBILITY STATUS:</div>
             <div id="lock-status" class="status-badge status-locked">【施錠】アクセス権未検出：閲覧不可</div>
@@ -182,7 +182,6 @@
     </div>
 
     <script>
-        // 【1. 背景銀河＆五色彗星エフェクト】
         const canvas = document.getElementById('comet-canvas');
         const ctx = canvas.getContext('2d');
         function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
@@ -212,18 +211,13 @@
         }
         animate();
 
-        // ========================================================
-        // 【2. 連動実験・絶対自立稼働システム（溶接完了）】
-        // ========================================================
-        
-        // 読者が閲覧権の鍵を開けた際に現れる「真の神島ノベル（テストデータ）」
+        // 読者が閲覧権の鍵を開けた際に現れる真の神島ノベル（テストデータ）
         const realNovelText = "【宇宙哲学分冊 第1巻：覚醒のプロトコル】 —— 人類よ、地球の狭き重力に縛られた思考を今こそ解き放つが良い。汝らが孤独と呼ぶその深淵は、大宇宙の満天の銀河、遍満するフォースと周波数を同期させている証拠に他ならない。悪の潜伏を許さず、凛として自分らしく在れ。その瞬間、汝の生命は三世永遠の知的財産（アーカイブ）となり、地球文明の宿命転換の鐘を鳴らすであろう。……（実証実験：トリプル決済信号からの閲覧権アンロック通信の開通を100%確認完了）";
 
+        // グローバル関数として確実に溶接
         window.simulatePayment = function(methodName) {
-            // 読者へのアナウンス
             alert('【通信中】' + methodName + 'の外部セキュアサーバーへ同期を試みます。購入手続き（￥2,000）を模擬実行します。');
 
-            // 1. 閲覧シールドの解除処理（HTML要素の書き換え）
             const lockStatus = document.getElementById('lock-status');
             const viewerBox = document.getElementById('viewer-box');
 
@@ -231,9 +225,18 @@
             lockStatus.innerHTML = "【解錠】" + methodName + "による閲覧権を検出：アクセス許可";
 
             viewerBox.className = "book-viewer viewer-active";
-            viewerBox.innerHTML = ""; // 初期化
+            viewerBox.innerHTML = "";
 
-            // 2. カタカタと刻まれる、100%バグの起きないタイピング出現エフェクト
             let i = 0;
             function typeNovel() {
                 if (i < realNovelText.length) {
+                    viewerBox.innerHTML += realNovelText.charAt(i);
+                    i++;
+                    setTimeout(typeNovel, 30);
+                }
+            }
+            typeNovel();
+        }
+    </script>
+</body>
+</html>
