@@ -3,244 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>宇宙哲学神殿 - Cosmic Philosophy Sanctuary</title>
-    
-    <!-- 案B：宇宙哲学の神聖紋章（ファビコン） -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://w3.org' viewBox='0 0 100 100'%3E%3Cstyle%3E.line%7Bfill:none;stroke:%23e2b86b;stroke-width:1.2;stroke-miterlimit:10;opacity:0.85;%7D.glow%7Bfilter:url(%23g);%7D%3C/style%3E%3Cdefs%3E%3Cfilter id='g' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeGaussianBlur stdDeviation='1.5' result='blur'/%3E%3CfeMerge%3E%3CfeMergeNode in='blur'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Ccircle class='line' cx='50' cy='50' r='45' style='stroke-dasharray:1, 3;'/%3E%3Ccircle class='line glow' cx='50' cy='50' r='38'/%3E%3Cpolygon class='line' points='50,18 78,65 22,65'/%3E%3Cpolygon class='line' points='50,82 22,35 78,35'/%3E%3Ccircle class='line glow' cx='50' cy='50' r='5' fill='%23e2b86b'/%3E%3Cpath class='line' d='M50,2 L50,98 M2,50 L98,50' style='opacity:0.3; stroke-dasharray:2, 4;'/%3E%3C/svg%3E">
-
+    <title>宇宙哲学神殿 - 第Ⅰ階層：正門</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://w3.org' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='38' fill='none' stroke='%23e2b86b' stroke-width='1.2'/%3E%3Cpolygon points='50,18 78,65 22,65' fill='none' stroke='%23e2b86b' stroke-width='1.2'/%3E%3Ccircle cx='50' cy='50' r='5' fill='%23e2b86b'/%3E%3C/svg%3E">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #020306;
-            font-family: 'Times New Roman', 'Noto Serif JP', serif;
-            color: #f5f6f8;
-        }
-        #comet-engine {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            display: block;
-        }
-        .sanctuary-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-            text-align: center;
-            background: transparent;
-            transition: opacity 1.2s ease;
-        }
-        .fade-out {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .decree-box {
-            max-width: 600px;
-            opacity: 0;
-            transform: translateY(15px);
-            animation: soakIn 3.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-            animation-delay: 0.3s;
-        }
-        .decree-title {
-            font-size: 0.85rem;
-            letter-spacing: 0.4em;
-            color: #a3b8cc;
-            text-transform: uppercase;
-            margin-bottom: 2rem;
-        }
-        .decree-text {
-            font-size: 1.4rem;
-            line-height: 2.2;
-            letter-spacing: 0.25em;
-            font-weight: 300;
-            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(255,255,255,0.1);
-        }
-        .control-trigger {
-            margin-top: 4rem;
-            padding: 1rem 2.5rem;
-            background: transparent;
-            border: 1px solid rgba(163, 184, 204, 0.4);
-            color: #a3b8cc;
-            font-family: inherit;
-            font-size: 0.9rem;
-            letter-spacing: 0.3em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            opacity: 0;
-            animation: fadeIn 2s ease forwards;
-            animation-delay: 1.2s;
-            box-shadow: 0 0 15px rgba(163, 184, 204, 0.05);
-        }
-        .control-trigger:active {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.8);
-            color: #ffffff;
-            box-shadow: 0 0 30px rgba(255,255,255,0.3);
-        }
-        @keyframes soakIn {
-            0% { opacity: 0; transform: translateY(15px); filter: blur(5px); }
-            100% { opacity: 1; transform: translateY(0); filter: blur(0); }
-        }
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-user-select: none; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background-color: #020306; font-family: 'Times New Roman', 'Noto Serif JP', serif; color: #f5f6f8; }
+        #comet-engine { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        .sanctuary-container { position: relative; width: 100%; height: 100%; z-index: 2; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem; text-align: center; transition: opacity 1s; }
+        .fade-out { opacity: 0; pointer-events: none; }
+        .decree-box { max-width: 600px; opacity: 0; transform: translateY(15px); animation: soakIn 3.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+        .decree-title { font-size: 0.85rem; letter-spacing: 0.4em; color: #a3b8cc; text-transform: uppercase; margin-bottom: 2rem; }
+        .editable-text { font-size: 1.4rem; line-height: 2.2; letter-spacing: 0.25em; font-weight: 300; background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; outline: none; transition: background 0.3s; cursor: pointer; }
+        .editable-text[contenteditable="true"] { -webkit-text-fill-color: #ffffff; background: rgba(255,255,255,0.08); border: 1px dashed rgba(226, 184, 107, 0.5); padding: 10px; user-select: text; -webkit-user-select: text; }
+        .control-trigger { margin-top: 4rem; padding: 1rem 2.5rem; background: transparent; border: 1px solid rgba(163, 184, 204, 0.4); color: #a3b8cc; font-family: inherit; font-size: 0.9rem; letter-spacing: 0.3em; cursor: pointer; opacity: 0; animation: fadeIn 2s ease forwards; animation-delay: 1.2s; }
+        @keyframes soakIn { 0% { opacity: 0; transform: translateY(15px); filter: blur(5px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
+        @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
-
     <canvas id="comet-engine"></canvas>
-
     <div class="sanctuary-container" id="main-ui">
         <div class="decree-box">
             <p class="decree-title">Cosmic Philosophy Decree</p>
-            <p class="decree-text">
-                未明の静寂に刻まれる真理。<br>
-                俗世の価値を排し、<br>
-                深遠なる美の神殿へ歩みを進めよ。
-            </p>
+            <!-- 長押しまたは右クリックで暗号錠が発動 -->
+            <div class="editable-text" id="target-text">未明の静寂に刻まれる真理。<br>俗世の価値を排し、<br>深遠なる美の神殿へ歩みを進めよ。</div>
         </div>
-        <button class="control-trigger" id="lock-on-button" onclick="triggerBurstAndNavigate(event)">神殿の深淵へ</button>
+        <button class="control-trigger" onclick="triggerBurstAndNavigate(event, 'abyss.html')">神殿の深淵へ</button>
     </div>
-
     <script>
-        const canvas = document.getElementById('comet-engine');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        let isBursting = false;
-
-        const cometColors = [
-            'rgba(147, 197, 253, 0.55)', // 彗星青
-            'rgba(244, 197, 249, 0.55)', // 星雲紫
-            'rgba(253, 244, 175, 0.45)', // 星塵金
-            'rgba(167, 243, 208, 0.45)', // 深宇宙緑
-            'rgba(255, 255, 255, 0.75)'  // 純白光
-        ];
-
-        function initCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', initCanvas);
-        initCanvas();
-
+        const canvas = document.getElementById('comet-engine'); const ctx = canvas.getContext('2d'); let particles = []; let isBursting = false;
+        const SECRET_KEY = 'rayna777'; // 閣下専用の絶対暗号キー
+        function initCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; } window.addEventListener('resize', initCanvas); initCanvas();
         class Particle {
             constructor(x, y, type = 'normal', angle = 0, speed = 0) {
-                this.x = x;
-                this.y = y;
-                this.type = type;
-                this.color = cometColors[Math.floor(Math.random() * cometColors.length)];
-                if (this.type === 'burst') {
-                    this.vx = Math.cos(angle) * speed;
-                    this.vy = Math.sin(angle) * speed;
-                    this.size = Math.random() * 3.5 + 1.5;
-                    this.decay = Math.random() * 0.012 + 0.006;
-                } else {
-                    this.vx = (Math.random() - 0.5) * (type === 'touch' ? 1.8 : 0.4);
-                    this.vy = (Math.random() - 0.7) * (type === 'touch' ? 1.8 : 0.5) - 0.2;
-                    this.size = Math.random() * (type === 'touch' ? 2.8 : 1.6) + 0.5;
-                    this.decay = Math.random() * 0.005 + 0.003;
-                }
-                this.alpha = 1;
+                this.x = x; this.y = y; this.type = type; this.color = 'rgba(255,255,255,0.7)';
+                if (type === 'burst') { this.vx = Math.cos(angle) * speed; this.vy = Math.sin(angle) * speed; this.size = Math.random() * 3 + 1; this.decay = Math.random() * 0.01 + 0.005; }
+                else { this.vx = (Math.random() - 0.5) * 0.4; this.vy = Math.random() * -0.5 - 0.2; this.size = Math.random() * 1.5 + 0.5; this.decay = 0.004; } this.alpha = 1;
             }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if (this.type === 'burst') {
-                    this.vx *= 0.97;
-                    this.vy *= 0.97;
-                }
-                this.alpha -= this.decay;
-            }
-            draw() {
-                ctx.save();
-                ctx.globalAlpha = this.alpha;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.shadowBlur = this.type === 'burst' ? 15 : 10;
-                ctx.shadowColor = this.color;
-                ctx.fill();
-                ctx.restore();
-            }
+            update() { this.x += this.vx; this.y += this.vy; if (this.type === 'burst') { this.vx *= 0.97; this.vy *= 0.97; } this.alpha -= this.decay; }
+            draw() { ctx.save(); ctx.globalAlpha = this.alpha; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fillStyle = '#cbd5e1'; ctx.fill(); ctx.restore(); }
         }
-
-        function injectNaturalSparks() {
-            if (particles.length < 45 && Math.random() < 0.07) {
-                particles.push(new Particle(Math.random() * canvas.width, canvas.height * 0.85, 'normal'));
-            }
+        function render() { ctx.fillStyle = 'rgba(2,3,6,0.14)'; ctx.fillRect(0,0,canvas.width,canvas.height); if (particles.length < 30 && Math.random() < 0.05) particles.push(new Particle(Math.random()*canvas.width, canvas.height*0.85)); for (let i = particles.length - 1; i >= 0; i--) { particles[i].update(); if (particles[i].alpha <= 0) particles.splice(i,1); else particles[i].draw(); } requestAnimationFrame(render); } render();
+        
+        const el = document.getElementById('target-text');
+        function verifyAndUnlock() {
+            const input = prompt("【宇宙哲学神殿・管理者暗号キーを入力せよ】");
+            if (input === SECRET_KEY) {
+                el.contentEditable = "true"; el.focus();
+                el.onblur = () => { el.contentEditable = "false"; localStorage.setItem(el.id, el.innerHTML); };
+            } else if (input !== null) { alert("不敬なり。暗号が相違する。"); }
         }
+        // スマホ長押し & PC右クリック検知
+        let pressTimer;
+        el.addEventListener('touchstart', () => { pressTimer = setTimeout(verifyAndUnlock, 1000); });
+        el.addEventListener('touchend', () => { clearTimeout(pressTimer); });
+        el.addEventListener('contextmenu', (e) => { e.preventDefault(); verifyAndUnlock(); });
+        window.addEventListener('DOMContentLoaded', () => { const saved = localStorage.getItem('target-text'); if(saved) el.innerHTML = saved; });
 
-        window.addEventListener('touchmove', (e) => {
-            if (e.touches.length > 0) {
-                const t = e.touches[0];
-                particles.push(new Particle(t.clientX, t.clientY, 'touch'));
-            }
-        }, { passive: true });
-
-        window.addEventListener('mousemove', (e) => {
-            if (Math.random() < 0.4) {
-                particles.push(new Particle(e.clientX, e.clientY, 'touch'));
-            }
-        });
-
-        function renderLoop() {
-            ctx.fillStyle = 'rgba(2, 3, 6, 0.14)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            injectNaturalSparks();
-            for (let i = particles.length - 1; i >= 0; i--) {
-                particles[i].update();
-                if (particles[i].alpha <= 0) {
-                    particles.splice(i, 1);
-                } else {
-                    particles[i].draw();
-                }
-            }
-            requestAnimationFrame(renderLoop);
-        }
-        renderLoop();
-
-        function triggerBurstAndNavigate(event) {
-            if (isBursting) return;
-            isBursting = true;
-
-            const button = document.getElementById('lock-on-button');
-            const rect = button.getBoundingClientRect();
-            const burstX = rect.left + rect.width / 2;
-            const burstY = rect.top + rect.height / 2;
-
-            document.getElementById('main-ui').classList.add('fade-out');
-
-            const particleCount = 300;
-            for (let i = 0; i < particleCount; i++) {
-                const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 8 + 3; 
-                particles.push(new Particle(burstX, burstY, 'burst', angle, speed));
-            }
-
-            setTimeout(() => {
-                window.location.href = 'abyss.html';
-            }, 1400);
+        function triggerBurstAndNavigate(e, url) {
+            if (isBursting) return; isBursting = true; document.getElementById('main-ui').classList.add('fade-out');
+            for (let i = 0; i < 150; i++) particles.push(new Particle(canvas.width/2, canvas.height/2, 'burst', Math.random()*Math.PI*2, Math.random()*6+2));
+            setTimeout(() => { window.location.href = url; }, 1200);
         }
     </script>
 </body>
