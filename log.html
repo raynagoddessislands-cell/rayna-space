@@ -7,13 +7,13 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-user-select: none; }
         body, html { width: 100%; height: 100%; overflow: hidden; background-color: #020306; font-family: 'Times New Roman', 'Noto Serif JP', serif; color: #f5f6f8; }
-        #comet-engine { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-        .sanctuary-container { position: relative; width: 100%; height: 100%; z-index: 2; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem; text-align: center; transition: opacity 1s; }
+        #comet-engine { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; display: block; pointer-events: none; }
+        .sanctuary-container { position: relative; width: 100%; height: 100%; z-index: 2; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem; text-align: center; transition: opacity 1s; background: transparent; }
         .fade-out { opacity: 0; pointer-events: none; }
         .decree-box { max-width: 600px; }
         .decree-title { font-size: 0.85rem; letter-spacing: 0.6em; color: #a7f3d0; text-transform: uppercase; margin-bottom: 2rem; }
-        .editable-text { font-size: 1.3rem; line-height: 2.4; letter-spacing: 0.28em; font-weight: 300; background: linear-gradient(135deg, #ffffff 0%, #a7f3d0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; outline: none; transition: background 0.3s; cursor: pointer; }
-        .editable-text[contenteditable="true"] { -webkit-text-fill-color: #ffffff; background: rgba(255,255,255,0.08); border: 1px dashed rgba(167, 243, 208, 0.5); padding: 10px; user-select: text; -webkit-user-select: text; }
+        .editable-text { font-size: 1.3rem; line-height: 2.4; letter-spacing: 0.28em; font-weight: 300; background: linear-gradient(135deg, #ffffff 0%, #a7f3d0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; outline: none; transition: background 0.3s; padding: 10px; border: 1px solid transparent; width: 100%; display: block; -webkit-user-modify: read-only; }
+        .editable-text[contenteditable="true"] { -webkit-background-clip: initial; -webkit-text-fill-color: #ffffff; background: rgba(255,255,255,0.12); border: 1px dashed rgba(167, 243, 208, 0.6); border-radius: 6px; user-select: text; -webkit-user-select: text; -webkit-user-modify: read-write; }
         .control-trigger { margin-top: 4rem; padding: 0.8rem 2rem; background: transparent; border: 1px solid rgba(167, 243, 208, 0.4); color: #a7f3d0; font-family: inherit; font-size: 0.85rem; letter-spacing: 0.2em; cursor: pointer; }
     </style>
 </head>
@@ -22,44 +22,42 @@
     <div class="sanctuary-container" id="main-ui">
         <div class="decree-box">
             <p class="decree-title">階層識別：大局観の記録</p>
-            <div class="editable-text" id="log-text">地球という未開の星における、<br>思考と技術の融合実験。<br><br>すべての軌跡はビッグデータの海に深く沈み、<br>真なる価値の交換を待っている。</div>
+            <div class="editable-text" id="log-text">地球という未開の星における、<br>思考と技術 of 融合実験。<br><br>すべての軌跡はビッグデータの海に深く沈み、<br>真なる価値の交換を待っている。</div>
         </div>
-        <button class="control-trigger" onclick="triggerBurstAndNavigate(event, 'order.html')">第Ⅳ階層：絶対規律へ</button>
+        <button class="control-trigger" id="lock-on-button" onclick="triggerBurstAndNavigate(event, 'order.html')">第Ⅳ階層：絶対規律へ</button>
     </div>
     <script>
-        const canvas = document.getElementById('comet-engine'); const ctx = canvas.getContext('2d'); let particles = []; let isBursting = false;
-        const SECRET_KEY = 'rayna777';
+        const canvas = document.getElementById('comet-engine'); const ctx = canvas.getContext('2d'); let particles = []; let isBursting = false; const SECRET_KEY = 'rayna777';
+        const cometColors = ['rgba(147, 197, 253, 0.55)', 'rgba(244, 197, 249, 0.55)', 'rgba(253, 244, 175, 0.45)', 'rgba(167, 243, 208, 0.45)', 'rgba(255, 255, 255, 0.75)'];
         function initCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; } window.addEventListener('resize', initCanvas); initCanvas();
         class Particle {
             constructor(x, y, type = 'normal', angle = 0, speed = 0) {
-                this.x = x; this.y = y; this.type = type; this.color = 'rgba(167,243,208,0.5)';
-                if (type === 'burst') { this.vx = Math.cos(angle) * speed; this.vy = Math.sin(angle) * speed; this.size = Math.random() * 3 + 1; this.decay = Math.random() * 0.01 + 0.005; }
-                else { this.vx = (Math.random() - 0.5) * 0.3; this.vy = Math.random() * -0.4 - 0.1; this.size = Math.random() * 1.2 + 0.5; this.decay = 0.003; } this.alpha = 1;
+                this.x = x; this.y = y; this.type = type; this.color = cometColors[Math.floor(Math.random() * cometColors.length)];
+                if (this.type === 'burst') { this.vx = Math.cos(angle) * speed; this.vy = Math.sin(angle) * speed; this.size = Math.random() * 3.5 + 1.5; this.decay = Math.random() * 0.012 + 0.006; }
+                else { this.vx = (Math.random() - 0.5) * (type === 'touch' ? 1.8 : 0.4); this.vy = (Math.random() - 0.7) * (type === 'touch' ? 1.8 : 0.5) - 0.2; this.size = Math.random() * (type === 'touch' ? 2.8 : 1.6) + 0.5; this.decay = Math.random() * 0.005 + 0.003; } this.alpha = 1;
             }
             update() { this.x += this.vx; this.y += this.vy; if (this.type === 'burst') { this.vx *= 0.97; this.vy *= 0.97; } this.alpha -= this.decay; }
-            draw() { ctx.save(); ctx.globalAlpha = this.alpha; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fillStyle = '#a7f3d0'; ctx.fill(); ctx.restore(); }
+            draw() { ctx.save(); ctx.globalAlpha = this.alpha; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = this.color; ctx.shadowBlur = this.type === 'burst' ? 15 : 10; ctx.shadowColor = this.color; ctx.fill(); ctx.restore(); }
         }
-        function render() { ctx.fillStyle = 'rgba(2,3,6,0.14)'; ctx.fillRect(0,0,canvas.width,canvas.height); if (particles.length < 30 && Math.random() < 0.05) particles.push(new Particle(Math.random()*canvas.width, canvas.height*0.85)); for (let i = particles.length - 1; i >= 0; i--) { particles[i].update(); if (particles[i].alpha <= 0) particles.splice(i,1); else particles[i].draw(); } requestAnimationFrame(render); } render();
+        function injectNaturalSparks() { if (particles.length < 45 && Math.random() < 0.07) { particles.push(new Particle(Math.random() * canvas.width, canvas.height * 0.85, 'normal')); } }
+        window.addEventListener('touchmove', (e) => { if (e.touches.length > 0) { particles.push(new Particle(e.touches[0].clientX, e.touches[0].clientY, 'touch')); } }, { passive: true });
+        window.addEventListener('mousemove', (e) => { if (Math.random() < 0.4) { particles.push(new Particle(e.clientX, e.clientY, 'touch')); } });
+        function renderLoop() { ctx.fillStyle = 'rgba(2, 3, 6, 0.14)'; ctx.fillRect(0, 0, canvas.width, canvas.height); injectNaturalSparks(); for (let i = particles.length - 1; i >= 0; i--) { particles[i].update(); if (particles[i].alpha <= 0) { particles.splice(i, 1); } else { particles[i].draw(); } } requestAnimationFrame(renderLoop); } renderLoop();
 
-        const el = document.getElementById('log-text');
-        function verifyAndUnlock() {
+        const el = document.getElementById('log-text'); let pressTimer;
+        function verifyAndUnlock(e) {
+            if(e) e.preventDefault();
             const input = prompt("【宇宙哲学神殿・管理者暗号キーを入力せよ】");
             if (input === SECRET_KEY) {
-                el.contentEditable = "true"; el.focus();
+                el.contentEditable = "true"; setTimeout(() => { el.focus(); }, 50);
                 el.onblur = () => { el.contentEditable = "false"; localStorage.setItem(el.id, el.innerHTML); };
             } else if (input !== null) { alert("不敬なり。暗号が相違する。"); }
         }
-        let pressTimer;
-        el.addEventListener('touchstart', () => { pressTimer = setTimeout(verifyAndUnlock, 1000); });
+        el.addEventListener('touchstart', (e) => { pressTimer = setTimeout(() => verifyAndUnlock(e), 800); }, { passive: false });
         el.addEventListener('touchend', () => { clearTimeout(pressTimer); });
-        el.addEventListener('contextmenu', (e) => { e.preventDefault(); verifyAndUnlock(); });
+        el.addEventListener('contextmenu', (e) => { verifyAndUnlock(e); });
         window.addEventListener('DOMContentLoaded', () => { const saved = localStorage.getItem('log-text'); if(saved) el.innerHTML = saved; });
-
-        function triggerBurstAndNavigate(e, url) {
-            if (isBursting) return; isBursting = true; document.getElementById('main-ui').classList.add('fade-out');
-            for (let i = 0; i < 150; i++) particles.push(new Particle(canvas.width/2, canvas.height/2, 'burst', Math.random()*Math.PI*2, Math.random()*6+2));
-            setTimeout(() => { window.location.href = url; }, 1200);
-        }
+        function triggerBurstAndNavigate(e, url) { if (isBursting) return; isBursting = true; document.getElementById('main-ui').classList.add('fade-out'); const rect = document.getElementById('lock-on-button').getBoundingClientRect(); const burstX = rect.left + rect.width / 2; const burstY = rect.top + rect.height / 2; for (let i = 0; i < 300; i++) particles.push(new Particle(burstX, burstY, 'burst', Math.random()*Math.PI*2, Math.random()*8+3)); setTimeout(() => { window.location.href = url; }, 1400); }
     </script>
 </body>
 </html>
